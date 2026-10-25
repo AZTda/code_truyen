@@ -57,12 +57,14 @@ server/data/covers_cache/
 server/static/flashcards/
 server/data/novels/
 
-# Gradle & Android
+# Gradle, Android & Rust
 .gradle/
 .kotlin/
 app/.kotlin/
 build/
 app/**/build/
+rust/target/
+target/
 local.properties
 *.apk
 *.aab

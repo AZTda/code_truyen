@@ -1,0 +1,14 @@
+[package]
+name = "truyencloud-app"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+truyencloud-core = { path = "../truyencloud-core" }
+eframe.workspace = true
+egui.workspace = true
+reqwest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
