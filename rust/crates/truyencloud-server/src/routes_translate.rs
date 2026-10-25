@@ -267,7 +267,7 @@ pub async fn translate_via_google_gtx(client: &reqwest::Client, text: &str, sl: 
     let mut chunks = Vec::new();
     let mut cur = String::new();
     for para in text.split("\n\n") {
-        if cur.chars().count() + para.chars().count() > 1800 && !cur.is_empty() {
+        if cur.chars().count() + para.chars().count() > 2800 && !cur.is_empty() {
             chunks.push(cur.clone());
             cur.clear();
         }
@@ -278,23 +278,36 @@ pub async fn translate_via_google_gtx(client: &reqwest::Client, text: &str, sl: 
 
     let mut out_parts = Vec::new();
     for chunk in chunks {
-        let resp = client
-            .get("https://translate.googleapis.com/translate_a/single")
+        if let Some(p) = translate_chunk_batchexecute(client, &chunk, sl, tl).await.or_else(|| None) {
+            out_parts.push(p);
+            continue;
+        }
+        let resp = client.get("https://translate.googleapis.com/translate_a/single")
             .query(&[("client", "gtx"), ("sl", sl), ("tl", tl), ("dt", "t"), ("q", chunk.as_str())])
-            .send()
-            .await
-            .ok()?;
+            .send().await.ok()?;
         let val: Value = resp.json().await.ok()?;
         let sentences = val.get(0)?.as_array()?;
-        let mut part = String::new();
-        for s in sentences {
-            if let Some(seg) = s.get(0).and_then(|v| v.as_str()) {
-                part.push_str(seg);
-            }
-        }
-        if !part.trim().is_empty() {
-            out_parts.push(part.trim().to_string());
+        let part: String = sentences.iter().filter_map(|s| s.get(0).and_then(|v| v.as_str())).collect();
+        if !part.trim().is_empty() { out_parts.push(part.trim().to_string()); }
+    }
+    (!out_parts.is_empty()).then(|| out_parts.join("\n\n"))
+}
+
+async fn translate_chunk_batchexecute(client: &reqwest::Client, chunk: &str, sl: &str, tl: &str) -> Option<String> {
+    let inner = serde_json::to_string(&json!([[chunk, sl, tl, true], [Value::Null]])).ok()?;
+    let f_req = serde_json::to_string(&json!([[["MkEWBc", inner, Value::Null, "generic"]]])).ok()?;
+    let resp = client.post("https://translate.google.com/_/TranslateWebserverUi/data/batchexecute")
+        .form(&[("f.req", f_req.as_str())]).send().await.ok()?;
+    let raw = resp.text().await.ok()?;
+    for line in raw.lines() {
+        if line.contains("MkEWBc") {
+            let outer: Value = serde_json::from_str(line).ok()?;
+            let inner_str = outer.get(0)?.get(2)?.as_str()?;
+            let inner_val: Value = serde_json::from_str(inner_str).ok()?;
+            let sents = inner_val.get(1)?.get(0)?.get(0)?.get(5)?.as_array()?;
+            let out: String = sents.iter().filter_map(|s| s.get(0).and_then(|v| v.as_str())).collect();
+            if !out.trim().is_empty() { return Some(out.trim().to_string()); }
         }
     }
-    if out_parts.is_empty() { None } else { Some(out_parts.join("\n\n")) }
+    None
 }
