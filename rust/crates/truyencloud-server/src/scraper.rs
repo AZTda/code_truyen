@@ -7,11 +7,15 @@ use encoding_rs::{GB18030, UTF_8};
 use scraper::{Html, Selector};
 use serde::Deserialize;
 use serde_json::json;
+use truyencloud_core::hanviet::translate_hanviet_phrases;
 use truyencloud_core::text_paging::clean_paragraphs;
 
 #[derive(Debug, Deserialize)]
 pub struct ScrapeRequest {
+    #[serde(default)]
     pub url: String,
+    #[serde(default)]
+    pub source_url: String,
 }
 
 /// Chuyển URL `69shuba.com` / `uukanshu.cc` qua cổng proxy `translate.goog` để vượt tường lửa Cloudflare.
@@ -125,22 +129,73 @@ pub async fn scrape_url(
     State(state): State<AppState>,
     Json(req): Json<ScrapeRequest>,
 ) -> impl IntoResponse {
-    let url = req.url.trim();
-    if !url.starts_with("http://") && !url.starts_with("https://") {
+    let raw_url = if !req.source_url.trim().is_empty() {
+        req.source_url.trim()
+    } else {
+        req.url.trim()
+    };
+    if !raw_url.starts_with("http://") && !raw_url.starts_with("https://") {
         return (
             StatusCode::BAD_REQUEST,
             Json(json!({"detail": "URL phải bắt đầu bằng http:// hoặc https://"})),
         );
     }
 
-    if let Some(content) = fetch_chapter_body(&state.http_client, url).await {
+    // Kiểm tra xem truyện đã có trong thư viện chưa (theo source_url hoặc mã số sách 69shuba)
+    for novel in state.load_all_novels() {
+        if novel.source_url == raw_url || (!novel.id.is_empty() && raw_url.contains(&novel.id)) {
+            let (toc, translated_nums) = state.get_novel_toc_and_translated(&novel.id);
+            let total_chapters = if novel.total_chapters > 0 {
+                novel.total_chapters
+            } else {
+                toc.len() as i32
+            };
+            return (
+                StatusCode::OK,
+                Json(json!({
+                    "id": novel.id,
+                    "title": novel.title,
+                    "title_vi": novel.display_title(),
+                    "author": novel.display_author(),
+                    "source_url": novel.source_url,
+                    "source_id": if novel.source_id.is_empty() { "69shuba" } else { &novel.source_id },
+                    "cover_url": novel.cover_url,
+                    "description": novel.description,
+                    "status": "ongoing",
+                    "total_chapters": total_chapters,
+                    "translated_chapters": translated_nums.len(),
+                    "overnight_enabled": novel.overnight_enabled,
+                    "translated_chapter_numbers": translated_nums,
+                    "chapters": toc
+                })),
+            );
+        }
+    }
+
+    if let Some(content) = fetch_chapter_body(&state.http_client, raw_url).await {
+        let title_vi = translate_hanviet_phrases("Truyện mới nhập");
         return (
             StatusCode::OK,
             Json(json!({
-                "url": url,
-                "title": "",
+                "id": "scraped_novel",
+                "title": "Truyện mới",
+                "title_vi": title_vi,
+                "author": "Khuyết danh",
+                "source_url": raw_url,
+                "url": raw_url,
+                "source_id": "69shuba",
+                "cover_url": "",
+                "description": content.chars().take(240).collect::<String>(),
                 "content": content,
                 "char_count": content.chars().count(),
+                "status": "ongoing",
+                "total_chapters": 1,
+                "translated_chapters": 0,
+                "overnight_enabled": false,
+                "translated_chapter_numbers": [],
+                "chapters": [
+                    {"chapter_number": 1, "title": "Chương 1", "title_vi": "Chương 1", "url": raw_url, "is_translated": false}
+                ],
                 "engine": "rust-scraper-gb18030"
             })),
         );

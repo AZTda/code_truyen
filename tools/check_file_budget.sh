@@ -22,9 +22,10 @@ while IFS= read -r line; do
         echo "⚠️  [CẢNH BÁO] $count dòng: $file"
         WARNINGS=$((WARNINGS + 1))
     fi
-done < <(find app server -type f \( -name "*.kt" -o -name "*.py" \) \
+done < <(find app server rust -type f \( -name "*.kt" -o -name "*.py" -o -name "*.rs" \) \
   ! -path "*/.venv/*" \
   ! -path "*/build/*" \
+  ! -path "*/target/*" \
   ! -path "*/.gradle/*" \
   ! -path "*/.idea/*" \
   ! -path "*/iosApp.xcodeproj/*" \

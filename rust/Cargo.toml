@@ -3,7 +3,6 @@ resolver = "2"
 members = [
     "crates/truyencloud-core",
     "crates/truyencloud-server",
-    "crates/truyencloud-app",
 ]
 
 [workspace.package]
@@ -34,5 +33,3 @@ chrono = { version = "0.4", features = ["serde"] }
 uuid = { version = "1.10", features = ["v4", "serde"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-eframe = "0.29"
-egui = "0.29"
