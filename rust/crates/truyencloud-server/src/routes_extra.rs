@@ -1,5 +1,5 @@
 use crate::routes_admin_novels::set_novel_overnight_flag;
-use crate::routes_translate::translate_pipeline_lang;
+use crate::routes_translate::{run_agy_gemini, translate_pipeline_lang};
 use crate::scraper::fetch_chapter_body;
 use crate::state::AppState;
 use axum::body::Body;
@@ -11,7 +11,7 @@ use serde_json::{json, Value};
 use std::fs;
 use truyencloud_core::hanviet::translate_hanviet_phrases;
 
-fn read_active_model(state: &AppState) -> (String, String, i64) {
+pub fn read_active_model(state: &AppState) -> (String, String, i64) {
     let path = state.data_dir.join("models_cache.json");
     if let Ok(raw) = fs::read_to_string(path) {
         if let Ok(val) = serde_json::from_str::<Value>(&raw) {
@@ -318,13 +318,16 @@ pub async fn ask_qwen_fast(state: &AppState, system_prompt: &str, user_prompt: &
             {"role": "system", "content": format!("{} /no_think", system_prompt)},
             {"role": "user", "content": format!("{} /no_think", user_prompt)}
         ],
-        "temperature": 0.3,
-        "max_tokens": 160
+        "temperature": 0.3, "max_tokens": 160
     });
     let fut = state.http_client.post(&state.qwen_url).json(&req_body).send();
-    let resp = tokio::time::timeout(std::time::Duration::from_secs(4), fut).await.ok()?.ok()?;
-    let val = resp.json::<Value>().await.ok()?;
-    let text = val.pointer("/choices/0/message/content")?.as_str()?;
-    let cleaned = text.split("</think>").last().unwrap_or(text).trim().to_string();
-    if cleaned.is_empty() { None } else { Some(cleaned) }
+    if let Ok(Ok(resp)) = tokio::time::timeout(std::time::Duration::from_secs(4), fut).await {
+        if let Ok(val) = resp.json::<Value>().await {
+            if let Some(text) = val.pointer("/choices/0/message/content").and_then(|v| v.as_str()) {
+                let cleaned = text.split("</think>").last().unwrap_or(text).trim().to_string();
+                if !cleaned.is_empty() { return Some(cleaned); }
+            }
+        }
+    }
+    run_agy_gemini(state, &format!("{}\n\n{}", system_prompt, user_prompt), 15).await
 }

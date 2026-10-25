@@ -1,3 +1,4 @@
+use crate::routes_extra::read_active_model;
 use crate::scraper::fetch_chapter_body;
 use crate::state::AppState;
 use axum::extract::{Path, Query, State};
@@ -6,8 +7,11 @@ use axum::response::IntoResponse;
 use axum::Json;
 use serde::Deserialize;
 use serde_json::{json, Value};
+use tokio::sync::Semaphore;
 use truyencloud_core::hanviet::translate_hanviet_phrases;
 use truyencloud_core::text_paging::clean_paragraphs;
+
+static AGY_SEMAPHORE: Semaphore = Semaphore::const_new(2);
 
 #[derive(Debug, Deserialize)]
 pub struct RecrawlQuery {
@@ -185,24 +189,20 @@ pub async fn translate_pipeline_lang(
 
     let snippet: String = cleaned.chars().take(5200).collect();
 
-    if std::path::Path::new("/usr/local/bin/agy").exists() {
-        let prompt = format!(
-            "Dịch chương tiểu thuyết tiếng Trung sau sang tiếng Việt tự nhiên, văn phong tiểu thuyết mượt mà, giữ nguyên tên riêng Hán-Việt. Chỉ trả về đúng nội dung bản dịch tiếng Việt, không lời dẫn:\n\n{}",
-            snippet
-        );
-        let fut = tokio::process::Command::new("/usr/local/bin/agy")
-            .args([
-                "-p", &prompt, "--output-format", "text", "--effort", "low",
-                "--model", "gemini-3.8-flash-low", "--disable-slash-commands", "--dangerously-skip-permissions",
-            ])
-            .output();
-        if let Ok(Ok(output)) = tokio::time::timeout(std::time::Duration::from_secs(35), fut).await {
-            if output.status.success() {
-                let out = String::from_utf8_lossy(&output.stdout).trim().to_string();
-                if out.chars().count() > 80 {
-                    return (out, "ANTIGRAVITY_CLI".to_string());
-                }
-            }
+    let custom_rule = std::fs::read_to_string(state.data_dir.join("translation_profile.json"))
+        .ok()
+        .and_then(|s| serde_json::from_str::<Value>(&s).ok())
+        .and_then(|v| v.get("custom_prompt").and_then(|x| x.as_str()).map(ToOwned::to_owned))
+        .unwrap_or_else(|| "Văn phong tiểu thuyết mượt mà, giữ nguyên tên riêng Hán-Việt.".to_string());
+
+    let (_, _, cfg_timeout) = read_active_model(state);
+    let prompt = format!(
+        "Dịch chương tiểu thuyết tiếng Trung sau sang tiếng Việt tự nhiên ({}). Chỉ trả về đúng nội dung bản dịch tiếng Việt, không lời dẫn:\n\n{}",
+        custom_rule, snippet
+    );
+    if let Some(out) = run_agy_gemini(state, &prompt, cfg_timeout.clamp(20, 90) as u64).await {
+        if out.chars().count() > 80 {
+            return (out, "ANTIGRAVITY_CLI".to_string());
         }
     }
 
@@ -231,6 +231,36 @@ pub async fn translate_pipeline_lang(
     }
 
     (translate_hanviet_phrases(&cleaned), "RUST_HANVIET".to_string())
+}
+
+pub async fn run_agy_gemini(state: &AppState, prompt: &str, timeout_secs: u64) -> Option<String> {
+    if !std::path::Path::new("/usr/local/bin/agy").exists() {
+        return None;
+    }
+    let _permit = AGY_SEMAPHORE.acquire().await.ok()?;
+    let (active_model, active_effort, _) = read_active_model(state);
+    let mut cmd = tokio::process::Command::new("/usr/local/bin/agy");
+    cmd.kill_on_drop(true).args([
+        "-p",
+        prompt,
+        "--output-format",
+        "text",
+        "--effort",
+        &active_effort,
+        "--model",
+        &active_model,
+        "--disable-slash-commands",
+        "--dangerously-skip-permissions",
+    ]);
+    let output = tokio::time::timeout(std::time::Duration::from_secs(timeout_secs), cmd.output())
+        .await
+        .ok()?
+        .ok()?;
+    if !output.status.success() {
+        return None;
+    }
+    let out = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    (!out.is_empty()).then_some(out)
 }
 
 pub async fn translate_via_google_gtx(client: &reqwest::Client, text: &str, sl: &str, tl: &str) -> Option<String> {
