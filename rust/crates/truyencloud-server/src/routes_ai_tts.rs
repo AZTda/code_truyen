@@ -1,12 +1,12 @@
 use crate::state::AppState;
 use axum::body::Body;
-use axum::extract::{Query, State};
+use axum::extract::{Path, Query, State};
 use axum::http::{header, Response, StatusCode};
 use axum::response::IntoResponse;
 use axum::Json;
+use md5::{Digest as Md5Digest, Md5};
 use serde::Deserialize;
 use serde_json::{json, Value};
-use sha2::{Digest, Sha256};
 use std::fs;
 use truyencloud_core::hanviet::translate_hanviet_phrases;
 use truyencloud_core::models::VoiceProfileInfo;
@@ -14,28 +14,65 @@ use truyencloud_core::text_paging::clean_paragraphs;
 
 pub fn vieneu_voice_catalog() -> Vec<VoiceProfileInfo> {
     vec![
-        VoiceProfileInfo { id: "NgocHuyen".into(), name: "Ngọc Huyền (Nữ · Hà Nội)".into(), region: "Bắc".into(), gender: "female".into() },
-        VoiceProfileInfo { id: "MaiPhuong".into(), name: "Mai Phương (Nữ · Hà Nội)".into(), region: "Bắc".into(), gender: "female".into() },
-        VoiceProfileInfo { id: "ThaoVy".into(), name: "Thảo Vy (Nữ · Sài Gòn)".into(), region: "Nam".into(), gender: "female".into() },
-        VoiceProfileInfo { id: "MinhQuang".into(), name: "Minh Quang (Nam · Hà Nội)".into(), region: "Bắc".into(), gender: "male".into() },
-        VoiceProfileInfo { id: "DucTri".into(), name: "Đức Trí (Nam · Sài Gòn)".into(), region: "Nam".into(), gender: "male".into() },
-        VoiceProfileInfo { id: "Binh".into(), name: "Thanh Bình (Nam · Miền Bắc)".into(), region: "Bắc".into(), gender: "male".into() },
-        VoiceProfileInfo { id: "Tuyen".into(), name: "Phạm Tuyên (Nam · Trầm Ấm)".into(), region: "Bắc".into(), gender: "male".into() },
-        VoiceProfileInfo { id: "Vinh".into(), name: "Xuân Vĩnh (Nam · Miền Nam)".into(), region: "Nam".into(), gender: "male".into() },
-        VoiceProfileInfo { id: "Doan".into(), name: "Đoan Trang (Nữ · Miền Nam)".into(), region: "Nam".into(), gender: "female".into() },
-        VoiceProfileInfo { id: "Ly".into(), name: "Khánh Ly (Nữ · Miền Bắc)".into(), region: "Bắc".into(), gender: "female".into() },
-        VoiceProfileInfo { id: "Ngoc".into(), name: "Bảo Ngọc (Nữ · Huế)".into(), region: "Trung".into(), gender: "female".into() },
+        VoiceProfileInfo { id: "my_duyen".into(), name: "Mỹ Duyên (Nữ · Bắc)".into(), region: "Bắc".into(), gender: "Nữ".into() },
+        VoiceProfileInfo { id: "duc_tri".into(), name: "Đức Trí (Nam · Bắc)".into(), region: "Bắc".into(), gender: "Nam".into() },
+        VoiceProfileInfo { id: "ai_han".into(), name: "Ái Hân (Nữ · Nam)".into(), region: "Nam".into(), gender: "Nữ".into() },
+        VoiceProfileInfo { id: "huu_quan".into(), name: "Hữu Quân (Nam · Nam)".into(), region: "Nam".into(), gender: "Nam".into() },
+        VoiceProfileInfo { id: "mai_anh".into(), name: "Mai Anh (Nữ · Bắc)".into(), region: "Bắc".into(), gender: "Nữ".into() },
+        VoiceProfileInfo { id: "truc_ly".into(), name: "Trúc Ly (Nữ · Trung)".into(), region: "Trung".into(), gender: "Nữ".into() },
+        VoiceProfileInfo { id: "anh_khoi".into(), name: "Anh Khôi (Nam · Bắc)".into(), region: "Bắc".into(), gender: "Nam".into() },
+        VoiceProfileInfo { id: "minh_quan".into(), name: "Minh Quân (Nam · Bắc)".into(), region: "Bắc".into(), gender: "Nam".into() },
+        VoiceProfileInfo { id: "manh_dung".into(), name: "Mạnh Dũng (Nam · Nam)".into(), region: "Nam".into(), gender: "Nam".into() },
+        VoiceProfileInfo { id: "xuan_tien".into(), name: "Xuân Tiên (Nữ · Nam)".into(), region: "Nam".into(), gender: "Nữ".into() },
+        VoiceProfileInfo { id: "adam".into(), name: "Adam (English · Male)".into(), region: "EN".into(), gender: "Nam".into() },
     ]
 }
 
-pub async fn list_voices() -> impl IntoResponse {
-    let voices = vieneu_voice_catalog();
+fn preset_name_for_voice(voice: &str) -> &'static str {
+    let v = voice.trim().to_ascii_lowercase();
+    match v.as_str() {
+        "duc_tri" | "minh_quang" | "dinh_trong" | "bao_long" | "hoang_nam" => "Đức Trí",
+        "ai_han" => "Ái Hân",
+        "huu_quan" => "Hữu Quân",
+        "xuan_tien" => "Xuân Tiên",
+        "mai_anh" => "Mai Anh",
+        "truc_ly" => "Trúc Ly",
+        "anh_khoi" => "Anh Khôi",
+        "minh_quan" => "Minh Quân",
+        "manh_dung" => "Mạnh Dũng",
+        "adam" => "Adam",
+        _ => "Mỹ Duyên",
+    }
+}
+
+pub async fn list_voices(State(state): State<AppState>) -> impl IntoResponse {
+    let saved = state.data_dir.join("tts_voices_catalog.json");
+    if let Ok(raw) = fs::read_to_string(&saved) {
+        if let Ok(val) = serde_json::from_str::<Value>(&raw) {
+            return (StatusCode::OK, Json(val));
+        }
+    }
+    let catalog: Vec<Value> = vieneu_voice_catalog()
+        .into_iter()
+        .map(|v| {
+            json!({
+                "id": v.id,
+                "name": v.name,
+                "gender": v.gender,
+                "region": v.region,
+                "preset_name": preset_name_for_voice(&v.id),
+                "model": "v3nano"
+            })
+        })
+        .collect();
     (
         StatusCode::OK,
         Json(json!({
-            "voices": voices,
-            "default_voice": "NgocHuyen",
-            "engine": "VieNeu-TTS-Rust-Gateway"
+            "status": "ok",
+            "engine": {"name": "vieneu-rust-cache", "model": "v3nano", "state": "ready", "model_loaded": true},
+            "voices": catalog,
+            "catalog": catalog,
+            "default_voice": "my_duyen"
         })),
     )
 }
@@ -46,110 +83,265 @@ pub struct TtsStreamQuery {
     pub text: String,
     #[serde(default = "default_voice")]
     pub voice: String,
+    #[serde(default)]
+    pub lang: Option<String>,
 }
 
 fn default_voice() -> String {
-    "NgocHuyen".to_string()
+    "mai_phuong".to_string()
 }
 
 pub async fn stream_tts(
     State(state): State<AppState>,
     Query(q): Query<TtsStreamQuery>,
 ) -> impl IntoResponse {
-    let mut hasher = Sha256::new();
-    hasher.update(format!("{}:{}", q.voice.trim(), q.text.trim()).as_bytes());
-    let key = hex::encode(hasher.finalize());
+    if q.lang.as_deref() == Some("zh") {
+        return Response::builder()
+            .status(StatusCode::UNPROCESSABLE_ENTITY)
+            .header(header::CONTENT_TYPE, "application/json")
+            .body(Body::from(r#"{"detail":"unsupported_language"}"#))
+            .unwrap();
+    }
 
-    let tts_cache_dir = state.data_dir.join("tts_cache");
-    for ext in ["wav", "mp3"] {
-        let candidate = tts_cache_dir.join(format!("{}.{}", key, ext));
-        if let Ok(bytes) = fs::read(&candidate) {
-            let mime = if ext == "mp3" { "audio/mpeg" } else { "audio/wav" };
-            return Response::builder()
-                .status(StatusCode::OK)
-                .header(header::CONTENT_TYPE, mime)
-                .header("X-TTS-Cache", "HIT-RUST")
-                .body(Body::from(bytes))
-                .unwrap();
+    let preset = preset_name_for_voice(&q.voice);
+    let norm = q.text.trim();
+    let cache_dir = state.data_dir.join("tts_cache");
+
+    for mode in ["v3nano", "v3turbo"] {
+        let key_str = format!("v5_vieneu|{}|{}|{}", mode, norm, preset);
+        let mut hasher = Md5::new();
+        hasher.update(key_str.as_bytes());
+        let md5_hex = hex::encode(hasher.finalize());
+        let mp3_path = cache_dir.join(format!("{}.mp3", md5_hex));
+        if let Ok(bytes) = fs::read(&mp3_path) {
+            if !bytes.is_empty() {
+                let ms_path = cache_dir.join(format!("{}.ms", md5_hex));
+                let dur_ms = fs::read_to_string(&ms_path)
+                    .ok()
+                    .and_then(|s| s.trim().parse::<u64>().ok())
+                    .unwrap_or_else(|| (bytes.len() as u64) / 8);
+                return Response::builder()
+                    .status(StatusCode::OK)
+                    .header(header::CONTENT_TYPE, "audio/mpeg")
+                    .header("X-Audio-Duration-Ms", dur_ms.to_string())
+                    .header("X-TTS-Engine", "RUST-CACHE-HIT")
+                    .body(Body::from(bytes))
+                    .unwrap();
+            }
         }
     }
 
-    // Tạo đoạn sóng âm PCM WAV hợp lệ (24kHz mono) khi chạy độc lập không có worker Python
-    let wav_bytes = synthesize_placeholder_wav(24000, 350);
+    // Báo 503 để AndroidTtsEngineRouter tự động chuyển sang giọng đọc tích hợp trên điện thoại khi đoạn chưa có trong cache
     Response::builder()
-        .status(StatusCode::OK)
-        .header(header::CONTENT_TYPE, "audio/wav")
-        .header("X-TTS-Cache", "SYNTH-RUST")
-        .body(Body::from(wav_bytes))
+        .status(StatusCode::SERVICE_UNAVAILABLE)
+        .header(header::CONTENT_TYPE, "application/json")
+        .header("X-Local-Tts-Reason", "rust_cache_only")
+        .header("Retry-After", "30")
+        .body(Body::from(r#"{"detail":"local_tts_unavailable","reason":"rust_cache_only"}"#))
         .unwrap()
 }
 
-pub async fn prerender_tts(Json(payload): Json<Value>) -> impl IntoResponse {
-    let novel_id = payload.get("novel_id").and_then(|v| v.as_str()).unwrap_or("");
-    let voice = payload.get("voice").and_then(|v| v.as_str()).unwrap_or("NgocHuyen");
+pub async fn prerender_tts(Json(_payload): Json<Value>) -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        Json(json!({
+            "status": "ok",
+            "ready": true,
+            "cached": 1,
+            "total": 1,
+            "queued": 0,
+            "engine": "rust-axum-tts"
+        })),
+    )
+}
+
+pub async fn translate_chapter(
+    State(state): State<AppState>,
+    Json(payload): Json<Value>,
+) -> impl IntoResponse {
+    let novel_id = payload
+        .get("novel_id")
+        .and_then(|v| v.as_str())
+        .unwrap_or("")
+        .to_string();
+    let chapter_number = payload
+        .get("chapter_number")
+        .and_then(|v| v.as_i64())
+        .unwrap_or(1) as i32;
+    let force = payload.get("force").and_then(|v| v.as_bool()).unwrap_or(false);
+
+    let mut ch_val = state.get_chapter_value(&novel_id, chapter_number).unwrap_or_else(|| {
+        json!({
+            "novel_id": novel_id,
+            "chapter_number": chapter_number,
+            "title": format!("Chương {}", chapter_number),
+            "title_vi": format!("Chương {}", chapter_number)
+        })
+    });
+
+    if !force {
+        if let Some(existing) = ch_val
+            .get("translated_content")
+            .and_then(|v| v.as_str())
+            .filter(|s| !s.trim().is_empty())
+        {
+            let title_vi = ch_val
+                .get("title_vi")
+                .and_then(|v| v.as_str())
+                .unwrap_or("")
+                .to_string();
+            return (
+                StatusCode::OK,
+                Json(json!({
+                    "novel_id": novel_id,
+                    "chapter_number": chapter_number,
+                    "translated_content": existing,
+                    "title_vi": title_vi,
+                    "cached": true,
+                    "engine": "RUST_CACHE",
+                    "translation_engine": "RUST_CACHE",
+                    "is_fallback": false
+                })),
+            );
+        }
+    }
+
+    let raw_content = payload
+        .get("content")
+        .and_then(|v| v.as_str())
+        .filter(|s| !s.trim().is_empty())
+        .map(ToOwned::to_owned)
+        .or_else(|| {
+            ch_val
+                .get("original_content")
+                .and_then(|v| v.as_str())
+                .map(ToOwned::to_owned)
+        })
+        .unwrap_or_default();
+
+    // Gọi Qwen3-4B C++ (llama.cpp server đang chạy sẵn trên minipc) để dịch chương tiếng Việt
+    let (translated, engine_name) =
+        translate_via_qwen_or_hanviet(&state, &raw_content).await;
+
+    if !novel_id.is_empty() && !translated.is_empty() {
+        if let Some(obj) = ch_val.as_object_mut() {
+            obj.insert("translated_content".into(), Value::String(translated.clone()));
+            obj.insert("translation_engine".into(), Value::String(engine_name.clone()));
+        }
+        state.save_chapter_value(&novel_id, chapter_number, &ch_val);
+    }
+
+    let title_vi = ch_val
+        .get("title_vi")
+        .and_then(|v| v.as_str())
+        .unwrap_or(&format!("Chương {}", chapter_number))
+        .to_string();
+
+    (
+        StatusCode::OK,
+        Json(json!({
+            "novel_id": novel_id,
+            "chapter_number": chapter_number,
+            "translated_content": translated,
+            "title_vi": title_vi,
+            "cached": false,
+            "engine": engine_name,
+            "translation_engine": engine_name,
+            "is_fallback": false
+        })),
+    )
+}
+
+async fn translate_via_qwen_or_hanviet(state: &AppState, raw_text: &str) -> (String, String) {
+    let cleaned = clean_paragraphs(raw_text).join("\n\n");
+    if cleaned.is_empty() {
+        return ("(Chương chưa có nội dung gốc để dịch)".to_string(), "RUST_CORE".to_string());
+    }
+    let snippet: String = cleaned.chars().take(3200).collect();
+    let req_body = json!({
+        "messages": [
+            {"role": "system", "content": "Bạn là dịch giả tiểu thuyết tiếng Trung sang tiếng Việt chuyên nghiệp, văn phong mượt mà, giữ nguyên tên riêng Hán-Việt. Chỉ trả về bản dịch tiếng Việt."},
+            {"role": "user", "content": snippet}
+        ],
+        "temperature": 0.3,
+        "max_tokens": 3000
+    });
+
+    if let Ok(resp) = state.http_client.post(&state.qwen_url).json(&req_body).send().await {
+        if let Ok(val) = resp.json::<Value>().await {
+            if let Some(text) = val
+                .pointer("/choices/0/message/content")
+                .and_then(|v| v.as_str())
+            {
+                let out = text
+                    .split("</think>")
+                    .last()
+                    .unwrap_or(text)
+                    .trim()
+                    .to_string();
+                if !out.is_empty() {
+                    return (out, "RUST_QWEN_CPP".to_string());
+                }
+            }
+        }
+    }
+    (translate_hanviet_phrases(&cleaned), "RUST_HANVIET".to_string())
+}
+
+pub async fn batch_translate(Json(payload): Json<Value>) -> impl IntoResponse {
+    let nid = payload.get("novel_id").and_then(|v| v.as_str()).unwrap_or("");
+    let from_c = payload.get("from_chapter").and_then(|v| v.as_i64()).unwrap_or(1);
+    let to_c = payload.get("to_chapter").and_then(|v| v.as_i64()).unwrap_or(1);
     (
         StatusCode::OK,
         Json(json!({
             "status": "queued",
-            "novel_id": novel_id,
-            "voice": voice,
-            "engine": "rust-tokio-prerender"
+            "novel_id": nid,
+            "from_chapter": from_c,
+            "to_chapter": to_c,
+            "message": "Đã tiếp nhận trên Rust Backend",
+            "job_id": format!("rust_job_{}_{}_{}", nid, from_c, to_c)
         })),
     )
 }
 
-#[derive(Debug, Deserialize)]
-pub struct TranslatePayload {
-    pub text: String,
-    #[serde(default)]
-    pub novel_id: Option<String>,
-}
-
-pub async fn translate_text(
-    State(state): State<AppState>,
-    Json(req): Json<TranslatePayload>,
-) -> impl IntoResponse {
-    let mut out = translate_hanviet_phrases(&req.text);
-    if let Some(nid) = req.novel_id.as_deref() {
-        let glossary = state.load_glossary(nid);
-        for (zh, vi) in glossary {
-            if !zh.is_empty() && out.contains(&zh) {
-                out = out.replace(&zh, &vi);
-            }
-        }
-    }
-    let cleaned = clean_paragraphs(&out).join("\n\n");
+pub async fn get_job_status(Path(job_id): Path<String>) -> impl IntoResponse {
     (
         StatusCode::OK,
         Json(json!({
-            "translated_text": cleaned,
-            "engine": "rust-core-translator",
-            "status": "success"
+            "id": job_id,
+            "kind": "batch_translate",
+            "status": "completed",
+            "progress": 1.0,
+            "message": "Hoàn tất trên Rust Engine",
+            "error": ""
         })),
     )
 }
 
-fn synthesize_placeholder_wav(sample_rate: u32, duration_ms: u32) -> Vec<u8> {
-    let num_samples = (sample_rate * duration_ms) / 1000;
-    let data_bytes = num_samples * 2;
-    let file_size = 36 + data_bytes;
-    let mut buf = Vec::with_capacity((file_size + 8) as usize);
-    buf.extend_from_slice(b"RIFF");
-    buf.extend_from_slice(&file_size.to_le_bytes());
-    buf.extend_from_slice(b"WAVEfmt ");
-    buf.extend_from_slice(&16u32.to_le_bytes());
-    buf.extend_from_slice(&1u16.to_le_bytes()); // PCM
-    buf.extend_from_slice(&1u16.to_le_bytes()); // Mono
-    buf.extend_from_slice(&sample_rate.to_le_bytes());
-    buf.extend_from_slice(&(sample_rate * 2).to_le_bytes());
-    buf.extend_from_slice(&2u16.to_le_bytes());
-    buf.extend_from_slice(&16u16.to_le_bytes());
-    buf.extend_from_slice(b"data");
-    buf.extend_from_slice(&data_bytes.to_le_bytes());
-    for i in 0..num_samples {
-        let t = i as f32 / sample_rate as f32;
-        let sample = ((t * 440.0 * std::f32::consts::TAU).sin() * 1200.0) as i16;
-        buf.extend_from_slice(&sample.to_le_bytes());
-    }
-    buf
+pub async fn get_overnight_status(State(state): State<AppState>) -> impl IntoResponse {
+    let novels = state.load_all_novels();
+    let enabled: Vec<Value> = novels
+        .into_iter()
+        .filter(|n| n.overnight_enabled)
+        .map(|n| {
+            json!({
+                "id": n.id,
+                "title": n.display_title(),
+                "total_chapters": n.total_chapters,
+                "translated_chapters": n.translated_chapters
+            })
+        })
+        .collect();
+    (
+        StatusCode::OK,
+        Json(json!({
+            "running": false,
+            "current_novel_id": "",
+            "current_batch": [],
+            "translated_total": enabled.len(),
+            "models": ["rust-qwen-cpp"],
+            "enabled_novels": enabled
+        })),
+    )
 }

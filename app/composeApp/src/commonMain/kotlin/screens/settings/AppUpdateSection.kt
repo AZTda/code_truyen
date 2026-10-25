@@ -55,7 +55,7 @@ fun VersionFooter(versionName: String, versionCode: Int, modifier: Modifier = Mo
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "TruyenCloud · Phiên bản $versionName (Build $versionCode)",
+            text = "TruyenCloud · Phiên bản $versionName (Build $versionCode) · Rust Engine",
             style = AppText.caption,
             color = LocalCustomColors.current.textTertiary,
             textAlign = TextAlign.Center
