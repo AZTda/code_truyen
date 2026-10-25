@@ -1,0 +1,13 @@
+{
+  "version_code": 20,
+  "version_name": "1.6.0",
+  "min_version_code": 1,
+  "download_url": "/static/truyencloud-latest.apk",
+  "apk_url": "/static/truyencloud-1.6.0-20.apk",
+  "file_size_bytes": 25342005,
+  "changelog": "Bản cập nhật v1.6.0 (Build 20) — 5 Nhóm Tính Năng Mới & Bộ Vector Icons:\n- Khám phá 366+ truyện: Huy hiệu 'Đã dịch X chương / Đêm' trực tiếp trên bìa truyện & Thanh lọc nhanh theo trạng thái dịch / nguồn truyện.\n- Studio Chi tiết truyện: Xuất & chia sẻ sách điện tử .EPUB tiếng Việt 1 chạm, Quản lý Bảng thuật ngữ ngay tại màn Chi tiết truyện.\n- Giọng đọc VieNeu-TTS & Dựng sẵn Audio: Chọn & nghe thử 11 giọng đọc AI theo từng truyện, tích hợp Dựng sẵn Audio (Pre-render) trong hộp thoại Tải hàng loạt chương.\n- Mini Audiobook Player nổi: Vừa nghe truyện vừa lướt Tủ sách / Khám phá và chạm 1 lần để nhảy lại chương đang nghe.\n- Ôn từ vựng theo truyện đang đọc (Flashcard tại chỗ) & Nhật ký Lịch sử đọc/nghe chi tiết theo mốc thời gian.",
+  "release_date": "2026-10-25",
+  "is_mandatory": false,
+  "force_update": false,
+  "sha256": "386f39edf7c20cc667e752605ca962b8070f718f9fc3e956014073044f57652b"
+}

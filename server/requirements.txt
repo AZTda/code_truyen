@@ -1,0 +1,23 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+httpx>=0.28.0
+beautifulsoup4>=4.12.0
+supabase>=2.10.0
+pydantic>=2.10.0
+python-dotenv>=1.0.0
+zhconv==1.4.3  # phồn thể -> giản thể khi so khớp tên truyện (uukanshu, piaotia)
+google-antigravity>=0.1.16
+Pillow>=10.0.0
+pytest>=8.0.0
+pytest-asyncio>=0.24.0
+
+# --- Giọng đọc VieNeu-TTS chạy trên máy chủ (ONNX, CPU, KHÔNG torch). Ghim đúng phiên bản đã chạy thật. ---
+# Gói `vieneu` kéo theo gradio + librosa (hàng trăm MB, không dùng ở đường đọc) nên nó nằm ở requirements-vieneu.txt và
+# được cài bằng `pip install --no-deps`; mọi thư viện thật sự cần lúc chạy được ghim ngay dưới đây.
+numpy==2.4.6
+onnxruntime==1.31.0
+tokenizers==0.23.3
+huggingface_hub==2.2.0
+sea-g2p==0.10.0
+PyYAML==6.0.3
+lameenc==1.8.4

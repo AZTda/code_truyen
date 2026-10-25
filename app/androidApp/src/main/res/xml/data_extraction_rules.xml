@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+: sao lưu đám mây / chuyển máy giữ mọi thứ TRỪ mã đăng nhập. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="truyencloud_secure_prefs.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="truyencloud_secure_prefs.xml" />
+    </device-transfer>
+</data-extraction-rules>

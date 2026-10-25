@@ -1,0 +1,79 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+.fuse_hidden*
+
+# Environment & Secrets
+.env
+server/.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.keystore
+server/data/users.json
+server/data/.session_secret
+server/data/.test1_password
+!server/.env.example
+
+# Build outputs & Backups
+build-outputs/
+.backup-*/
+server/in.txt
+
+# AI Model Weights
+*.gguf
+*.onnx
+*.safetensors
+*.pt
+*.pth
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+
+# SQLite & Local databases
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Server cache & generated data
+server/data/tts_cache/
+server/data/covers_cache/
+server/static/flashcards/
+server/data/novels/
+
+# Gradle & Android
+.gradle/
+.kotlin/
+app/.kotlin/
+build/
+app/**/build/
+local.properties
+*.apk
+*.aab
+
+# iOS & Xcode
+*.xcuserstate
+xcuserdata/
+DerivedData/
+Pods/
+.build/
+
+# Temp captures
+capture_*.png
+test_*.png

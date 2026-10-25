@@ -1,0 +1,18 @@
+.fuse_hidden*
+.env
+.env.*
+!*.env.example
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.db
+*.db-shm
+*.db-wal
+data/tts_cache/
+data/covers_cache/
+static/flashcards/
+# Từ điển convert cộng đồng (không giấy phép, chỉ dùng riêng), mô hình Hy-MT2 và cache tựa: chỉ nằm trong data/
+data/dict/
+data/mt/
+data/title_cache.sqlite*

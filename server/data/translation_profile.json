@@ -1,0 +1,8 @@
+{
+  "genre": "Khoa huyễn / Mạt thế",
+  "sino_vietnamese_ratio": "Thuần Việt mềm mại",
+  "custom_prompt": "Dịch giọng văn tiểu thuyết trôi chảy, xưng hô phù hợp bối cảnh, giữ nguyên kiếm chiêu và danh xưng tôn kính.",
+  "prefetch_chapters": 1,
+  "auto_recrawl": true,
+  "reader_mode": "original"
+}

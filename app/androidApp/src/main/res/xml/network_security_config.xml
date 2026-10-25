@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Mặc định KHÔNG cho phép HTTP không mã hoá (trước đây android:usesCleartextTraffic="true" mở HTTP cho mọi địa chỉ,
+  nên mật khẩu và token đăng nhập có thể bị nghe lén trên Wi-Fi công cộng). Máy chủ thật chạy HTTPS qua Cloudflare.
+
+  Ngoại lệ HTTP chỉ dành cho phát triển trên cùng máy:
+    - localhost / 127.0.0.1    máy chủ chạy trên chính thiết bị (hoặc `adb reverse`)
+    - 10.0.2.2                 máy chủ chạy trên máy tính, nhìn từ Android Emulator
+
+  HẠN CHẾ KHI DÙNG MẠNG LAN: bản APK đang phát hành bằng server/publish_apk.sh là bản DEBUG
+  (androidApp chưa có cấu hình ký bản release; publish_apk.sh chỉ sao chép APK có sẵn, tệp duy nhất từng được dựng
+  là androidApp-debug.apk). Vì vậy KHÔNG có thư mục src/debug ghi đè cho phép HTTP mọi nơi — làm thế thì chính bản
+  phát hành sẽ lại cho phép HTTP khắp nơi. Android không cho khai báo cả dải IP (192.168.x.x), nên máy chủ trong LAN
+  trên Android phải dùng HTTPS (ví dụ Cloudflare Tunnel hoặc chứng chỉ riêng). iOS khác: Info.plist dùng
+  NSAllowsLocalNetworking nên vẫn dùng được HTTP tới địa chỉ LAN. Cài đặt → Nâng cao → Máy chủ kiểm tra giới hạn này
+  trước khi lưu.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>

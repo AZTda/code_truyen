@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Máy đang ở chế độ tối: nền khởi động trùng với giao diện Tối (#07090B) để không loé sáng -->
+    <style name="Theme.TruyenCloud" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">#FF07090B</item>
+    </style>
+</resources>

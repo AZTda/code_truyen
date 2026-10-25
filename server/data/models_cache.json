@@ -1,0 +1,75 @@
+{
+  "cli_version": "1.1.27",
+  "last_updated": "2026-09-30T21:02:13.604535Z",
+  "active_model": "gemini-3.8-flash-low",
+  "active_effort": "low",
+  "timeout_seconds": 120,
+  "models": [
+    {
+      "id": "gemini-3.8-flash-low",
+      "name": "Gemini 3.8 Flash (Low - Tốc độ cực đại)",
+      "provider": "Google",
+      "reasoning": "low"
+    },
+    {
+      "id": "gemini-3.8-flash-medium",
+      "name": "Gemini 3.8 Flash (Medium)",
+      "provider": "Google",
+      "reasoning": "medium"
+    },
+    {
+      "id": "gemini-3.8-flash-high",
+      "name": "Gemini 3.8 Flash (High)",
+      "provider": "Google",
+      "reasoning": "high"
+    },
+    {
+      "id": "gemini-3.7-flash-low",
+      "name": "Gemini 3.7 Flash (Low)",
+      "provider": "Google",
+      "reasoning": "low"
+    },
+    {
+      "id": "gemini-3.7-flash-medium",
+      "name": "Gemini 3.7 Flash (Medium)",
+      "provider": "Google",
+      "reasoning": "medium"
+    },
+    {
+      "id": "gemini-3.7-flash-high",
+      "name": "Gemini 3.7 Flash (High)",
+      "provider": "Google",
+      "reasoning": "high"
+    },
+    {
+      "id": "gemini-3.1-pro-low",
+      "name": "Gemini 3.1 Pro (Low)",
+      "provider": "Google",
+      "reasoning": "low"
+    },
+    {
+      "id": "gemini-3.1-pro-high",
+      "name": "Gemini 3.1 Pro (High)",
+      "provider": "Google",
+      "reasoning": "high"
+    },
+    {
+      "id": "claude-sonnet-4-6",
+      "name": "Claude Sonnet 4.6 (Thinking)",
+      "provider": "Anthropic",
+      "reasoning": "thinking"
+    },
+    {
+      "id": "claude-opus-4-6-thinking",
+      "name": "Claude Opus 4.6 (Thinking)",
+      "provider": "Anthropic",
+      "reasoning": "thinking"
+    },
+    {
+      "id": "gpt-oss-120b-medium",
+      "name": "GPT-OSS 120B (Medium)",
+      "provider": "OpenAI",
+      "reasoning": "medium"
+    }
+  ]
+}

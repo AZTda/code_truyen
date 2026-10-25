@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Cửa sổ lúc khởi động (trước khi Compose vẽ khung hình đầu): cùng màu nền với giao diện Sáng "Tuyết", khớp chế độ "Hệ thống" -->
+    <style name="Theme.TruyenCloud" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:windowBackground">#FFF2F4F6</item>
+    </style>
+</resources>

@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TruyenCloud: đọc truyện, nghe truyện, học từ mới</title>
+<meta name="description" content="TruyenCloud là ứng dụng Android để đọc truyện chữ dịch từ tiếng Trung, nghe truyện bằng giọng đọc và học từ tiếng Anh gặp trong truyện. Tải tệp APK, bản mới tự cập nhật trong ứng dụng.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F2F4F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#07090B" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://truyen.achatvn.com/">
+<link rel="icon" type="image/png" sizes="64x64" href="/static/site/icon-64-v1.png">
+<link rel="apple-touch-icon" href="/static/site/icon-180-v1.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="vi_VN">
+<meta property="og:site_name" content="TruyenCloud">
+<meta property="og:title" content="TruyenCloud: đọc truyện, nghe truyện, học từ mới">
+<meta property="og:description" content="Ứng dụng Android đọc truyện chữ dịch từ tiếng Trung, nghe truyện bằng giọng đọc và học từ tiếng Anh gặp trong truyện.">
+<meta property="og:url" content="https://truyen.achatvn.com/">
+<meta property="og:image" content="https://truyen.achatvn.com/static/site/og-v1.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ứng dụng TruyenCloud với trang Khám phá và trang đọc truyện trên điện thoại">
+<meta name="twitter:card" content="summary_large_image">
+<noscript><style>#log-status,#qr-card{display:none!important}</style></noscript>
+<style>
+/*
+  Kế hoạch trang (Nordic x iOS, giống ứng dụng 1.4.0):
+  - Màu lấy đúng token của app (theme/Color.kt): tối #07090B/#12161A/#181D22, sáng "Tuyết" #F2F4F6 + thẻ trắng,
+    một màu nhấn xanh (#5FAEF0 tối / #0A66C2 sáng). Theo prefers-color-scheme, không có nút đổi.
+  - Chữ: phông hệ thống (sans) cho mọi thứ; không in hoa, không emoji, viết hoa đầu câu.
+  - Bố cục, từ trên xuống: thanh trên (logo, mục, nút Tải về) > hero (biểu tượng, tên app, một câu giới thiệu,
+    nút tải lớn + phiên bản/dung lượng/ngày lấy từ /v1/app/check-update, QR chỉ trên màn rộng, khung điện thoại)
+    > Tính năng (6 mục, danh sách nhóm inset trên điện thoại, lưới thẻ trên laptop) > Ảnh chụp (cuộn ngang
+    có snap trên điện thoại, lưới 6 cột trên laptop) > Cài đặt trên Android (3 bước) > Có gì mới (changelog từ API)
+    > Hỏi đáp (details) > chân trang (không có link quản trị).
+  - Không gọi mạng ra ngoài: ảnh/QR nằm trong /static/site/. Nút tải luôn có href /v1/app/download-latest,
+    JS chỉ đổi sang download_url có phiên bản khi API trả về. Không ghi cứng số phiên bản.
+  - Ảnh có width/height (không xô lệch bố cục), vùng chạm >= 44px, focus rõ, tôn trọng prefers-reduced-motion.
+*/
+:root{
+  color-scheme:light dark;
+  --bg:#F2F4F6;--surface:#FFFFFF;--card:#FFFFFF;--card-high:#E9EDF0;--hairline:#E1E5E9;--outline:#7D8892;
+  --text:#12161A;--text-2:#4A545D;--text-3:#606B75;
+  --accent:#0A66C2;--accent-strong:#0B58A6;--on-accent:#FFFFFF;--accent-soft:rgba(10,102,194,.10);--on-accent-soft:#0B58A6;
+  --header-bg:rgba(242,244,246,.84);--glow:rgba(10,102,194,.10);
+  --bezel:#12161A;--bezel-ring:rgba(18,22,26,.14);
+  --phone-shadow:0 28px 56px -24px rgba(18,22,26,.38),0 10px 22px -14px rgba(18,22,26,.28);
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text",Roboto,"Segoe UI",sans-serif;
+  --gutter:16px;--radius:16px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#07090B;--surface:#12161A;--card:#181D22;--card-high:#1F252B;--hairline:#232A31;--outline:#66727C;
+    --text:#EAEEF1;--text-2:#A6B0B8;--text-3:#8A949D;
+    --accent:#5FAEF0;--accent-strong:#4A97DB;--on-accent:#06121D;--accent-soft:rgba(95,174,240,.14);--on-accent-soft:#5FAEF0;
+    --header-bg:rgba(7,9,11,.80);--glow:rgba(95,174,240,.12);
+    --bezel:#1F252B;--bezel-ring:rgba(234,238,241,.10);
+    --phone-shadow:0 30px 60px -26px rgba(0,0,0,.9),0 0 0 1px rgba(234,238,241,.04);
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.5 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:clip}
+h1,h2,h3,p,ul,ol,figure{margin:0}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+ul,ol{padding:0;list-style:none}
+img{display:block;max-width:100%;height:auto}
+a{color:var(--accent)}
+a:hover{color:var(--accent-strong)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+b{font-weight:600;color:var(--text)}
+.wrap{width:100%;max-width:1160px;margin:0 auto;padding-inline:var(--gutter)}
+.skip{position:absolute;left:12px;top:-60px;z-index:20;background:var(--accent);color:var(--on-accent);padding:12px 16px;border-radius:10px;font-weight:600;text-decoration:none}
+.skip:focus{top:12px;color:var(--on-accent)}
+.ic{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+
+/* Thanh trên */
+.top{position:sticky;top:0;z-index:10;background:var(--header-bg);-webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px);border-bottom:1px solid var(--hairline)}
+.top-in{display:flex;align-items:center;gap:8px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;min-height:44px;color:var(--text);text-decoration:none;font-weight:600;font-size:17px;margin-right:auto}
+.brand:hover{color:var(--text)}
+.brand img{width:32px;height:32px;border-radius:8px}
+.nav{display:none;gap:2px}
+.nav a{display:flex;align-items:center;min-height:44px;padding:0 12px;border-radius:10px;color:var(--text-2);text-decoration:none;font-size:15px}
+.nav a:hover{color:var(--text);background:var(--card-high)}
+
+/* Nút */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 18px;border-radius:12px;background:var(--accent);color:var(--on-accent);font:600 15px/1.2 var(--sans);text-decoration:none;border:0;cursor:pointer}
+.btn:hover{background:var(--accent-strong);color:var(--on-accent)}
+.btn .ic{width:20px;height:20px;stroke-width:2}
+.btn-lg{min-height:56px;padding:0 24px;border-radius:14px;font-size:17px;width:100%;max-width:400px}
+.btn-lg .ic{width:22px;height:22px}
+
+/* Hero */
+.hero{position:relative;padding:32px 0 8px;overflow-x:clip}
+.hero-grid{display:grid;gap:36px}
+.app-icon{width:72px;height:72px;border-radius:17px;box-shadow:0 0 0 1px var(--hairline),0 8px 20px -10px rgba(0,0,0,.35)}
+.eyebrow{margin-top:20px;color:var(--text-2);font-size:15px;font-weight:500}
+h1{margin-top:4px;font-size:clamp(40px,8.6vw,60px);line-height:1.05;font-weight:700;letter-spacing:-.022em}
+.promise{margin-top:14px;max-width:560px;color:var(--text-2);font-size:clamp(19px,2.2vw,22px);line-height:1.45}
+.get{margin-top:28px;display:flex;gap:28px;align-items:flex-start}
+.get-main{flex:1;min-width:0}
+.get-meta{margin-top:12px;min-height:1.5em;color:var(--text);font-size:15px;font-weight:500;font-variant-numeric:tabular-nums}
+.get-note{margin-top:4px;max-width:46ch;color:var(--text-3);font-size:14px;line-height:1.45}
+.notice{display:flex;gap:10px;align-items:flex-start;margin-top:14px;max-width:46ch;padding:12px 14px;border-radius:12px;background:var(--accent-soft);color:var(--text);font-size:14px;line-height:1.45}
+.notice .ic{color:var(--on-accent-soft);width:20px;height:20px;margin-top:1px}
+.notice[hidden]{display:none}
+.more-link{display:inline-flex;align-items:center;gap:4px;min-height:44px;margin-top:6px;font-size:15px;font-weight:500;text-decoration:none}
+.more-link .ic{width:16px;height:16px;stroke-width:2}
+.qr{display:none;width:164px;flex:none;padding:14px;border-radius:var(--radius);background:var(--card);box-shadow:0 0 0 1px var(--hairline)}
+.qr-box{width:136px;height:136px;border-radius:8px;overflow:hidden;background:#fff}
+.qr-box svg{display:block;width:100%;height:100%}
+.qr figcaption{margin-top:10px;color:var(--text-3);font-size:12px;line-height:1.4}
+.qr[hidden]{display:none!important}
+
+/* Khung điện thoại */
+.phone{position:relative;padding:3.2%;border-radius:15%/6.9%;background:var(--bezel);box-shadow:inset 0 0 0 1px var(--bezel-ring),var(--phone-shadow)}
+.phone img,.phone picture{display:block;width:100%;border-radius:12.5%/5.8%;overflow:hidden}
+.hero-art{position:relative;display:flex;justify-content:center;max-height:430px;overflow:hidden;-webkit-mask-image:linear-gradient(#000 64%,transparent 98%);mask-image:linear-gradient(#000 64%,transparent 98%)}
+.hero-art::before{content:"";position:absolute;inset:6% 0 0;background:radial-gradient(closest-side,var(--glow),transparent);pointer-events:none}
+.hero-art .front{position:relative;width:min(72vw,300px)}
+.hero-art .back{display:none}
+
+/* Khu vực chung */
+.section{padding:56px 0 0;scroll-margin-top:60px}
+#tinh-nang{padding-top:32px}
+.section-head{max-width:720px;margin-bottom:24px}
+h2{font-size:clamp(28px,4.4vw,38px);line-height:1.15;font-weight:700;letter-spacing:-.016em}
+.lead{margin-top:10px;color:var(--text-2);font-size:17px;line-height:1.5}
+h3{font-size:17px;line-height:1.3;font-weight:600}
+
+/* Tính năng: danh sách nhóm inset trên điện thoại, lưới thẻ khi rộng */
+.features{background:var(--card);border-radius:var(--radius);overflow:hidden}
+.feat{position:relative;display:grid;grid-template-columns:40px 1fr;align-content:start;gap:14px;padding:16px}
+.feat+.feat::before{content:"";position:absolute;top:0;left:70px;right:0;height:1px;background:var(--hairline)}
+.f-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;background:var(--accent-soft);color:var(--on-accent-soft)}
+.feat p{margin-top:4px;color:var(--text-2);font-size:15px;line-height:1.5}
+
+/* Ảnh chụp */
+.shots-scroll{margin-inline:calc(var(--gutter)*-1);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--outline) transparent;padding-bottom:8px}
+.shots-scroll:focus-visible{outline-offset:-2px;border-radius:var(--radius)}
+@media (hover:none) and (pointer:coarse){
+  .shots-scroll{scrollbar-width:none}
+  .shots-scroll::-webkit-scrollbar{display:none}
+}
+.shots{display:flex;gap:14px;width:max-content;padding:4px var(--gutter) 24px}
+.shot{width:min(62vw,250px);scroll-snap-align:center}
+.shot figcaption{margin-top:14px;padding-inline:4px}
+.shot strong{display:block;font-size:15px;font-weight:600}
+.shot span{display:block;margin-top:2px;color:var(--text-3);font-size:13px;line-height:1.4}
+.swipe-hint{margin-top:2px;color:var(--text-3);font-size:13px}
+
+/* Cài đặt */
+.steps{display:grid;gap:12px;counter-reset:step}
+.step{display:grid;grid-template-columns:36px 1fr;align-content:start;gap:14px;padding:18px 16px;border-radius:var(--radius);background:var(--card)}
+.step-n{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--accent-soft);color:var(--on-accent-soft);font-weight:700;font-size:16px}
+.step p{margin-top:6px;color:var(--text-2);font-size:15px;line-height:1.55}
+.after-steps{margin-top:16px;color:var(--text-3);font-size:14px;max-width:70ch}
+
+/* Có gì mới */
+.log{border-radius:var(--radius);background:var(--card);overflow:hidden}
+.log-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:18px 18px 14px;border-bottom:1px solid var(--hairline)}
+.log-head h3{font-size:19px}
+.log-date{color:var(--text-3);font-size:14px;font-variant-numeric:tabular-nums}
+.log-body{padding:14px 18px 18px;min-height:96px}
+.log-list li{position:relative;padding:6px 0 6px 20px;color:var(--text);font-size:15px;line-height:1.5}
+.log-list li::before{content:"";position:absolute;left:3px;top:15px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.log-status{color:var(--text-3);font-size:15px}
+.sha{border-top:1px solid var(--hairline)}
+.sha summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;padding:0 18px;color:var(--text-2);font-size:14px;cursor:pointer;list-style:none}
+.sha summary::-webkit-details-marker{display:none}
+.sha code{display:block;padding:0 18px 16px;color:var(--text-2);font:13px/1.5 ui-monospace,"SF Mono",Menlo,Consolas,monospace;overflow-wrap:anywhere}
+
+/* Hỏi đáp */
+.faq{border-radius:var(--radius);background:var(--card);overflow:hidden}
+.faq details+details{border-top:1px solid var(--hairline)}
+.faq summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:12px 16px;font-size:17px;font-weight:500;cursor:pointer;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .ic,.sha summary .ic{width:18px;height:18px;color:var(--text-3);stroke-width:2;transform:rotate(90deg)}
+.faq details[open] summary .ic,.sha[open] summary .ic{transform:rotate(-90deg)}
+.faq summary:focus-visible,.sha summary:focus-visible{outline-offset:-3px;border-radius:var(--radius)}
+.faq .ans{padding:0 16px 18px;color:var(--text-2);font-size:15px;line-height:1.55;max-width:66ch}
+
+/* Chân trang */
+.foot{margin-top:72px;padding:28px 0 calc(32px + env(safe-area-inset-bottom));border-top:1px solid var(--hairline);color:var(--text-3);font-size:14px}
+.foot-in{display:grid;gap:14px}
+.foot-brand{display:flex;align-items:center;gap:10px;color:var(--text);font-weight:600}
+.foot-brand img{width:24px;height:24px;border-radius:6px}
+.foot-links{display:flex;flex-wrap:wrap;gap:0 4px;margin-left:-10px}
+.foot-links a{display:flex;align-items:center;min-height:44px;padding:0 10px;color:var(--text-2);text-decoration:none}
+.foot-links a:hover{color:var(--text)}
+
+@media (min-width:600px){
+  :root{--gutter:24px}
+  .features{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;background:none;border-radius:0;overflow:visible}
+  .feat{grid-template-columns:1fr;gap:16px;padding:22px;border-radius:var(--radius);background:var(--card)}
+  .feat+.feat::before{display:none}
+  .steps{grid-template-columns:repeat(3,1fr);gap:16px}
+  .step{grid-template-columns:1fr;padding:22px}
+}
+@media (min-width:760px){
+  .nav{display:flex}
+}
+@media (min-width:960px){
+  :root{--gutter:32px}
+  .hero{padding:56px 0 24px}
+  .hero-grid{grid-template-columns:minmax(0,1fr) 300px;align-items:center;gap:40px}
+  .app-icon{width:84px;height:84px;border-radius:20px}
+  .qr{display:block}
+  .hero-art{max-height:none;overflow:visible;-webkit-mask-image:none;mask-image:none;justify-content:flex-end;padding:10px 6px 30px 0}
+  .hero-art::before{inset:4% -6% 0}
+  .hero-art .front{width:290px;z-index:1}
+  .section{padding-top:96px}
+  #tinh-nang{padding-top:56px}
+  .section-head{margin-bottom:32px}
+  .features{grid-template-columns:repeat(3,1fr)}
+  .shots-scroll{margin-inline:0;overflow:visible;padding-bottom:0}
+  .shots{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:20px;width:auto;padding:0}
+  .shot{width:auto}
+  .swipe-hint{display:none}
+  .log-head{padding:22px 24px 16px}
+  .log-body{padding:16px 24px 22px}
+  .sha summary{padding:0 24px}.sha code{padding:0 24px 18px}
+  .faq summary{padding:14px 24px}.faq .ans{padding:0 24px 20px}
+  .foot-in{grid-template-columns:auto 1fr auto;align-items:center}
+  .foot-links{justify-content:center;margin-left:0}
+}
+/* Khung thứ hai chỉ khi cột ảnh đủ rộng (từ 1160px nội dung đạt 1096px): hẹp hơn thì nó đè lên QR và chữ. */
+@media (min-width:1160px){
+  .hero-grid{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)}
+  .hero-art .back{display:block;position:absolute;width:250px;right:244px;top:56px;opacity:.96}
+}
+@media (min-width:1024px){
+  .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:start}
+}
+@media (prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth}
+  .btn,.nav a,.foot-links a{transition:background-color .18s ease,color .18s ease}
+  .faq summary .ic,.sha summary .ic{transition:transform .2s ease}
+}
+@media (forced-colors:active){
+  .btn{border:1px solid ButtonText}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 19.5h14"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.6C10.4 5.3 8.1 4.5 5.5 4.5H4a1 1 0 0 0-1 1V17a1 1 0 0 0 1 1h1.5c2.6 0 4.9.7 6.5 2 1.6-1.3 3.9-2 6.5-2H20a1 1 0 0 0 1-1V5.5a1 1 0 0 0-1-1h-1.5c-2.6 0-4.9.8-6.5 2.1z"/><path d="M12 6.6V20"/></symbol>
+  <symbol id="i-lang" viewBox="0 0 24 24"><path d="M3.5 5.5h9"/><path d="M8 3.5v2"/><path d="M10.6 5.5c-.9 3.6-3.4 6.4-6.6 7.8"/><path d="M5.9 8.6c1 1.9 2.6 3.4 4.6 4.4"/><path d="m12.5 20.5 4-9 4 9"/><path d="M13.9 17.4h5.2"/></symbol>
+  <symbol id="i-head" viewBox="0 0 24 24"><path d="M4 16v-4a8 8 0 0 1 16 0v4"/><path d="M4 15.5h2.5a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M20 15.5h-2.5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1H19a1 1 0 0 0 1-1z"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M3 8c1.5-1.3 3-1.3 4.5 0s3 1.3 4.5 0 3-1.3 4.5 0 3 1.3 4.5 0"/><path d="M3 12.5c1.5-1.3 3-1.3 4.5 0s3 1.3 4.5 0 3-1.3 4.5 0 3 1.3 4.5 0"/><path d="M3 17c1.5-1.3 3-1.3 4.5 0s3 1.3 4.5 0 3-1.3 4.5 0 3 1.3 4.5 0"/></symbol>
+  <symbol id="i-sync" viewBox="0 0 24 24"><path d="M7 18.5a4.5 4.5 0 0 1-.6-8.96 6 6 0 0 1 11.7 1.5 3.75 3.75 0 0 1-.85 7.46"/><path d="M12 11.5v8"/><path d="m9 16.5 3 3 3-3"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="m2.5 9.5 9.5-5 9.5 5-9.5 5z"/><path d="M6.5 11.6V16c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.4"/><path d="M21.5 9.5v5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><path d="M12 8h.01"/></symbol>
+</svg>
+<a class="skip" href="#main">Bỏ qua đến nội dung</a>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#top" aria-label="TruyenCloud, về đầu trang"><img src="/static/site/icon-160-v1.webp" width="32" height="32" alt=""><span>TruyenCloud</span></a>
+    <nav class="nav" aria-label="Các mục trên trang">
+      <a href="#tinh-nang">Tính năng</a>
+      <a href="#anh">Ảnh chụp</a>
+      <a href="#cai-dat">Cài đặt</a>
+      <a href="#co-gi-moi">Có gì mới</a>
+      <a href="#hoi-dap">Hỏi đáp</a>
+    </nav>
+    <a class="btn" href="/v1/app/download-latest" download data-dl>Tải về</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="app-name">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <img class="app-icon" src="/static/site/icon-160-v1.webp" width="84" height="84" alt="Biểu tượng ứng dụng TruyenCloud: một cuốn sách đang mở">
+        <p class="eyebrow">Ứng dụng đọc truyện cho Android</p>
+        <h1 id="app-name">TruyenCloud</h1>
+        <p class="promise">Đọc truyện chữ dịch từ tiếng Trung, nghe truyện bằng giọng đọc và học từ tiếng Anh gặp trong truyện.</p>
+        <div class="get">
+          <div class="get-main">
+            <a class="btn btn-lg" id="dl-main" href="/v1/app/download-latest" download data-dl>
+              <svg class="ic" aria-hidden="true"><use href="#i-dl"/></svg><span>Tải ứng dụng cho Android</span>
+            </a>
+            <p class="get-meta" id="dl-meta" aria-live="polite">Bản mới nhất, tệp APK</p>
+            <p class="get-note">Cần Android 8.0 trở lên. Tài khoản do quản trị viên cấp; chưa có tài khoản vẫn đọc offline được.</p>
+            <p class="notice" id="ios-note" hidden><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span>Bạn đang dùng iPhone hoặc iPad. Hiện TruyenCloud chỉ có bản Android.</span></p>
+            <a class="more-link" href="#cai-dat">Xem cách cài đặt<svg class="ic" aria-hidden="true"><use href="#i-chev"/></svg></a>
+          </div>
+          <figure class="qr" id="qr-card">
+            <div class="qr-box" id="qr"></div>
+            <figcaption>Quét bằng camera điện thoại để mở trang này.</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="phone back">
+          <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="/static/site/discover-dark-v1.webp">
+            <img src="/static/site/discover-light-v1.webp" width="660" height="1441" loading="lazy" decoding="async" alt="Trang Khám phá với truyện gợi ý và bìa truyện">
+          </picture>
+        </div>
+        <div class="phone front">
+          <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="/static/site/reader-dark-v1.webp">
+            <img src="/static/site/reader-light-v1.webp" width="660" height="1441" fetchpriority="high" decoding="async" alt="Trang đọc truyện: chương 1 của Chuyện Tình Boston, chữ serif tiếng Việt">
+          </picture>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="tinh-nang" aria-labelledby="h-features">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="h-features">Bạn làm được gì với TruyenCloud</h2>
+        <p class="lead">Ứng dụng dùng riêng cho một nhóm nhỏ và chạy trên máy chủ riêng. Đây là những gì có trong ứng dụng hiện nay.</p>
+      </div>
+      <ul class="features">
+        <li class="feat">
+          <span class="f-icon"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg></span>
+          <div><h3>Tìm và đọc truyện</h3><p>Tìm truyện trên nhiều nguồn tiếng Trung, xem mục lục rồi đọc bản tiếng Việt. Trang đọc có năm màu nền, chỉnh được cỡ chữ và giãn dòng.</p></div>
+        </li>
+        <li class="feat">
+          <span class="f-icon"><svg class="ic" aria-hidden="true"><use href="#i-lang"/></svg></span>
+          <div><h3>Dịch bằng AI trên máy chủ riêng</h3><p>Chương truyện được dịch bằng mô hình AI chạy trên máy chủ riêng của nhóm. Khi máy dịch chính không dùng được, có đường dịch dự phòng.</p></div>
+        </li>
+        <li class="feat">
+          <span class="f-icon"><svg class="ic" aria-hidden="true"><use href="#i-head"/></svg></span>
+          <div><h3>Nghe truyện</h3><p>11 giọng đọc VieNeu tạo sẵn trên máy chủ, có ghi giọng nam hay nữ và vùng miền. Dừng lúc nào cũng được, lần sau nghe tiếp đúng chỗ. Khi cần, dùng giọng có sẵn của điện thoại.</p></div>
+        </li>
+        <li class="feat">
+          <span class="f-icon"><svg class="ic" aria-hidden="true"><use href="#i-wave"/></svg></span>
+          <div><h3>Âm thanh nền</h3><p>Bật tiếng mưa, lò sưởi, sóng biển hoặc quán cà phê khi đọc hay nghe, với âm lượng chỉnh riêng.</p></div>
+        </li>
+        <li class="feat">
+          <span class="f-icon"><svg class="ic" aria-hidden="true"><use href="#i-sync"/></svg></span>
+          <div><h3>Đọc offline, đồng bộ giữa các máy</h3><p>Tải trước chương để đọc khi không có mạng. Tiến độ đọc, kệ sách và truyện yêu thích đồng bộ giữa các máy dùng cùng tài khoản.</p></div>
+        </li>
+        <li class="feat">
+          <span class="f-icon"><svg class="ic" aria-hidden="true"><use href="#i-cap"/></svg></span>
+          <div><h3>Học từ tiếng Anh trong truyện</h3><p>Xen từ tiếng Anh vào bản dịch, chạm để tra nghĩa và lưu vào sổ từ. Ôn bằng thẻ ghi nhớ giãn cách, luyện điền từ, gõ lại và nghe chép.</p></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="anh" aria-labelledby="h-shots">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="h-shots">Ảnh chụp ứng dụng</h2>
+        <p class="lead">Giao diện sáng hoặc tối theo cài đặt của máy, ảnh dưới đây cũng vậy.</p>
+        <p class="swipe-hint">Vuốt ngang để xem thêm.</p>
+      </div>
+      <div class="shots-scroll" tabindex="0" role="region" aria-label="Ảnh chụp màn hình ứng dụng">
+        <ul class="shots">
+          <li><figure class="shot">
+            <div class="phone"><picture><source media="(prefers-color-scheme: dark)" srcset="/static/site/discover-dark-v1.webp"><img src="/static/site/discover-light-v1.webp" width="660" height="1441" loading="lazy" decoding="async" alt="Trang Khám phá: truyện dành cho bạn, mới cập nhật và đọc nhiều"></picture></div>
+            <figcaption><strong>Khám phá</strong><span>Gợi ý, truyện mới cập nhật và đọc nhiều</span></figcaption>
+          </figure></li>
+          <li><figure class="shot">
+            <div class="phone"><picture><source media="(prefers-color-scheme: dark)" srcset="/static/site/novel-dark-v1.webp"><img src="/static/site/novel-light-v1.webp" width="660" height="1441" loading="lazy" decoding="async" alt="Trang truyện với nút Đọc tiếp, các nút Yêu thích, Nghe, Tải về và mục lục chương"></picture></div>
+            <figcaption><strong>Trang truyện</strong><span>Đọc tiếp, nghe, tải về và mục lục</span></figcaption>
+          </figure></li>
+          <li><figure class="shot">
+            <div class="phone"><picture><source media="(prefers-color-scheme: dark)" srcset="/static/site/reader-dark-v1.webp"><img src="/static/site/reader-light-v1.webp" width="660" height="1441" loading="lazy" decoding="async" alt="Trang đọc với bản dịch tiếng Việt bằng chữ serif"></picture></div>
+            <figcaption><strong>Trang đọc</strong><span>Bản dịch tiếng Việt, chữ dễ đọc</span></figcaption>
+          </figure></li>
+          <li><figure class="shot">
+            <div class="phone"><picture><source media="(prefers-color-scheme: dark)" srcset="/static/site/reader-settings-dark-v1.webp"><img src="/static/site/reader-settings-light-v1.webp" width="660" height="1441" loading="lazy" decoding="async" alt="Bảng cài đặt đọc: giao diện, năm màu nền, kiểu chữ, cỡ chữ, chế độ đọc và giãn dòng"></picture></div>
+            <figcaption><strong>Cài đặt đọc</strong><span>Màu nền, cỡ chữ, giãn dòng</span></figcaption>
+          </figure></li>
+          <li><figure class="shot">
+            <div class="phone"><picture><source media="(prefers-color-scheme: dark)" srcset="/static/site/vocab-dark-v1.webp"><img src="/static/site/vocab-light-v1.webp" width="660" height="1441" loading="lazy" decoding="async" alt="Sổ từ: các từ tiếng Anh đã lưu kèm phiên âm, nghĩa và tên truyện"></picture></div>
+            <figcaption><strong>Sổ từ</strong><span>Từ tiếng Anh gặp trong truyện</span></figcaption>
+          </figure></li>
+          <li><figure class="shot">
+            <div class="phone"><picture><source media="(prefers-color-scheme: dark)" srcset="/static/site/review-dark-v1.webp"><img src="/static/site/review-light-v1.webp" width="660" height="1441" loading="lazy" decoding="async" alt="Ôn thẻ: thẻ từ serendipity với câu trong truyện và nút Lật thẻ"></picture></div>
+            <figcaption><strong>Ôn thẻ</strong><span>Thẻ ghi nhớ ôn theo lịch giãn cách</span></figcaption>
+          </figure></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="cai-dat" aria-labelledby="h-install">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="h-install">Cài đặt trên Android</h2>
+        <p class="lead">TruyenCloud không có trên Google Play nên bạn cài bằng tệp APK. Chỉ cần làm một lần.</p>
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <span class="step-n" aria-hidden="true">1</span>
+          <div><h3>Cho phép cài từ nguồn này</h3><p>Bấm <b>Tải ứng dụng cho Android</b> rồi mở tệp vừa tải. Lần đầu, Android sẽ hỏi quyền: vào <b>Cài đặt</b>, bật <b>Cho phép từ nguồn này</b> cho trình duyệt bạn đang dùng, rồi quay lại.</p></div>
+        </li>
+        <li class="step">
+          <span class="step-n" aria-hidden="true">2</span>
+          <div><h3>Mở tệp APK và cài</h3><p>Bấm <b>Cài đặt</b>. Nếu Google Play Protect hỏi về ứng dụng lạ, mở phần chi tiết và chọn <b>Vẫn cài đặt</b>. Xong thì mở TruyenCloud và đăng nhập.</p></div>
+        </li>
+        <li class="step">
+          <span class="step-n" aria-hidden="true">3</span>
+          <div><h3>Bản mới đến ngay trong ứng dụng</h3><p>Khi có phiên bản mới, ứng dụng tự báo và tải bản cập nhật. Bản mới cài đè lên bản cũ, dữ liệu vẫn giữ nguyên.</p></div>
+        </li>
+      </ol>
+      <p class="after-steps">Không tìm thấy tệp? Mở ứng dụng <b>Tệp</b> hoặc mục <b>Tải xuống</b> của trình duyệt.</p>
+    </div>
+  </section>
+
+  <div class="wrap duo">
+  <section class="section" id="co-gi-moi" aria-labelledby="h-news">
+      <div class="section-head">
+        <h2 id="h-news">Có gì mới</h2>
+        <p class="lead">Thay đổi trong bản mới nhất, lấy trực tiếp từ máy chủ.</p>
+      </div>
+      <article class="log" aria-labelledby="log-title">
+        <div class="log-head">
+          <h3 id="log-title">Bản mới nhất</h3>
+          <span class="log-date" id="log-date"></span>
+        </div>
+        <div class="log-body">
+          <p class="log-status" id="log-status">Đang tải danh sách thay đổi…</p>
+          <noscript><p class="log-status">Bật JavaScript để xem danh sách thay đổi. Nút tải ở trên vẫn dùng được.</p></noscript>
+          <ul class="log-list" id="log-list"></ul>
+        </div>
+        <details class="sha" id="sha" hidden>
+          <summary>Mã SHA-256 của tệp, để kiểm tra<svg class="ic" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+          <code id="sha-value"></code>
+        </details>
+      </article>
+  </section>
+
+  <section class="section" id="hoi-dap" aria-labelledby="h-faq">
+      <div class="section-head">
+        <h2 id="h-faq">Hỏi đáp</h2>
+        <p class="lead">Về tài khoản, iPhone, dữ liệu và cập nhật.</p>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Làm sao để có tài khoản?<svg class="ic" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+          <div class="ans"><p>TruyenCloud dùng riêng cho một nhóm nhỏ nên không có đăng ký công khai. Tài khoản do quản trị viên tạo, hãy nhắn quản trị viên nếu bạn cần. Khi chưa có tài khoản, bạn vẫn dùng được chế độ khách để đọc offline.</p></div>
+        </details>
+        <details>
+          <summary>Có bản cho iPhone không?<svg class="ic" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+          <div class="ans"><p>Hiện chỉ có bản Android, chạy trên Android 8.0 trở lên.</p></div>
+        </details>
+        <details>
+          <summary>Dữ liệu được lưu ở đâu, có đồng bộ không?<svg class="ic" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+          <div class="ans"><p>Khi đăng nhập, tiến độ đọc, kệ sách và truyện yêu thích được lưu trên máy chủ riêng của TruyenCloud và đồng bộ giữa các máy dùng cùng tài khoản. Chương đã tải về nằm trên điện thoại để đọc khi không có mạng.</p></div>
+        </details>
+        <details>
+          <summary>Cập nhật ứng dụng thế nào?<svg class="ic" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+          <div class="ans"><p>Ứng dụng tự kiểm tra phiên bản mới và báo cho bạn, chỉ cần bấm cập nhật. Bạn cũng có thể tải lại tệp APK ở trang này bất cứ lúc nào rồi cài đè, dữ liệu vẫn giữ nguyên.</p></div>
+        </details>
+        <details>
+          <summary>Làm sao biết tệp tải về đúng là của TruyenCloud?<svg class="ic" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+          <div class="ans"><p>Tệp được tải thẳng từ máy chủ của TruyenCloud. Nếu muốn chắc chắn, so mã SHA-256 ở mục Có gì mới với mã của tệp bạn đã tải.</p></div>
+        </details>
+      </div>
+  </section>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div class="foot-brand"><img src="/static/site/icon-160-v1.webp" width="24" height="24" alt=""><span>TruyenCloud</span></div>
+    <nav class="foot-links" aria-label="Liên kết chân trang">
+      <a href="/v1/app/download-latest" download data-dl>Tải APK</a>
+      <a href="#cai-dat">Cài đặt</a>
+      <a href="#co-gi-moi">Có gì mới</a>
+      <a href="#hoi-dap">Hỏi đáp</a>
+    </nav>
+    <p>© 2026 TruyenCloud. Dùng riêng cho một nhóm nhỏ.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+
+  // iPhone/iPad: báo rõ chỉ có bản Android (iPadOS báo là MacIntel có cảm ứng).
+  var ua = navigator.userAgent || "";
+  if (/iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) {
+    $("ios-note").hidden = false;
+  }
+
+  // Mã QR chỉ cho màn hình rộng: tải bộ tạo mã cục bộ khi cần, không gọi dịch vụ ngoài.
+  var wide = window.matchMedia ? window.matchMedia("(min-width: 960px)") : { matches: false };
+  var qrStarted = false;
+  function loadQr() {
+    if (qrStarted || !wide.matches) return;
+    qrStarted = true;
+    var s = document.createElement("script");
+    s.src = "/static/site/qr-v1.js";
+    s.async = true;
+    s.onload = function () {
+      var url = location.origin + "/download";
+      var el = window.TruyenCloudQR && window.TruyenCloudQR.svg(url, "Mã QR mở trang " + url);
+      if (el) $("qr").appendChild(el); else $("qr-card").hidden = true;
+    };
+    s.onerror = function () { $("qr-card").hidden = true; };
+    document.head.appendChild(s);
+  }
+  loadQr();
+  if (wide.addEventListener) wide.addEventListener("change", loadQr);
+
+  // Dải ảnh chỉ nhận Tab khi thật sự cuộn ngang được (trên laptop ảnh xếp lưới, không cần điểm dừng thừa).
+  var shots = document.querySelector(".shots-scroll");
+  function syncShots() {
+    if (shots.scrollWidth > shots.clientWidth + 1) shots.setAttribute("tabindex", "0");
+    else shots.removeAttribute("tabindex");
+  }
+  if (shots) { syncShots(); window.addEventListener("resize", syncShots); }
+
+  // Thông tin phiên bản từ máy chủ. Nút tải đã có sẵn /v1/app/download-latest nên lỗi ở đây không chặn việc tải.
+  function safeUrl(u) {
+    if (!u) return null;
+    try {
+      var x = new URL(String(u), location.href);
+      if (x.protocol !== "https:" && x.protocol !== "http:") return null;
+      if (location.protocol === "https:" && x.protocol === "http:") {
+        // Trình duyệt chặn tải qua http trên trang https: cùng máy chủ thì nâng lên https, khác máy chủ thì bỏ.
+        if (x.host !== location.host) return null;
+        x.protocol = "https:";
+      }
+      return x.href;
+    } catch (e) { return null; }
+  }
+  function fmtSize(bytes) {
+    var n = Number(bytes);
+    if (!isFinite(n) || n <= 0) return "";
+    return new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 1 }).format(n / 1e6) + "\u00a0MB";
+  }
+  function fmtDate(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || ""));
+    return m ? m[3] + "/" + m[2] + "/" + m[1] : "";
+  }
+  function showError() {
+    $("log-status").textContent = "Chưa lấy được danh sách thay đổi lúc này. Nút tải ở trên vẫn tải bản mới nhất.";
+  }
+  function render(d) {
+    var ver = String(d.version_name || "").trim();
+    if (!ver) return showError();
+    var url = safeUrl(d.download_url);
+    if (url) {
+      var links = document.querySelectorAll("[data-dl]");
+      for (var i = 0; i < links.length; i++) links[i].href = url;
+    }
+    var size = fmtSize(d.file_size_bytes), date = fmtDate(d.release_date);
+    // Khoảng trắng không ngắt trước dấu "·" để khi xuống dòng, dấu không nằm đầu dòng.
+    $("dl-meta").textContent = ["Phiên bản\u00a0" + ver, size, date].filter(Boolean).join("\u00a0· ");
+    $("log-title").textContent = "Phiên bản " + ver;
+    if (date) {
+      var t = document.createElement("time");
+      t.dateTime = d.release_date;
+      t.textContent = "Phát hành " + date;
+      $("log-date").appendChild(t);
+    }
+    var lines = String(d.changelog || "").split(/\r?\n/).map(function (l) {
+      return l.trim().replace(/^[-•*]\s*/, "");
+    }).filter(Boolean);
+    var list = $("log-list");
+    lines.forEach(function (l) {
+      var li = document.createElement("li");
+      li.textContent = l;
+      list.appendChild(li);
+    });
+    if (lines.length) $("log-status").remove();
+    else $("log-status").textContent = "Bản này chưa có ghi chú thay đổi.";
+    var sha = String(d.sha256 || "").toLowerCase();
+    if (/^[0-9a-f]{64}$/.test(sha)) {
+      $("sha-value").textContent = sha;
+      $("sha").hidden = false;
+    }
+  }
+
+  var ctrl = window.AbortController ? new AbortController() : null;
+  var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 10000);
+  fetch("/v1/app/check-update?platform=android", { cache: "no-store", signal: ctrl ? ctrl.signal : undefined })
+    .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(render)
+    .catch(showError)
+    .then(function () { clearTimeout(timer); });
+})();
+</script>
+</body>
+</html>

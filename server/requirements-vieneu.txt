@@ -1,0 +1,4 @@
+# Cài SAU requirements.txt và KHÔNG kéo phụ thuộc:
+#   pip install -r requirements.txt && pip install --no-deps -r requirements-vieneu.txt
+# (vieneu khai báo gradio + librosa chỉ cho giao diện demo và nhân bản giọng; đường đọc truyện không nạp chúng.)
+vieneu==3.8.3

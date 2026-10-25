@@ -1,0 +1,10 @@
+.gemini
+agy_bin
+data
+ollama_data
+*.db*
+.env
+.venv
+.git
+.pytest_cache
+__pycache__

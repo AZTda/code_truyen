@@ -1,0 +1,107 @@
+services:
+  truyencloud-backend:
+    build: .
+    container_name: truyencloud-backend
+    restart: unless-stopped
+    init: true
+    # Chỉ nghe trên loopback của máy chủ: cloudflared chạy trên host là đường vào duy nhất.
+    # Mở ra mọi interface thì ai trong LAN cũng gọi thẳng được, bỏ qua Cloudflare.
+    ports:
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - .env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DEBUG=false
+      # cloudflared trên host đi vào container qua gateway của bridge Docker (172.16.0.0/12),
+      # không phải 127.0.0.1. An toàn vì cổng 8000 chỉ bind loopback ở trên.
+      - TRUSTED_PROXY_IPS=${TRUSTED_PROXY_IPS:-127.0.0.1,::1,172.16.0.0/12}
+      # Giọng đọc VieNeu-TTS chạy ngay trên máy chủ (xem .env.example). Mô hình nằm trong volume ./data nên không tải lại
+      # khi tạo lại container.
+      - TTS_LOCAL_ENABLED=${TTS_LOCAL_ENABLED:-1}
+      - TTS_LOCAL_MODEL=${TTS_LOCAL_MODEL:-v3nano}
+      - TTS_LOCAL_THREADS=${TTS_LOCAL_THREADS:-3}
+      - TTS_ONDEMAND_TIMEOUT=${TTS_ONDEMAND_TIMEOUT:-90}
+      - TTS_CACHE_MAX_MB=${TTS_CACHE_MAX_MB:-32768}
+      - TTS_MODEL_DIR=/app/data/hf
+      - TRUYENCLOUD_DB_PATH=/app/data/db/truyencloud.db
+      # Tựa truyện / tựa chương / từ khoá tìm kiếm không còn qua Google: từ điển convert (tải lần đầu vào
+      # ./data/dict, chỉ dùng riêng) trả lời tức thì; Hy-MT2 (dịch vụ truyencloud-mt bên dưới) sửa nền rồi cache.
+      # Dịch vụ mô hình tắt/thiếu tệp thì máy chủ vẫn chạy bình thường bằng từ điển (xem .env.example).
+      - TITLE_MT_URL=${TITLE_MT_URL:-http://truyencloud-mt:8080}
+      - TITLE_MT_ENABLED=${TITLE_MT_ENABLED:-1}
+      - TITLE_DICT_DIR=/app/data/dict
+      - TITLE_CACHE_PATH=/app/data/title_cache.sqlite
+      - TITLE_MT_MODEL_DIR=/app/data/mt
+      - QWEN_MT_URL=${QWEN_MT_URL:-http://truyencloud-qwen:8081/v1/chat/completions}
+      - LOCAL_CHAPTER_MT_ENABLED=${LOCAL_CHAPTER_MT_ENABLED:-1}
+    volumes:
+      # Lưu toàn bộ dữ liệu truyện, CSDL SQLite (kèm -wal/-shm trong thư mục db/), mô hình AI và bộ đệm âm thanh
+      # trên ổ cứng 1TB (/srv/dchat-data/truyencloud/data) của MiniPC.
+      - ${TRUYENCLOUD_DATA_DIR:-/srv/dchat-data/truyencloud/data}:/app/data
+      - ./.env:/app/.env
+      - ./.gemini:/root/.gemini
+      - ./agy_bin:/usr/local/bin/agy
+
+  # Hy-MT2-1.8B (Tencent, Apache-2.0) Q4_K_M qua llama.cpp — chỉ trong mạng nội bộ của compose (không mở cổng ra host).
+  # Kết hợp cùng bộ tra ngược VietPhrase & RAG Hints (query_vp_reverse) để đạt tốc độ ~400-700ms trên CPU 4 nhân.
+  truyencloud-mt:
+    image: ghcr.io/ggml-org/llama.cpp:server-b11541
+    container_name: truyencloud-mt
+    restart: unless-stopped
+    init: true
+    # Mount cả THƯ MỤC (chỉ đọc), không mount riêng tệp .gguf: tệp chưa tải mà mount riêng thì Docker tạo một thư mục
+    # rỗng trùng tên trên host và lệnh tải sau đó hỏng.
+    volumes:
+      - ${TRUYENCLOUD_DATA_DIR:-/srv/dchat-data/truyencloud/data}/mt:/models:ro
+    command: >-
+      -m /models/Hy-MT2-1.8B-Q4_K_M.gguf
+      -t 4 -tb 4 -c 2048 -np 2 -kvu --jinja --no-webui
+      -cram 64 -lm none
+      --host 0.0.0.0 --port 8080
+    expose:
+      - "8080"
+    cpu_shares: 512
+    # Mô hình dùng ~1,2-1,6 GB; trần 4 GB chỉ để chặn rò rỉ, MiniPC còn dư ~9 GB
+    mem_limit: 4g
+    # llama-server ghi ~1 KB log mỗi yêu cầu (~100 MB/ngày khi hàng đợi tinh chỉnh chạy liên tục): giới hạn log json-file.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
+      retries: 3
+
+  # Qwen3-4B-Q4_K_M.gguf qua llama.cpp — chuyên dịch ngầm chương truyện ban đêm cùng Gemini Flash Medium.
+  truyencloud-qwen:
+    image: ghcr.io/ggml-org/llama.cpp:server-b11541
+    container_name: truyencloud-qwen
+    restart: unless-stopped
+    init: true
+    volumes:
+      - ${TRUYENCLOUD_DATA_DIR:-/srv/dchat-data/truyencloud/data}/mt:/models:ro
+    command: >-
+      -m /models/Qwen3-4B-Q4_K_M.gguf
+      -t 4 -tb 4 -c 4096 -np 1 -kvu --jinja --no-webui
+      --host 0.0.0.0 --port 8081
+    expose:
+      - "8081"
+    cpu_shares: 512
+    mem_limit: 5g
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
+      retries: 3

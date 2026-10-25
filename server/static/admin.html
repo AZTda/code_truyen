@@ -1,0 +1,3908 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#060913" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3F5F9" media="(prefers-color-scheme: light)">
+<link rel="icon" type="image/png" href="/static/site/icon-64-v1.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<title>TruyenCloud Admin · Trung Tâm Quản Trị 3D</title>
+<style id="adminStyle">
+:root {
+	color-scheme: dark light;
+	--bg: #050811;
+	--bg-deep: #090E1C;
+	--surface: rgba(13, 19, 36, 0.78);
+	--card: rgba(17, 25, 46, 0.74);
+	--card-solid: #11192E;
+	--card-high: rgba(28, 40, 70, 0.82);
+	--hairline: rgba(148, 175, 225, 0.14);
+	--hairline-strong: rgba(245, 194, 91, 0.34);
+	--outline: rgba(132, 152, 192, 0.36);
+	--text: #F4F7FC;
+	--text-2: #A6B4D0;
+	--text-3: #6E7E9F;
+	--accent: #22D3B6;
+	--accent-strong: #14B89C;
+	--on-accent: #031714;
+	--accent-soft: rgba(34, 211, 182, 0.15);
+	--gold: #F5C25B;
+	--gold-strong: #E5A932;
+	--gold-soft: rgba(245, 194, 91, 0.16);
+	--royal: #818CF8;
+	--royal-soft: rgba(129, 140, 248, 0.16);
+	--success: #34D399;
+	--warning: #FBBF24;
+	--error: #FB7185;
+	--on-error: #25040A;
+	--success-soft: rgba(52, 211, 153, 0.15);
+	--warning-soft: rgba(251, 191, 36, 0.15);
+	--error-soft: rgba(251, 113, 133, 0.15);
+	--field: rgba(9, 14, 28, 0.78);
+	--track: rgba(9, 14, 28, 0.84);
+	--thumb: rgba(33, 47, 82, 0.96);
+	--scrim: rgba(3, 6, 15, 0.76);
+	--bar: rgba(7, 11, 22, 0.85);
+	--shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(148, 175, 225, 0.12);
+	--shadow-lg: 0 28px 72px -12px rgba(0, 0, 0, 0.78), 0 0 0 1px rgba(245, 194, 91, 0.24);
+	--shadow-glow: 0 14px 40px -10px rgba(34, 211, 182, 0.32);
+	--font: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	--mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: light) {
+	:root {
+		--bg: #EEF2F9;
+		--bg-deep: #E2E8F4;
+		--surface: rgba(255, 255, 255, 0.86);
+		--card: rgba(255, 255, 255, 0.88);
+		--card-solid: #FFFFFF;
+		--card-high: rgba(235, 241, 251, 0.92);
+		--hairline: rgba(15, 26, 52, 0.09);
+		--hairline-strong: rgba(202, 138, 4, 0.35);
+		--outline: rgba(71, 88, 122, 0.28);
+		--text: #0B1324;
+		--text-2: #41506E;
+		--text-3: #687796;
+		--accent: #0D9488;
+		--accent-strong: #0F766E;
+		--on-accent: #FFFFFF;
+		--accent-soft: rgba(13, 148, 136, 0.12);
+		--gold: #B47809;
+		--gold-strong: #925E04;
+		--gold-soft: rgba(217, 149, 22, 0.14);
+		--royal: #4F46E5;
+		--royal-soft: rgba(79, 70, 229, 0.12);
+		--success: #059669;
+		--warning: #B45309;
+		--error: #E11D48;
+		--on-error: #FFFFFF;
+		--success-soft: rgba(5, 150, 105, 0.12);
+		--warning-soft: rgba(180, 83, 9, 0.12);
+		--error-soft: rgba(225, 29, 72, 0.1);
+		--field: rgba(241, 245, 252, 0.9);
+		--track: rgba(226, 233, 245, 0.9);
+		--thumb: #FFFFFF;
+		--scrim: rgba(11, 19, 36, 0.48);
+		--bar: rgba(243, 246, 252, 0.88);
+		--shadow: 0 10px 30px -8px rgba(15, 26, 52, 0.09), 0 0 0 1px rgba(15, 26, 52, 0.07);
+		--shadow-lg: 0 28px 68px -12px rgba(15, 26, 52, 0.24), 0 0 0 1px rgba(15, 26, 52, 0.1);
+		--shadow-glow: 0 12px 32px -8px rgba(13, 148, 136, 0.25);
+	}
+}
+*, ::before, ::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+	margin: 0;
+	min-height: 100vh;
+	background:
+		radial-gradient(circle at 14% 12%, rgba(34, 211, 182, 0.14), transparent 38%),
+		radial-gradient(circle at 86% 18%, rgba(245, 194, 91, 0.13), transparent 40%),
+		radial-gradient(circle at 50% 92%, rgba(129, 140, 248, 0.12), transparent 45%),
+		linear-gradient(160deg, var(--bg) 0%, var(--bg-deep) 100%);
+	color: var(--text);
+	font: 15px/1.5 var(--font);
+	-webkit-font-smoothing: antialiased;
+	overflow-x: hidden;
+	position: relative;
+}
+#bgCanvas {
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 0;
+	opacity: 0.75;
+}
+main, .app, dialog { position: relative; z-index: 1; }
+h1, h2, h3, p, ul { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease; }
+button:active:not(:disabled) { transform: scale(0.97); }
+code, .mono { font-family: var(--mono); font-size: 0.92em; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+[tabindex="-1"]:focus { outline: none; }
+.muted { color: var(--text-2); }
+.i {
+	display: inline-block;
+	flex: none;
+	width: 20px;
+	height: 20px;
+	background: currentColor;
+	-webkit-mask: var(--m, linear-gradient(#0000, #0000)) center/contain no-repeat;
+	mask: var(--m, linear-gradient(#0000, #0000)) center/contain no-repeat;
+}
+
+/* Buttons */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-width: 44px;
+	min-height: 44px;
+	padding: 0 18px;
+	border: 1px solid transparent;
+	border-radius: 14px;
+	font-weight: 600;
+	line-height: 20px;
+	white-space: nowrap;
+	position: relative;
+	overflow: hidden;
+}
+.btn .i { width: 18px; height: 18px; }
+.btn-primary {
+	background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+	color: var(--on-accent);
+	box-shadow: var(--shadow-glow), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.btn-primary:hover:not(:disabled) {
+	transform: translateY(-1px);
+	box-shadow: 0 16px 38px -8px rgba(34, 211, 182, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+.btn-gold {
+	background: linear-gradient(135deg, #FAD47B 0%, #E5A429 100%);
+	color: #1B1102;
+	box-shadow: 0 12px 32px -8px rgba(245, 194, 91, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+.btn-gold:hover:not(:disabled) {
+	transform: translateY(-1px);
+	box-shadow: 0 16px 40px -6px rgba(245, 194, 91, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+.btn-quiet {
+	background: var(--card-high);
+	color: var(--text);
+	border-color: var(--hairline);
+	-webkit-backdrop-filter: blur(12px);
+	backdrop-filter: blur(12px);
+}
+.btn-quiet:hover:not(:disabled), .icon-btn:hover {
+	background: rgba(148, 175, 225, 0.18);
+	border-color: rgba(148, 175, 225, 0.28);
+}
+.btn-plain { background: none; color: var(--accent); padding: 0 10px; }
+.btn-danger {
+	background: linear-gradient(135deg, #FB7185 0%, #E11D48 100%);
+	color: #FFF;
+	box-shadow: 0 10px 28px -6px rgba(225, 29, 72, 0.45);
+}
+.btn-danger-text { color: var(--error); }
+.btn-block { width: 100%; }
+.btn-sm { font-size: 13.5px; min-height: 38px; padding: 0 13px; border-radius: 11px; font-weight: 600; }
+.btn:disabled { opacity: 0.42; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+.busy .i { display: none; }
+.busy::before {
+	content: "";
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	border: 2px solid;
+	border-right-color: transparent;
+	animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.icon-btn {
+	display: inline-grid;
+	place-items: center;
+	width: 42px;
+	height: 42px;
+	flex: none;
+	border: 0;
+	border-radius: 11px;
+	background: none;
+	color: var(--text-2);
+}
+.icon-btn[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); }
+
+/* Fields & Inputs */
+.field { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; margin-bottom: 16px; }
+.field > label { font-size: 13px; font-weight: 600; color: var(--text-2); letter-spacing: 0.01em; }
+.hint, .row-sub, .group-foot, .fine, .foot-note { font-size: 12px; line-height: 16px; color: var(--text-3); }
+.input, .input-wrap {
+	width: 100%;
+	min-height: 46px;
+	border: 1px solid var(--outline);
+	border-radius: 13px;
+	background: var(--field);
+	transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+.input { padding: 11px 14px; outline: none; }
+textarea.input { resize: vertical; }
+.input:focus, .input-wrap:focus-within {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px var(--accent-soft), 0 8px 24px -8px rgba(34, 211, 182, 0.22);
+}
+.input-wrap { display: flex; align-items: center; padding-right: 4px; }
+.input-wrap input { flex: 1; min-width: 0; height: 44px; padding: 0 14px; border: 0; background: none; outline: none; }
+::placeholder { color: var(--text-3); }
+.form-error, .notice, .warn-line {
+	margin: 0 0 14px;
+	padding: 11px 14px;
+	border-radius: 12px;
+	background: var(--error-soft);
+	border: 1px solid rgba(251, 113, 133, 0.28);
+	color: var(--error);
+	font-size: 13.5px;
+	line-height: 20px;
+}
+.notice.info { background: var(--accent-soft); border-color: rgba(34, 211, 182, 0.3); color: var(--accent); }
+.warn-line { background: var(--warning-soft); border-color: rgba(251, 191, 36, 0.3); color: var(--warning); }
+
+/* Segmented Controls */
+.seg {
+	display: flex;
+	gap: 4px;
+	padding: 4px;
+	border-radius: 14px;
+	background: var(--track);
+	border: 1px solid var(--hairline);
+	min-width: 0;
+}
+.topbar .seg { background: var(--card-high); }
+.seg button {
+	flex: 1 1 0;
+	min-width: 0;
+	min-height: 40px;
+	padding: 0 10px;
+	border: 0;
+	border-radius: 10px;
+	background: none;
+	color: var(--text-2);
+	font-size: 13.5px;
+	font-weight: 600;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.seg [aria-pressed="true"], .seg [aria-current="page"] {
+	background: linear-gradient(135deg, var(--thumb) 0%, rgba(34, 211, 182, 0.18) 100%);
+	color: var(--text);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Groups & Rows */
+.group {
+	background: var(--card);
+	border: 1px solid var(--hairline);
+	border-radius: 20px;
+	box-shadow: var(--shadow);
+	-webkit-backdrop-filter: blur(20px);
+	backdrop-filter: blur(20px);
+	overflow: hidden;
+}
+.group.pad { padding: 20px 20px 4px; }
+.group-title { margin: 28px 16px 10px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-2); }
+.group-foot { margin: 8px 16px 0; }
+.row { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; min-height: 52px; padding: 13px 18px; }
+.row + .row::before { content: ""; position: absolute; top: 0; left: 18px; right: 0; border-top: 1px solid var(--hairline); }
+.row-label { flex: 1 1 auto; min-width: 0; font-weight: 500; }
+.row-value { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; max-width: 100%; margin-left: auto; color: var(--text-2); text-align: right; overflow-wrap: anywhere; }
+.stack { flex-direction: column; align-items: stretch; }
+.stack .row-value { flex-direction: row; align-items: center; margin: 0; text-align: left; color: var(--text); }
+.stack .mono { flex: 1; word-break: break-all; }
+.meter { flex-basis: 100%; height: 7px; margin-top: 6px; border-radius: 99px; background: var(--card-high); overflow: hidden; }
+.meter span { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--gold)); }
+.meter.warn span { background: linear-gradient(90deg, var(--warning), var(--error)); }
+.switch-row { display: flex; align-items: center; gap: 16px; min-height: 54px; cursor: pointer; margin: 0 -20px; padding: 10px 20px; border-top: 1px solid var(--hairline); }
+.switch-row span { flex: 1; font-weight: 500; }
+.switch {
+	-webkit-appearance: none;
+	appearance: none;
+	position: relative;
+	flex: none;
+	width: 51px;
+	height: 31px;
+	margin: 0;
+	border-radius: 99px;
+	background: var(--outline);
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+.switch::after {
+	content: "";
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 27px;
+	height: 27px;
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+	transition: transform 0.2s;
+}
+.switch:checked { background: var(--accent); }
+.switch:checked::after { transform: translateX(20px); }
+.form-actions { display: flex; justify-content: flex-end; margin-top: 16px; }
+
+/* Badges & Pills */
+.badge, .pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 22px;
+	padding: 0 9px;
+	border-radius: 99px;
+	background: var(--card-high);
+	border: 1px solid var(--hairline);
+	color: var(--text-2);
+	font-size: 11.5px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+.badge:empty { display: none; }
+.badge-accent, .pill.info {
+	background: var(--gold-soft);
+	border-color: rgba(245, 194, 91, 0.35);
+	color: var(--gold);
+}
+.badge-vip {
+	background: var(--royal-soft);
+	border-color: rgba(129, 140, 248, 0.35);
+	color: var(--royal);
+}
+.badge-self, .pill.ok {
+	background: var(--success-soft);
+	border-color: rgba(52, 211, 153, 0.35);
+	color: var(--success);
+}
+.pill { padding: 2px 10px; font-size: 13px; line-height: 20px; white-space: normal; }
+.pill::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
+.pill.warn { background: var(--warning-soft); color: var(--warning); }
+.pill.err { background: var(--error-soft); color: var(--error); }
+
+/* Signin 3D Showcase */
+.signin {
+	min-height: 100vh;
+	min-height: 100dvh;
+	display: grid;
+	place-items: center;
+	padding: 28px 16px;
+}
+.signin-shell {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	max-width: 920px;
+	width: 100%;
+	border-radius: 28px;
+	background: var(--card);
+	border: 1px solid var(--hairline);
+	box-shadow: var(--shadow-lg);
+	-webkit-backdrop-filter: blur(24px);
+	backdrop-filter: blur(24px);
+	overflow: hidden;
+}
+.signin-stage {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 36px 28px 24px;
+	background:
+		radial-gradient(circle at 50% 42%, rgba(34, 211, 182, 0.24), transparent 62%),
+		radial-gradient(circle at 50% 65%, rgba(245, 194, 91, 0.18), transparent 68%),
+		linear-gradient(165deg, rgba(8, 14, 28, 0.92), rgba(15, 24, 48, 0.85));
+	border-bottom: 1px solid var(--hairline);
+	text-align: center;
+	overflow: hidden;
+}
+.stage-sculpture {
+	width: 210px;
+	height: 210px;
+	object-fit: contain;
+	filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 28px rgba(34, 211, 182, 0.28));
+	animation: float3d 6s ease-in-out infinite;
+}
+@keyframes float3d {
+	0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+	50% { transform: translateY(-10px) rotate(1.8deg) scale(1.025); }
+}
+.stage-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 10px;
+	padding: 4px 12px;
+	border-radius: 99px;
+	background: rgba(245, 194, 91, 0.14);
+	border: 1px solid rgba(245, 194, 91, 0.35);
+	color: #F5C25B;
+	font-size: 11.5px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+.stage-title {
+	margin-top: 10px;
+	font-size: 22px;
+	font-weight: 800;
+	color: #F8FAFC;
+	letter-spacing: -0.02em;
+}
+.stage-desc {
+	margin-top: 6px;
+	max-width: 340px;
+	font-size: 13px;
+	color: #94A3B8;
+}
+.signin-card {
+	width: 100%;
+	padding: 32px 28px 28px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+@media (min-width: 820px) {
+	.signin-shell { grid-template-columns: 1.05fr 1fr; }
+	.signin-stage { border-bottom: 0; border-right: 1px solid var(--hairline); padding: 44px 36px; }
+	.stage-sculpture { width: 260px; height: 260px; }
+	.signin-card { padding: 42px 38px; }
+}
+.brand-logo-wrap {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 14px;
+}
+.brand-logo {
+	width: 48px;
+	height: 48px;
+	border-radius: 13px;
+	object-fit: cover;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(245, 194, 91, 0.38);
+}
+.brand-logo.sm { width: 38px; height: 38px; border-radius: 10px; }
+.mark {
+	display: inline-grid;
+	place-items: center;
+	flex: none;
+	width: 36px;
+	height: 36px;
+	border-radius: 10px;
+	background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+	color: var(--on-accent);
+}
+.mark .i { width: 22px; height: 22px; }
+.signin h1 { font-size: 25px; line-height: 31px; font-weight: 800; letter-spacing: -0.02em; }
+.signin-sub { margin: 4px 0 22px; color: var(--text-2); font-size: 14px; }
+#btnSwitchMode { margin-top: 8px; }
+.fine { margin-top: 16px; }
+
+/* App Layout & Sidebar */
+.brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.brand > span:last-child, .who { display: grid; min-width: 0; }
+.brand b { font-size: 16px; line-height: 20px; font-weight: 800; letter-spacing: -0.01em; }
+.brand small, .who small { font-size: 12px; line-height: 16px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar { display: none; }
+.topbar {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	padding: calc(8px + env(safe-area-inset-top)) 16px 10px;
+	background: var(--bar);
+	-webkit-backdrop-filter: saturate(1.8) blur(22px);
+	backdrop-filter: saturate(1.8) blur(22px);
+	border-bottom: 1px solid var(--hairline);
+}
+.topbar > div { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.content { min-width: 0; padding: 22px 16px calc(56px + env(safe-area-inset-bottom)); }
+.nav-item {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+	min-height: 46px;
+	padding: 0 14px;
+	border: 1px solid transparent;
+	border-radius: 13px;
+	background: none;
+	color: var(--text-2);
+	font-weight: 600;
+}
+.nav-item:hover { background: var(--card-high); color: var(--text); }
+.nav-item[aria-current="page"] {
+	background: linear-gradient(135deg, var(--accent-soft), rgba(245, 194, 91, 0.1));
+	border-color: rgba(34, 211, 182, 0.28);
+	color: var(--accent);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.sec-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 16px; margin-bottom: 20px; }
+.sec-head > div { display: flex; flex-wrap: wrap; gap: 10px; min-width: 0; }
+.sec-head > div:first-child { display: block; }
+.large-title { font-size: 30px; line-height: 36px; font-weight: 800; letter-spacing: -0.025em; }
+.sec-sub { margin-top: 4px; color: var(--text-2); }
+@media (max-width: 420px) {
+	#btnReloadUsers .lbl { display: none; }
+	.topbar .seg button { padding: 0 2px; font-size: 13px; }
+}
+@media (min-width: 920px) {
+	.app { display: grid; grid-template-columns: 268px minmax(0, 1fr); width: 100%; min-height: 100vh; }
+	.sidebar {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+		position: sticky;
+		top: 0;
+		height: 100vh;
+		padding: 26px 18px;
+		background: var(--surface);
+		-webkit-backdrop-filter: blur(24px);
+		backdrop-filter: blur(24px);
+		border-right: 1px solid var(--hairline);
+	}
+	.sidebar nav { display: grid; gap: 4px; }
+	.side-3d-card {
+		padding: 14px;
+		border-radius: 18px;
+		background: linear-gradient(145deg, rgba(34, 211, 182, 0.1), rgba(245, 194, 91, 0.08));
+		border: 1px solid var(--hairline);
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+	.side-3d-card img {
+		width: 52px;
+		height: 52px;
+		object-fit: contain;
+		filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.45));
+		animation: float3d 5.5s ease-in-out infinite;
+	}
+	.side-3d-card div { font-size: 12px; line-height: 1.4; color: var(--text-2); }
+	.side-3d-card b { display: block; color: var(--gold); font-size: 12.5px; margin-bottom: 2px; }
+	.side-foot {
+		margin-top: auto;
+		display: grid;
+		gap: 10px;
+		padding-top: 16px;
+		border-top: 1px solid var(--hairline);
+	}
+	.who { padding: 0 8px; }
+	.topbar { display: none; }
+	.content { width: 100%; max-width: none; padding: 32px 40px 72px; }
+	.large-title { font-size: 34px; line-height: 41px; }
+	.toasts { inset: auto 24px 24px auto !important; justify-items: end !important; }
+}
+
+/* 3D Hero Command Banner & KPI Cards */
+.hero-3d-banner {
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 20px;
+	padding: 24px;
+	margin-bottom: 20px;
+	border-radius: 24px;
+	background:
+		radial-gradient(circle at 85% 50%, rgba(34, 211, 182, 0.2), transparent 55%),
+		radial-gradient(circle at 20% 20%, rgba(245, 194, 91, 0.14), transparent 50%),
+		var(--card);
+	border: 1px solid var(--hairline-strong);
+	box-shadow: var(--shadow);
+	-webkit-backdrop-filter: blur(22px);
+	backdrop-filter: blur(22px);
+	overflow: hidden;
+}
+.hero-3d-art {
+	display: none;
+}
+@media (min-width: 720px) {
+	.hero-3d-banner {
+		grid-template-columns: minmax(0, 1fr) 170px;
+		align-items: center;
+		padding: 26px 30px;
+	}
+	.hero-3d-art {
+		display: grid;
+		place-items: center;
+	}
+	.hero-3d-art img {
+		width: 158px;
+		height: 158px;
+		object-fit: contain;
+		filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 22px rgba(34, 211, 182, 0.24));
+		animation: float3d 6s ease-in-out infinite;
+	}
+}
+.hero-kicker {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 4px 12px;
+	border-radius: 99px;
+	background: var(--gold-soft);
+	border: 1px solid rgba(245, 194, 91, 0.35);
+	color: var(--gold);
+	font-size: 11.5px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	margin-bottom: 10px;
+}
+.hero-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 18px;
+}
+.kpi-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+	margin-bottom: 20px;
+}
+@media (min-width: 760px) {
+	.kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.kpi-card {
+	position: relative;
+	padding: 16px 18px;
+	border-radius: 18px;
+	background: var(--card);
+	border: 1px solid var(--hairline);
+	box-shadow: var(--shadow);
+	-webkit-backdrop-filter: blur(16px);
+	backdrop-filter: blur(16px);
+	transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+	transition: transform 0.16s ease-out, border-color 0.2s;
+	overflow: hidden;
+}
+.kpi-card:hover { border-color: rgba(34, 211, 182, 0.38); }
+.kpi-label { font-size: 12px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.05em; }
+.kpi-val { margin-top: 6px; font-size: 26px; line-height: 1.15; font-weight: 800; color: var(--text); font-family: var(--mono); }
+.kpi-sub { margin-top: 4px; font-size: 12px; color: var(--text-3); }
+.kpi-card.gold .kpi-val { color: var(--gold); }
+.kpi-card.jade .kpi-val { color: var(--accent); }
+
+/* Toolbar & 3D User Cards */
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+.search { flex: 1 1 260px; min-width: 0; position: relative; }
+.toolbar .seg { flex: 0 1 380px; }
+.users { container-type: inline-size; }
+.user-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+	gap: 14px;
+	width: 100%;
+}
+.user-card {
+	--av: 50px;
+	position: relative;
+	display: grid;
+	grid-template-columns: var(--av) minmax(0, 1fr);
+	grid-template-areas:
+		"av id"
+		"av email"
+		"stats stats"
+		"act act";
+	grid-template-rows: auto auto 1fr auto;
+	gap: 4px 14px;
+	padding: 18px;
+	border-radius: 20px;
+	background:
+		radial-gradient(circle at var(--gx, 85%) var(--gy, 15%), rgba(34, 211, 182, 0.11), transparent 55%),
+		var(--card);
+	border: 1px solid var(--hairline);
+	box-shadow: var(--shadow);
+	-webkit-backdrop-filter: blur(18px);
+	backdrop-filter: blur(18px);
+	transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+	transition: transform 0.15s ease-out, border-color 0.22s ease, box-shadow 0.22s ease;
+	overflow: hidden;
+}
+.user-card:hover {
+	border-color: rgba(245, 194, 91, 0.38);
+	box-shadow: 0 18px 42px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(245, 194, 91, 0.28);
+}
+.avatar {
+	grid-area: av;
+	position: relative;
+	width: var(--av);
+	height: var(--av);
+	border-radius: 16px;
+	background: linear-gradient(135deg, var(--accent-soft), var(--gold-soft));
+	border: 1.5px solid rgba(245, 194, 91, 0.42);
+	color: var(--gold);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.32);
+	overflow: hidden;
+}
+.avatar::before {
+	content: attr(data-initials);
+	position: absolute;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	font-weight: 800;
+	font-size: 16px;
+	letter-spacing: 0.02em;
+}
+.avatar img { position: relative; display: block; width: 100%; height: 100%; object-fit: cover; }
+.avatar .broken { visibility: hidden; }
+.user-id { grid-area: id; min-width: 0; }
+.user-name { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 7px; }
+.user-name > span:first-child { font-weight: 700; font-size: 15.5px; overflow-wrap: anywhere; }
+.user-handle, .user-email, .user-stats { font-size: 13px; line-height: 18px; color: var(--text-2); overflow-wrap: anywhere; }
+.user-handle { font-family: var(--mono); font-size: 12.5px; color: var(--accent); margin-top: 2px; }
+.user-email { grid-area: email; color: var(--text-3); margin-top: 2px; }
+.user-stats {
+	grid-area: stats;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid var(--hairline);
+}
+.user-stats > span {
+	display: inline-flex;
+	align-items: center;
+	padding: 3px 9px;
+	border-radius: 8px;
+	background: var(--card-high);
+	border: 1px solid var(--hairline);
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--text-2);
+}
+.user-actions {
+	grid-area: act;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
+	margin-top: 12px;
+}
+.user-actions :disabled { color: var(--text-3); }
+
+.foot-note { margin: 18px 4px 0; overflow-wrap: anywhere; }
+.state {
+	display: grid;
+	justify-items: center;
+	gap: 10px;
+	padding: 44px 24px;
+	border-radius: 22px;
+	background: var(--card);
+	border: 1px solid var(--hairline);
+	text-align: center;
+	color: var(--text-2);
+	font-size: 14px;
+}
+.state > .i { width: 36px; height: 36px; color: var(--gold); }
+.state.err > .i { color: var(--error); }
+.state p:first-of-type { color: var(--text); font-size: 16px; font-weight: 700; }
+.skel { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 14px; }
+.skel span { height: 148px; border-radius: 20px; background: var(--card); border: 1px solid var(--hairline); animation: fade 1.2s ease-in-out infinite alternate; }
+@keyframes fade { to { opacity: 0.4; } }
+.big { font-size: 22px; line-height: 28px; font-weight: 800; color: var(--accent); }
+.changelog { padding: 16px 20px 16px 36px; display: grid; gap: 8px; overflow-wrap: anywhere; }
+.note {
+	margin-top: 20px;
+	padding: 15px 18px;
+	border-radius: 18px;
+	background: var(--accent-soft);
+	border: 1px solid rgba(34, 211, 182, 0.25);
+	font-size: 14px;
+	line-height: 20px;
+}
+
+/* Dialogs & 3D Create Account Studio */
+dialog {
+	width: min(480px, calc(100% - 28px));
+	max-width: none;
+	max-height: calc(100dvh - 28px);
+	padding: 0;
+	border: 1px solid var(--hairline-strong);
+	border-radius: 24px;
+	background: var(--card-solid);
+	color: var(--text);
+	box-shadow: var(--shadow-lg);
+}
+#dlgCreate {
+	width: min(820px, calc(100% - 28px));
+}
+dialog[open] { display: flex; flex-direction: column; animation: pop 0.24s cubic-bezier(0.2, 0.9, 0.3, 1); }
+dialog::backdrop { background: var(--scrim); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+dialog > form { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.dlg-head {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 18px 14px 10px 24px;
+	border-bottom: 1px solid var(--hairline);
+}
+.dlg-head h2 { flex: 1; font-size: 19px; font-weight: 800; line-height: 25px; overflow-wrap: anywhere; }
+.dlg-sub { padding: 8px 24px 4px; color: var(--text-2); font-size: 14px; overflow-wrap: anywhere; }
+.dlg-body { padding: 18px 24px 8px; overflow: auto; min-height: 0; }
+.dlg-foot {
+	display: flex;
+	gap: 10px;
+	justify-content: flex-end;
+	padding: 14px 24px 22px;
+	border-top: 1px solid var(--hairline);
+}
+
+/* Create Studio 2-Column Layout */
+.studio-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 22px;
+}
+@media (min-width: 720px) {
+	.studio-grid {
+		grid-template-columns: 1.15fr 0.85fr;
+		align-items: start;
+	}
+}
+.vip-presets {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 6px;
+}
+.vip-chip {
+	padding: 4px 10px;
+	border-radius: 99px;
+	border: 1px solid var(--hairline);
+	background: var(--card-high);
+	color: var(--text-2);
+	font-size: 11.5px;
+	font-weight: 600;
+}
+.vip-chip:hover {
+	border-color: var(--gold);
+	color: var(--gold);
+	background: var(--gold-soft);
+}
+.pw-meter {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 5px;
+	margin-top: 6px;
+}
+.pw-meter span {
+	height: 4px;
+	border-radius: 99px;
+	background: var(--card-high);
+	transition: background-color 0.2s;
+}
+.pw-meter[data-score="1"] span:nth-child(-n+1) { background: var(--error); }
+.pw-meter[data-score="2"] span:nth-child(-n+2) { background: var(--warning); }
+.pw-meter[data-score="3"] span:nth-child(-n+3) { background: var(--accent); }
+.pw-meter[data-score="4"] span { background: var(--success); }
+
+/* 3D Holographic Identity Pass Preview */
+.id-pass-stage {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	padding: 18px;
+	border-radius: 20px;
+	background:
+		radial-gradient(circle at 50% 25%, rgba(245, 194, 91, 0.16), transparent 60%),
+		radial-gradient(circle at 50% 80%, rgba(34, 211, 182, 0.14), transparent 60%),
+		rgba(8, 13, 26, 0.65);
+	border: 1px solid var(--hairline);
+}
+.id-pass-3d-art {
+	width: 112px;
+	height: 112px;
+	object-fit: contain;
+	filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.6));
+	animation: float3d 5s ease-in-out infinite;
+}
+.id-pass-card {
+	width: 100%;
+	padding: 18px;
+	border-radius: 18px;
+	background:
+		linear-gradient(135deg, rgba(25, 37, 68, 0.92) 0%, rgba(12, 19, 38, 0.96) 100%);
+	border: 1px solid rgba(245, 194, 91, 0.42);
+	box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+	color: #F8FAFC;
+	transform: perspective(700px) rotateX(var(--rx, 2deg)) rotateY(var(--ry, -4deg));
+	transition: transform 0.18s ease-out;
+}
+.id-pass-top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-bottom: 14px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #F5C25B;
+}
+.id-pass-user {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+.id-pass-av {
+	width: 46px;
+	height: 46px;
+	border-radius: 14px;
+	background: linear-gradient(135deg, rgba(34, 211, 182, 0.25), rgba(245, 194, 91, 0.28));
+	border: 1.5px solid #F5C25B;
+	display: grid;
+	place-items: center;
+	font-weight: 800;
+	font-size: 16px;
+	color: #F5C25B;
+}
+.id-pass-name { font-weight: 800; font-size: 16px; color: #FFF; overflow-wrap: anywhere; }
+.id-pass-handle { font-family: var(--mono); font-size: 12.5px; color: #22D3B6; }
+.id-pass-meta {
+	margin-top: 12px;
+	padding-top: 10px;
+	border-top: 1px solid rgba(148, 175, 225, 0.16);
+	display: grid;
+	gap: 4px;
+	font-size: 12px;
+	color: #94A3B8;
+}
+
+.creds-hero {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin-bottom: 14px;
+	padding: 12px 14px;
+	border-radius: 16px;
+	background: linear-gradient(135deg, var(--gold-soft), var(--accent-soft));
+	border: 1px solid var(--hairline-strong);
+}
+.creds-hero img { width: 64px; height: 64px; object-fit: contain; flex: none; }
+.creds { margin-bottom: 12px; background: var(--field); }
+.creds .row-value { color: var(--text); font-family: var(--mono); font-size: 14px; font-weight: 600; }
+.alert { width: min(400px, calc(100% - 32px)); }
+.alert .dlg-head { padding: 22px 20px 8px; text-align: center; }
+.alert .dlg-body > p:first-child { margin-bottom: 12px; color: var(--text-2); font-size: 14px; text-align: center; }
+.alert .btn { flex: 1; }
+.expect { font-family: var(--mono); color: var(--gold); font-weight: 700; overflow-wrap: anywhere; }
+.mono, .expect, bdi { unicode-bidi: isolate; }
+@keyframes pop { from { opacity: 0; transform: translateY(10px) scale(0.97); } }
+@keyframes sheet { from { transform: translateY(100%); } }
+@media (max-width: 599px) {
+	.sheet {
+		width: 100% !important;
+		margin: auto 0 0;
+		max-height: calc(100dvh - 16px);
+		border-radius: 24px 24px 0 0;
+		padding-bottom: env(safe-area-inset-bottom);
+		animation-name: sheet !important;
+	}
+	.sheet::before {
+		content: "";
+		flex: none;
+		width: 38px;
+		height: 5px;
+		margin: 8px auto 0;
+		border-radius: 3px;
+		background: var(--hairline);
+	}
+	.sheet .btn { flex: 1; }
+}
+.toasts {
+	position: fixed;
+	inset: auto 16px calc(16px + env(safe-area-inset-bottom));
+	display: grid;
+	justify-items: center;
+	gap: 8px;
+	width: auto;
+	height: auto;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: none;
+	overflow:visible;
+	pointer-events: none;
+	z-index: 99;
+}
+.toast {
+	display: flex;
+	gap: 10px;
+	max-width: 440px;
+	padding: 13px 16px;
+	border-radius: 15px;
+	background: var(--card-solid);
+	border: 1px solid var(--hairline-strong);
+	box-shadow: var(--shadow-lg);
+	font-size: 14px;
+	line-height: 20px;
+	pointer-events: auto;
+	animation: pop 0.2s;
+	transition: opacity 0.25s;
+}
+.toast .i { width: 18px; height: 18px; margin-top: 1px; color: var(--success); }
+.toast.error .i { color: var(--error); }
+.toast.out { opacity: 0; }
+.novel-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+	gap: 16px;
+	width: 100%;
+}
+.novel-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 14px;
+	padding: 18px;
+	border-radius: 20px;
+	background:
+		radial-gradient(circle at var(--gx, 85%) var(--gy, 15%), rgba(245, 194, 91, 0.1), transparent 55%),
+		var(--card);
+	border: 1px solid var(--hairline);
+	box-shadow: var(--shadow);
+	-webkit-backdrop-filter: blur(18px);
+	backdrop-filter: blur(18px);
+	transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+	transition: transform 0.15s ease-out, border-color 0.2s;
+}
+.novel-card:hover { border-color: rgba(245, 194, 91, 0.4); }
+.novel-top {
+	display: grid;
+	grid-template-columns: 86px minmax(0, 1fr);
+	gap: 14px;
+	align-items: start;
+}
+.novel-cover {
+	width: 86px;
+	height: 120px;
+	border-radius: 12px;
+	overflow: hidden;
+	background: var(--card-high);
+	border: 1px solid var(--hairline-strong);
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+	display: grid;
+	place-items: center;
+	font-weight: 800;
+	font-size: 18px;
+	color: var(--gold);
+	flex-shrink: 0;
+}
+.novel-cover img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+.novel-info { min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.novel-title { margin: 0; font-weight: 800; font-size: 16px; line-height: 1.32; color: var(--text); overflow-wrap: anywhere; }
+.novel-raw { font-size: 12px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.novel-author { font-size: 12.5px; color: var(--gold); font-weight: 600; line-height: 1.35; }
+.novel-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.novel-desc {
+	margin: 4px 0 0;
+	font-size: 12.5px;
+	line-height: 1.45;
+	color: var(--text-2);
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.novel-foot {
+	padding-top: 12px;
+	border-top: 1px solid var(--hairline);
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.novel-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.novel-btns .btn { flex: 1 1 auto; }
+.btn-sm { min-height: 36px; padding: 6px 12px; font-size: 12.5px; border-radius: 10px; }
+.danger-text { color: var(--error); }
+.search-bar-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+.search-bar-row .input { flex: 2 1 280px; min-width: 0; }
+.search-bar-row select.input { flex: 1 1 210px; min-width: 0; }
+.job-box {
+	padding: 10px 12px;
+	border-radius: 12px;
+	background: var(--accent-soft);
+	border: 1px solid rgba(34, 211, 182, 0.32);
+	font-size: 12.5px;
+	line-height: 1.45;
+	color: var(--accent);
+	display: grid;
+	gap: 6px;
+}
+.range-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+}
+.suggest-box {
+	margin-top: 8px;
+	border-radius: 14px;
+	background: var(--card-high);
+	border: 1px solid var(--outline);
+	box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+	overflow: hidden;
+}
+.suggest-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	width: 100%;
+	padding: 10px 14px;
+	border: 0;
+	border-bottom: 1px solid var(--hairline);
+	background: none;
+	color: var(--text);
+	text-align: left;
+	cursor: pointer;
+	transition: background-color 0.15s;
+}
+.suggest-item:last-child { border-bottom: 0; }
+.suggest-item:hover, .suggest-item:focus-visible { background: var(--accent-soft); outline: none; }
+.suggest-main { font-weight: 700; font-size: 13.5px; color: var(--text); }
+.suggest-sub { font-size: 12px; color: var(--text-2); font-family: var(--mono); }
+.lib-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	margin: 12px 0 16px;
+	padding: 14px 16px;
+	border-radius: 18px;
+	background: var(--card);
+	border: 1px solid var(--hairline);
+}
+.lib-toolbar .input { flex: 2 1 240px; min-height: 42px; padding: 8px 13px; }
+.lib-toolbar select.input { flex: 1 1 170px; min-height: 42px; padding: 8px 12px; }
+.lib-toolbar .seg { flex: 2 1 340px; }
+.pager-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: 18px;
+	padding: 12px 16px;
+	border-radius: 16px;
+	background: var(--card);
+	border: 1px solid var(--hairline);
+}
+.overnight-box {
+	margin-bottom: 20px;
+	padding: 16px 18px;
+	border-radius: 18px;
+	background: linear-gradient(135deg, rgba(245, 194, 91, 0.14), rgba(34, 211, 182, 0.1));
+	border: 1px solid var(--hairline-strong);
+	box-shadow: var(--shadow);
+	display: grid;
+	gap: 10px;
+}
+.overnight-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+.overnight-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 5px 11px;
+	border-radius: 99px;
+	background: var(--card-high);
+	border: 1px solid rgba(245, 194, 91, 0.35);
+	font-size: 12.5px;
+	font-weight: 600;
+	color: var(--text);
+}
+.overnight-chip button {
+	border: 0;
+	background: none;
+	color: var(--error);
+	font-weight: 700;
+	padding: 0 2px;
+}
+#dlgNovelInspector { width: min(1440px, calc(100% - 28px)); max-height: calc(100dvh - 24px); }
+#dlgUserStudio { width: min(920px, calc(100% - 28px)); }
+.reader-split {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 14px;
+	margin-top: 8px;
+}
+@media (min-width: 820px) {
+	.reader-split { grid-template-columns: 1fr 1fr; }
+}
+.ch-chip-bar {
+	display: flex;
+	gap: 6px;
+	overflow-x: auto;
+	padding: 4px 2px 8px;
+	scrollbar-width: thin;
+}
+.ch-chip {
+	flex: none;
+	padding: 5px 11px;
+	border-radius: 10px;
+	border: 1px solid var(--hairline);
+	background: var(--card-high);
+	color: var(--text-2);
+	font-size: 12px;
+	font-weight: 600;
+}
+.ch-chip.ok, .ch-chip.has-trans { border-color: rgba(52, 211, 153, 0.45); color: var(--success); }
+.ch-chip.has-raw { border-color: rgba(245, 194, 91, 0.4); color: var(--gold); }
+.ch-chip.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.user-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (prefers-reduced-motion: reduce) {
+	*, ::before, ::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+<main id="viewSignin" class="signin">
+<div class="signin-shell">
+	<div class="signin-stage">
+		<img class="stage-sculpture" src="/static/site/admin-astrolabe-3d.png" alt="Điêu khắc 3D Thiên Văn Thư Các">
+		<span class="stage-tag">✦ Blender 3D Celestial Edition</span>
+		<h2 class="stage-title">Thiên Văn Thư Các</h2>
+		<p class="stage-desc">Không gian điều phối tài khoản độc giả, khoá bảo mật và trí tuệ nhân tạo dịch thuật của TruyenCloud.</p>
+	</div>
+	<div class="signin-card">
+		<div class="brand-logo-wrap">
+			<img class="brand-logo" src="/static/app_logo.png" alt="Logo TruyenCloud 3D">
+			<div>
+				<h1>TruyenCloud Admin</h1>
+				<p class="signin-sub" style="margin:2px 0 0">Quản trị máy chủ đọc truyện</p>
+			</div>
+		</div>
+		<div class="notice" id="signinNotice" role="alert" hidden></div>
+		<form id="formSignin" novalidate>
+			<div class="field" id="userField">
+				<label for="inUser">Tên đăng nhập hoặc email</label>
+				<input class="input" id="inUser" value="admin" autocomplete="username">
+			</div>
+			<div class="field">
+				<label for="inPass" id="passLabel">Mật khẩu</label>
+				<div class="input-wrap pw"><input id="inPass" type="password" autocomplete="current-password"></div>
+				<p class="hint" id="keyHint" hidden>Giá trị ADMIN_KEY trong tệp .env của máy chủ.</p>
+			</div>
+			<p class="form-error" id="signinError" role="alert" hidden></p>
+			<button class="btn btn-primary btn-block" id="btnSignin"><span class="lbl">Đăng nhập</span></button>
+		</form>
+		<button type="button" class="btn btn-plain btn-block" id="btnSwitchMode">Dùng mã quản trị</button>
+		<p class="fine">Phiên chỉ lưu trong thẻ trình duyệt này và bị xoá khi đăng xuất hoặc đóng thẻ. <span id="hostLabel"></span></p>
+	</div>
+</div>
+</main>
+
+<div id="viewApp" class="app" hidden>
+<aside class="sidebar">
+	<div class="brand">
+		<img class="brand-logo sm" src="/static/app_logo.png" alt="TruyenCloud">
+		<span><b>TruyenCloud</b><small>Trung tâm Quản trị 3D</small></span>
+	</div>
+	<nav aria-label="Mục quản trị">
+		<button class="nav-item" data-section="accounts"><span class="i i-users"></span>Tài khoản</button>
+		<button class="nav-item" data-section="novels"><span class="i i-book"></span>Kho truyện</button>
+		<button class="nav-item" data-section="ai"><span class="i i-ai"></span>Dịch AI</button>
+		<button class="nav-item" data-section="system"><span class="i i-pulse"></span>Hệ thống</button>
+		<button class="nav-item" data-section="app"><span class="i i-phone"></span>Ứng dụng</button>
+	</nav>
+	<div class="side-3d-card">
+		<img src="/static/site/admin-key-vault-3d.png" alt="">
+		<div>
+			<b>Bảo mật Kim Ấn</b>
+			Mật khẩu băm Argon2 / Bcrypt &amp; phiên cô lập
+		</div>
+	</div>
+	<div class="side-foot">
+		<div class="who"><b id="whoName"></b><small id="whoSub"></small></div>
+		<button type="button" class="btn btn-quiet btn-block" data-fullscreen><span class="i i-fullscreen"></span><span class="lbl">Toàn màn hình</span></button>
+		<button class="btn btn-quiet btn-block" data-signout><span class="i i-logout"></span>Đăng xuất</button>
+	</div>
+</aside>
+
+<header class="topbar">
+	<div>
+		<div class="brand">
+			<img class="brand-logo sm" src="/static/app_logo.png" alt="TruyenCloud">
+			<span><b>TruyenCloud</b><small id="whoShort"></small></span>
+		</div>
+		<div style="display:flex;align-items:center;gap:4px">
+			<button type="button" class="btn btn-plain" data-fullscreen aria-label="Toàn màn hình"><span class="i i-fullscreen"></span></button>
+			<button class="btn btn-plain" data-signout><span class="i i-logout"></span>Đăng xuất</button>
+		</div>
+	</div>
+	<nav class="seg" aria-label="Mục quản trị">
+		<button data-section="accounts">Tài khoản</button>
+		<button data-section="novels">Kho truyện</button>
+		<button data-section="ai">Dịch AI</button>
+		<button data-section="system">Hệ thống</button>
+		<button data-section="app">Ứng dụng</button>
+	</nav>
+</header>
+
+<main class="content">
+<section data-panel="accounts">
+	<div class="hero-3d-banner tilt-surface">
+		<div>
+			<span class="hero-kicker">✦ Đài Chỉ Huy Độc Giả &amp; Định Danh 3D</span>
+			<h1 class="large-title" id="h-accounts" tabindex="-1">Quản lý Tài khoản</h1>
+			<p class="sec-sub" id="usersSummary">Đang tải danh sách…</p>
+			<div class="hero-actions">
+				<button class="btn btn-gold" id="btnOpenCreate"><span class="i i-plus"></span>Tạo tài khoản mới</button>
+				<button class="btn btn-quiet" id="btnReloadUsers" aria-label="Làm mới danh sách"><span class="i i-refresh"></span><span class="lbl">Làm mới</span></button>
+			</div>
+		</div>
+		<div class="hero-3d-art">
+			<img src="/static/site/admin-astrolabe-3d.png" alt="">
+		</div>
+	</div>
+
+	<div class="kpi-grid" aria-label="Thống kê tổng quan">
+		<div class="kpi-card jade tilt-surface">
+			<div class="kpi-label">Tổng tài khoản</div>
+			<div class="kpi-val" id="kpiTotalUsers">0</div>
+			<div class="kpi-sub" id="kpiSubUsers">Đang đồng bộ máy chủ</div>
+		</div>
+		<div class="kpi-card gold tilt-surface">
+			<div class="kpi-label">Quản trị &amp; VIP</div>
+			<div class="kpi-val" id="kpiAdmins">0</div>
+			<div class="kpi-sub" id="kpiSubAdmins">Đặc quyền hệ thống</div>
+		</div>
+		<div class="kpi-card tilt-surface">
+			<div class="kpi-label">Tổng giờ đọc</div>
+			<div class="kpi-val" id="kpiHours">0</div>
+			<div class="kpi-sub">Tích luỹ toàn máy chủ</div>
+		</div>
+		<div class="kpi-card tilt-surface">
+			<div class="kpi-label">Chương đã đọc</div>
+			<div class="kpi-val" id="kpiChapters">0</div>
+			<div class="kpi-sub" id="kpiSubStreak">Kỷ lục chuỗi ngày đọc</div>
+		</div>
+	</div>
+
+	<div class="toolbar">
+		<div class="search">
+			<input class="input" id="inputSearch" type="search" placeholder="Tìm theo tên hiển thị, @username, email hoặc danh hiệu…" aria-label="Tìm tài khoản" autocomplete="off">
+		</div>
+		<div class="seg" id="userFilter" role="group" aria-label="Lọc theo vai trò">
+			<button data-filter="all" aria-pressed="true">Tất cả</button>
+			<button data-filter="admin" aria-pressed="false">Quản trị</button>
+			<button data-filter="member" aria-pressed="false">Thành viên</button>
+		</div>
+	</div>
+
+	<div class="users">
+		<div class="user-list" id="userListContainer" role="list" aria-label="Danh sách tài khoản"></div>
+		<div id="usersState" hidden></div>
+	</div>
+	<p class="foot-note">Quyền quản trị chỉ cấp hoặc thu hồi bằng dòng lệnh trên máy chủ: <code>python manage_users.py set-admin &lt;tên&gt;</code></p>
+</section>
+
+<section data-panel="novels" hidden>
+	<div class="sec-head">
+		<div>
+			<h1 class="large-title" id="h-novels" tabindex="-1">Kho truyện &amp; Dịch trước</h1>
+			<p class="sec-sub" id="novelsSub">Tìm truyện, lưu sẵn vào ổ 1 TB trên MiniPC và dịch AI trước để mọi độc giả vào app thấy ngay</p>
+		</div>
+		<div class="sec-actions">
+			<button class="btn btn-quiet" id="btnRefreshNovels"><span class="i i-refresh"></span><span class="lbl">Làm mới kho</span></button>
+		</div>
+	</div>
+
+	<div class="group pad" style="margin-bottom:20px">
+		<form id="formSearchNovel" novalidate autocomplete="off">
+			<label for="inNovelQuery" style="display:block;font-weight:700;margin-bottom:8px;color:var(--gold)">Thêm truyện mới vào Kho MiniPC (Tìm kiếm đa nguồn hoặc dán URL)</label>
+			<div class="search-bar-row">
+				<input class="input" id="inNovelQuery" type="search" placeholder="Nhập tên truyện (Việt / Hán Việt / Trung) hoặc dán URL 69shuba, piaotia, uukanshu…">
+				<select class="input" id="selImportPretranslate" aria-label="Số chương dịch trước khi nhập">
+					<option value="20" selected>Nhập kho + Dịch trước 20 chương đầu</option>
+					<option value="50">Nhập kho + Dịch trước 50 chương đầu</option>
+					<option value="10">Nhập kho + Dịch trước 10 chương đầu</option>
+					<option value="0">Chỉ nhập mục lục vào kho (chưa dịch)</option>
+				</select>
+				<button class="btn btn-gold" id="btnSearchNovel"><span class="i i-plus"></span><span class="lbl">Tìm / Nhập kho</span></button>
+			</div>
+			<div id="novelSuggestBox" class="suggest-box" hidden></div>
+			<p class="hint" style="margin-top:8px">Khi bạn nhập truyện vào kho, toàn bộ người dùng trên ứng dụng TruyenCloud sẽ thấy ngay trong mục Khám phá &amp; Tìm kiếm mà không cần chờ quét web.</p>
+		</form>
+		<div id="novelSearchState" hidden style="margin-top:14px"></div>
+		<div id="novelSearchWrap" hidden style="margin-top:16px">
+			<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+				<span class="group-title" id="novelSearchTitle" style="margin:0">Kết quả tìm thấy</span>
+				<button type="button" class="btn btn-quiet btn-sm" id="btnClearSearch">Ẩn kết quả tìm kiếm</button>
+			</div>
+			<div class="novel-grid" id="novelSearchResults"></div>
+		</div>
+	</div>
+
+	<div class="group pad" style="margin-bottom:20px">
+		<form id="formHarvester" novalidate autocomplete="off">
+			<label for="selHarvesterPack" style="display:block;font-weight:700;margin-bottom:8px;color:var(--accent)">✦ Bộ Thu Thập Truyện Tự Động (Auto-Seeder Kho Offline 1TB)</label>
+			<div class="search-bar-row">
+				<select class="input" id="selHarvesterPack" aria-label="Gói chủ đề thu thập">
+					<option value="all" selected>Tất cả chủ đề thịnh hành (50+ từ khoá đa thể loại)</option>
+					<option value="phd">Nghiên cứu sinh Tiến sĩ · Đọc Bác · Luận văn · Viện sĩ</option>
+					<option value="academic">Học bá · Khoa kỹ · Du học (MIT, Harvard, Stanford)</option>
+					<option value="urban">Đô thị / Thương trường / Trọng sinh / Bác sĩ</option>
+					<option value="xianxia">Tiên hiệp / Huyền huyễn / Kiếm đạo / Hồng Hoang</option>
+					<option value="horror">Linh dị / Quỷ dị / Vô hạn lưu / Chữa khỏi</option>
+					<option value="fandom">Đồng nhân / Hogwarts / Marvel / Anime</option>
+				</select>
+				<select class="input" id="selHarvesterMaxNovels" aria-label="Số bộ truyện mục tiêu">
+					<option value="15">Quét &amp; nhập 15 bộ mới</option>
+					<option value="30" selected>Quét &amp; nhập 30 bộ mới</option>
+					<option value="60">Quét &amp; nhập 60 bộ mới</option>
+					<option value="100">Quét &amp; nhập 100 bộ mới</option>
+				</select>
+				<select class="input" id="selHarvesterRawCh" aria-label="Chế độ tải gốc &amp; dịch Gemini mỗi bộ">
+					<option value="20:10" selected>Tải 20 chương gốc + Gemini dịch sẵn 10 ch. đầu</option>
+					<option value="50:20">Tải 50 chương gốc + Gemini dịch sẵn 20 ch. đầu</option>
+					<option value="20:5">Tải 20 chương gốc + Gemini dịch sẵn 5 ch. đầu</option>
+					<option value="50:0">Tải nhanh 50 chương gốc/bộ (dịch Gemini sau)</option>
+					<option value="0:0">Chỉ lưu mục lục + ảnh bìa</option>
+				</select>
+				<button class="btn btn-primary" id="btnStartHarvester"><span class="i i-plus"></span><span class="lbl">Quét Kho Tự Động</span></button>
+				<button type="button" class="btn btn-quiet danger-text" id="btnStopHarvester" hidden><span class="i i-close"></span><span class="lbl">Dừng quét</span></button>
+			</div>
+			<p class="hint" style="margin-top:8px">Tự động quét 69shuba, uukanshu, piaotia theo gói chủ đề, lọc trùng 100%, lưu ảnh bìa, tải sẵn chương gốc vào ổ 1 TB và đẩy vào hàng đợi để <b>Gemini (gemini-3-flash)</b> dịch sẵn các chương mở đầu.</p>
+		</form>
+		<div id="harvesterStatusBox" class="job-box" hidden style="margin-top:12px"></div>
+	</div>
+
+	<div id="overnightDashBox" class="overnight-box" hidden></div>
+
+	<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:8px">
+		<h2 class="group-title" id="hLibCount" style="margin:0 4px">Truyện đã lưu trong Kho MiniPC</h2>
+		<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+			<button type="button" class="btn btn-quiet btn-sm" id="btnTriggerAutoUpdater" title="Quét chương mới tự động từ 69shuba/uukanshu/piaotia cho các bộ truyện trong kho"><span class="i i-refresh"></span><span class="lbl">Quét chương mới</span></button>
+			<button type="button" class="btn btn-quiet btn-sm" id="btnBulkEnableOvernight" title="Bật Dịch Ngầm Ban Đêm cho các bộ truyện đang hiển thị theo bộ lọc"><span class="i i-moon"></span><span class="lbl">Bật Dịch ngầm (theo lọc)</span></button>
+			<button type="button" class="btn btn-quiet btn-sm danger-text" id="btnBulkDisableOvernight" title="Tắt Dịch Ngầm Ban Đêm cho toàn bộ truyện"><span class="i i-close"></span><span class="lbl">Tắt Dịch ngầm tất cả</span></button>
+			<label for="selTtsVoiceLib" class="hint" style="font-weight:600;margin-left:4px">Giọng tạo Audio:</label>
+			<select class="input" id="selTtsVoiceLib" style="min-height:36px;padding:4px 10px;width:auto;font-size:13px">
+				<option value="mai_phuong" selected>Mai Phương (Nữ miền Bắc)</option>
+				<option value="ngoc_huyen">Ngọc Huyền (Nữ truyền cảm)</option>
+				<option value="thao_vy">Thảo Vy (Nữ miền Nam)</option>
+				<option value="minh_quang">Minh Quang (Nam trầm ấm)</option>
+				<option value="duc_tri">Đức Trí (Nam miền Nam)</option>
+				<option value="Binh">Bình (Nam miền Bắc - VieNeu)</option>
+				<option value="Tuyen">Tuyên (Nam chuẩn - VieNeu)</option>
+				<option value="Vinh">Vĩnh (Nam miền Nam - VieNeu)</option>
+				<option value="Doan">Đoan (Nữ miền Nam - VieNeu)</option>
+				<option value="Ly">Ly (Nữ miền Bắc - VieNeu)</option>
+				<option value="Ngoc">Ngọc (Nữ Hà Nội - VieNeu)</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="lib-toolbar" aria-label="Bộ lọc và sắp xếp kho truyện">
+		<input class="input" id="inLibFilter" type="search" placeholder="Lọc nhanh trong kho theo tên truyện, tác giả, chữ Hán, ID…" aria-label="Lọc nhanh trong kho" autocomplete="off">
+		<div class="seg" id="libStatusFilter" role="group" aria-label="Lọc theo tiến độ dịch">
+			<button type="button" data-libstatus="all" aria-pressed="true">Tất cả</button>
+			<button type="button" data-libstatus="active" aria-pressed="false">Đang chạy / Dịch ngầm</button>
+			<button type="button" data-libstatus="translated" aria-pressed="false">Đã có bản dịch</button>
+			<button type="button" data-libstatus="untranslated" aria-pressed="false">Chưa dịch</button>
+		</div>
+		<select class="input" id="selLibSource" aria-label="Lọc theo nguồn">
+			<option value="all" selected>Mọi nguồn truyện</option>
+			<option value="69shuba">Nguồn: 69shuba</option>
+			<option value="uukanshu">Nguồn: uukanshu</option>
+			<option value="piaotia">Nguồn: piaotia</option>
+			<option value="local">Nguồn: local</option>
+		</select>
+		<select class="input" id="selLibSort" aria-label="Sắp xếp kho truyện">
+			<option value="recent" selected>Sắp xếp: Mới cập nhật</option>
+			<option value="translated_desc">Nhiều chương đã dịch nhất</option>
+			<option value="cached_desc">Nhiều chương gốc nhất</option>
+			<option value="title_asc">Tên truyện A → Z</option>
+		</select>
+	</div>
+
+	<div id="novelsState" hidden></div>
+	<div class="novel-grid" id="novelLibGrid"></div>
+	<div id="novelLibPager" class="pager-bar" hidden></div>
+</section>
+
+<section data-panel="ai" hidden>
+	<div class="sec-head">
+		<div><h1 class="large-title" id="h-ai" tabindex="-1">Dịch AI</h1><p class="sec-sub" id="aiSub">Đang tải…</p></div>
+		<div><button class="btn btn-quiet" id="btnRefreshModels"><span class="i i-refresh"></span><span class="lbl">Quét lại mô hình</span></button></div>
+	</div>
+	<div id="aiState" hidden></div>
+	<div id="aiBody" hidden>
+		<form id="formModel" novalidate>
+			<div class="group pad">
+				<div class="field"><label for="modelSelect">Mô hình dịch</label><select class="input" id="modelSelect"></select><p class="hint" id="modelInfo"></p></div>
+				<div class="field"><label for="inTimeout">Thời gian chờ mỗi lượt dịch (giây)</label><input class="input" id="inTimeout" type="number" inputmode="numeric" min="10" max="3600"></div>
+			</div>
+			<p class="group-foot" id="cliInfo"></p>
+			<div class="form-actions"><button class="btn btn-primary" id="btnApplyModel" disabled><span class="lbl">Áp dụng</span></button></div>
+		</form>
+		<form id="formProfile" novalidate>
+			<h2 class="group-title">Hồ sơ văn phong</h2>
+			<div class="group pad">
+				<div class="field"><label for="pfGenre">Thể loại</label><select class="input" id="pfGenre"></select></div>
+				<div class="field"><label for="pfRatio">Mức giữ từ Hán Việt</label><select class="input" id="pfRatio"></select></div>
+				<div class="field"><label for="pfPrompt">Hướng dẫn thêm cho AI</label><textarea class="input" id="pfPrompt" rows="4" maxlength="2000"></textarea></div>
+				<div class="field"><label for="pfMode">Chế độ đọc mặc định</label><select class="input" id="pfMode"></select></div>
+				<div class="field"><label for="pfPrefetch">Dịch trước chương kế tiếp</label><select class="input" id="pfPrefetch"></select></div>
+				<label class="switch-row"><span>Tự động thu thập lại khi thiếu nội dung</span><input type="checkbox" role="switch" class="switch" id="pfRecrawl"></label>
+			</div>
+			<div class="form-actions"><button class="btn btn-primary" id="btnSaveProfile" disabled><span class="lbl">Lưu hồ sơ</span></button></div>
+		</form>
+
+		<form id="formPlayground" novalidate autocomplete="off">
+			<h2 class="group-title">Phòng Thử Nghiệm Dịch AI &amp; Nghe Thử 7 Giọng Đọc VieNeu-TTS</h2>
+			<div class="group pad" style="padding-bottom:16px">
+				<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px">
+					<span class="hint">Kiểm tra nhanh chất lượng dịch của từng tầng AI và nghe thử giọng đọc trực tiếp trên trình duyệt</span>
+					<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+						<select class="input" id="pgEngineSelect" style="width:auto;min-height:38px;padding:6px 12px" aria-label="Chọn động cơ dịch thử">
+							<option value="qwen" selected>Tầng 2: Qwen3-4B Local GGUF (Offline 100%)</option>
+							<option value="gemini">Tầng 1: Gemini Antigravity CLI (Chính)</option>
+							<option value="title_mt">Tầng 3: Qwen2.5-1.5B Title MT (Tựa đề)</option>
+						</select>
+						<button type="submit" class="btn btn-gold btn-sm" id="btnPgTranslate"><span class="i i-ai"></span><span class="lbl">Dịch thử ngay</span></button>
+					</div>
+				</div>
+				<div class="reader-split">
+					<div class="field" style="margin-bottom:0">
+						<label for="pgSourceText">Đoạn văn mẫu tiếng Trung</label>
+						<textarea class="input mono" id="pgSourceText" rows="5" maxlength="3500">陈默站在斯德哥尔摩皇家理工学院的实验室窗前，看着窗外漫天飞舞的暴风雪。桌上的终端屏幕闪烁着微光，历经三百个日夜的算法推演终于收敛——这一刻，整个学界都将被彻底颠覆。</textarea>
+					</div>
+					<div class="field" style="margin-bottom:0">
+						<label for="pgOutputText">Kết quả dịch tiếng Việt (có thể sửa để đọc thử TTS)</label>
+						<textarea class="input" id="pgOutputText" rows="5" placeholder="Bấm 'Dịch thử ngay' hoặc nhập câu tiếng Việt bất kỳ để nghe thử giọng đọc VieNeu-TTS…">Trần Mặc đứng trước khung cửa sổ phòng thí nghiệm Học viện Công nghệ Hoàng gia Stockholm, ngắm nhìn trận bão tuyết trắng xoá tung bay ngoài trời. Màn hình thiết bị đầu cuối trên bàn lấp lánh ánh sáng dịu nhẹ, thuật toán suy diễn suốt ba trăm ngày đêm ròng rã cuối cùng đã hội tụ — khoảnh khắc này, toàn bộ giới học thuật sẽ hoàn toàn chấn động.</textarea>
+					</div>
+				</div>
+				<p class="hint" id="pgMetaInfo" style="margin-top:8px;color:var(--accent)"></p>
+				<div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--hairline)">
+					<label for="pgVoiceSelect" style="font-weight:600;font-size:13px">Giọng đọc VieNeu-TTS:</label>
+					<select class="input" id="pgVoiceSelect" style="width:auto;min-height:38px;padding:6px 12px">
+						<option value="mai_phuong" selected>Mai Phương (Nữ miền Bắc)</option>
+						<option value="ngoc_huyen">Ngọc Huyền (Nữ truyền cảm)</option>
+						<option value="thao_vy">Thảo Vy (Nữ miền Nam)</option>
+						<option value="minh_quang">Minh Quang (Nam trầm ấm)</option>
+						<option value="duc_tri">Đức Trí (Nam miền Nam)</option>
+						<option value="Binh">Bình (Nam miền Bắc - VieNeu)</option>
+						<option value="Tuyen">Tuyên (Nam chuẩn - VieNeu)</option>
+						<option value="Vinh">Vĩnh (Nam miền Nam - VieNeu)</option>
+						<option value="Doan">Đoan (Nữ miền Nam - VieNeu)</option>
+						<option value="Ly">Ly (Nữ miền Bắc - VieNeu)</option>
+						<option value="Ngoc">Ngọc (Nữ Hà Nội - VieNeu)</option>
+					</select>
+					<button type="button" class="btn btn-primary btn-sm" id="btnPgSpeak"><span class="i i-audio"></span><span class="lbl">Nghe thử giọng đọc</span></button>
+					<audio id="pgAudioPlayer" controls preload="none" style="height:36px;flex:1;min-width:240px"></audio>
+				</div>
+			</div>
+		</form>
+	</div>
+</section>
+
+<section data-panel="system" hidden>
+	<div class="sec-head">
+		<div><h1 class="large-title" id="h-system" tabindex="-1">Hệ thống</h1><p class="sec-sub" id="sysUpdated">Đang kiểm tra…</p></div>
+		<div style="display:flex;flex-wrap:wrap;gap:8px">
+			<button type="button" class="btn btn-gold" id="btnSweepCache"><span class="i i-zap"></span><span class="lbl">Dọn rác Bộ đệm &amp; Gộp SQLite</span></button>
+			<button type="button" class="btn btn-quiet" id="btnExportBackup"><span class="i i-download"></span><span class="lbl">Tải bản Sao lưu (.JSON)</span></button>
+			<button class="btn btn-quiet" id="btnRefreshSystem"><span class="i i-refresh"></span><span class="lbl">Kiểm tra lại</span></button>
+		</div>
+	</div>
+	<h2 class="group-title" style="margin-top:0">Máy chủ</h2>
+	<div class="group" id="sysServer"></div>
+	<h2 class="group-title">Cụm Trí Tuệ Nhân Tạo (3 Tầng Dịch)</h2>
+	<div class="group" id="sysAiEngines"></div>
+	<h2 class="group-title">Giọng đọc trên máy chủ</h2>
+	<div class="group" id="sysTts"></div>
+	<h2 class="group-title">Bộ đệm Ổ 1TB &amp; Từ điển Tên truyện (Cache Janitor)</h2>
+	<div class="group" id="sysCaches"></div>
+</section>
+
+<section data-panel="app" hidden>
+	<div class="sec-head">
+		<div><h1 class="large-title" id="h-app" tabindex="-1">Ứng dụng</h1><p class="sec-sub">Quản lý phát hành &amp; Cập nhật OTA cho Android</p></div>
+		<div><button class="btn btn-quiet" id="btnRefreshApp"><span class="i i-refresh"></span><span class="lbl">Làm mới</span></button></div>
+	</div>
+	<div id="appState" hidden></div>
+	<div id="appBody" hidden>
+		<div class="studio-grid">
+			<div>
+				<h2 class="group-title" style="margin-top:0">Phiên bản đang phát hành</h2>
+				<div class="group" id="appDetails"></div>
+				<h2 class="group-title">Có gì mới</h2>
+				<div class="group"><ul class="changelog" id="appChangelog"></ul></div>
+			</div>
+			<div>
+				<h2 class="group-title" style="margin-top:0">Phát hành Bản Cập Nhật OTA Mới</h2>
+				<div class="group pad" style="margin-bottom:16px;padding-bottom:14px">
+					<form id="formUploadApk" novalidate autocomplete="off">
+						<div class="field" style="margin-bottom:8px">
+							<label for="inApkFile">1. Tải tệp APK mới lên máy chủ (<code>/static/truyencloud-latest.apk</code>)</label>
+							<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+								<input class="input" id="inApkFile" type="file" accept=".apk" style="flex:1;min-width:200px;padding:7px 10px">
+								<button type="submit" class="btn btn-gold btn-sm" id="btnUploadApk"><span class="i i-plus"></span><span class="lbl">Tải lên APK &amp; Băm SHA-256</span></button>
+							</div>
+							<p class="hint">Tự động lưu nguyên tử, tính dung lượng và mã băm SHA-256 cho tệp APK vừa tải lên.</p>
+						</div>
+					</form>
+				</div>
+				<form id="formPublishApp" novalidate autocomplete="off">
+					<div class="group pad" style="padding-bottom:14px">
+						<div style="font-weight:700;color:var(--accent);margin-bottom:10px">2. Cấu hình Phiên bản &amp; Ghi chú Phát hành (OTA)</div>
+						<div class="range-grid">
+							<div class="field">
+								<label for="appVerCode">Version Code (Số nguyên)</label>
+								<input class="input mono" id="appVerCode" type="number" min="1" max="999999" value="1">
+							</div>
+							<div class="field">
+								<label for="appVerName">Tên phiên bản (Version Name)</label>
+								<input class="input mono" id="appVerName" maxlength="40" placeholder="1.2.0">
+							</div>
+						</div>
+						<div class="range-grid">
+							<div class="field">
+								<label for="appMinVerCode">Bản dựng tối thiểu</label>
+								<input class="input mono" id="appMinVerCode" type="number" min="1" max="999999" value="1">
+							</div>
+							<div class="field">
+								<label for="appReleaseDate">Ngày phát hành</label>
+								<input class="input mono" id="appReleaseDate" maxlength="20" placeholder="2026-10-25">
+							</div>
+						</div>
+						<div class="field">
+							<label for="appChangelogInput">Ghi chú phát hành (Mỗi dòng một mục)</label>
+							<textarea class="input" id="appChangelogInput" rows="4" maxlength="4000"></textarea>
+						</div>
+						<label class="switch-row" style="margin:0;padding:8px 2px">
+							<span>Bắt buộc người dùng cập nhật ngay (Mandatory Update)</span>
+							<input type="checkbox" role="switch" class="switch" id="appMandatory">
+						</label>
+						<div style="display:flex;justify-content:flex-end;margin-top:10px">
+							<button type="submit" class="btn btn-primary" id="btnSaveAppVersion"><span class="i i-check"></span><span class="lbl">Lưu &amp; Phát hành OTA</span></button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+</main>
+</div>
+
+<dialog id="dlgCreate" class="sheet" aria-labelledby="hCreate">
+<form id="formCreate" novalidate autocomplete="off">
+	<div class="dlg-head">
+		<h2 id="hCreate">Khởi tạo Tài khoản Độc giả Mới</h2>
+		<button type="button" class="icon-btn" data-close aria-label="Đóng"><span class="i i-close"></span></button>
+	</div>
+	<div class="dlg-body">
+		<div class="studio-grid">
+			<div>
+				<div class="field">
+					<label for="cuUser">Tên đăng nhập (ID)</label>
+					<input class="input mono" id="cuUser" maxlength="30" placeholder="vd: docgia_tinhanh">
+					<p class="hint">3–30 ký tự: chữ thường không dấu, số, dấu chấm, gạch dưới, gạch ngang.</p>
+				</div>
+				<div class="field">
+					<label for="cuName">Tên hiển thị</label>
+					<input class="input" id="cuName" maxlength="50" placeholder="vd: Lâm Phong">
+				</div>
+				<div class="field">
+					<label for="cuEmail">Email liên kết (không bắt buộc)</label>
+					<input class="input" id="cuEmail" type="email" maxlength="120" placeholder="ten-dang-nhap@truyencloud.vn">
+				</div>
+				<div class="field">
+					<label for="cuVip">Danh hiệu / Hạng thẻ</label>
+					<input class="input" id="cuVip" maxlength="50" placeholder="VIP Tinh Anh 2026">
+					<div class="vip-presets" id="vipPresets">
+						<button type="button" class="vip-chip" data-vip="VIP Tinh Anh 2026">✦ VIP Tinh Anh 2026</button>
+						<button type="button" class="vip-chip" data-vip="Chí Tôn Độc Giả">♛ Chí Tôn Độc Giả</button>
+						<button type="button" class="vip-chip" data-vip="Học Giả Song Ngữ">◈ Học Giả Song Ngữ</button>
+						<button type="button" class="vip-chip" data-vip="Thành Viên Nội Bộ">✧ Thành Viên Nội Bộ</button>
+					</div>
+				</div>
+				<div class="field">
+					<label for="cuBio">Tiểu sử / Ghi chú thẻ (không bắt buộc)</label>
+					<input class="input" id="cuBio" maxlength="160" placeholder="Đạo hữu yêu thích Tiên hiệp &amp; Luyện từ vựng IELTS">
+				</div>
+				<div class="field">
+					<label for="cuPass">Mật khẩu khởi tạo</label>
+					<div class="input-wrap pw gen"><input id="cuPass" class="mono" type="password" maxlength="128" autocomplete="new-password"></div>
+					<div class="pw-meter" id="pwStrengthMeter" data-score="0"><span></span><span></span><span></span><span></span></div>
+					<p class="hint" id="pwStrengthText">Ít nhất 8 ký tự. Bấm xúc xắc để tạo mật khẩu ngẫu nhiên chuẩn bảo mật.</p>
+				</div>
+			</div>
+			<div class="id-pass-stage">
+				<img class="id-pass-3d-art" src="/static/site/admin-key-vault-3d.png" alt="Kim Ấn Bảo Mật 3D">
+				<div class="id-pass-card tilt-surface" id="liveCardPreview">
+					<div class="id-pass-top">
+						<span>TRUYENCLOUD PASS</span>
+						<span id="pvVip">VIP Tinh Anh 2026</span>
+					</div>
+					<div class="id-pass-user">
+						<div class="id-pass-av" id="pvInitials">TC</div>
+						<div>
+							<div class="id-pass-name" id="pvName">Độc giả mới</div>
+							<div class="id-pass-handle" id="pvHandle">@ten-dang-nhap</div>
+						</div>
+					</div>
+					<div class="id-pass-meta">
+						<div id="pvEmail">ten-dang-nhap@truyencloud.vn</div>
+						<div id="pvBio">Đồng bộ đám mây · Dịch AI · Từ vựng FSRS</div>
+					</div>
+				</div>
+				<p class="hint" style="text-align:center">Thẻ định danh 3D cập nhật trực tiếp khi bạn nhập thông tin.</p>
+			</div>
+		</div>
+		<p class="form-error" id="createError" role="alert" hidden></p>
+	</div>
+	<div class="dlg-foot">
+		<button type="button" class="btn btn-quiet" data-close>Huỷ</button>
+		<button class="btn btn-gold" id="btnCreate"><span class="i i-plus"></span><span class="lbl">Tạo tài khoản</span></button>
+	</div>
+</form>
+</dialog>
+
+<dialog id="dlgPassword" class="sheet" aria-labelledby="hPassword">
+<form id="formPassword" novalidate autocomplete="off">
+	<div class="dlg-head">
+		<h2 id="hPassword">Đặt mật khẩu mới</h2>
+		<button type="button" class="icon-btn" data-close aria-label="Đóng"><span class="i i-close"></span></button>
+	</div>
+	<p class="dlg-sub">Cho tài khoản <span class="mono" id="pwTarget"></span></p>
+	<div class="dlg-body">
+		<div class="field">
+			<label for="newPass">Mật khẩu mới</label>
+			<div class="input-wrap pw gen"><input id="newPass" class="mono" type="password" maxlength="128" autocomplete="new-password"></div>
+			<p class="hint">Ít nhất 8 ký tự. Thiết bị đang đăng nhập tài khoản này vẫn giữ phiên hiện tại.</p>
+		</div>
+		<p class="form-error" id="pwError" role="alert" hidden></p>
+	</div>
+	<div class="dlg-foot">
+		<button type="button" class="btn btn-quiet" data-close>Huỷ</button>
+		<button class="btn btn-primary" id="btnSavePass"><span class="lbl">Lưu mật khẩu</span></button>
+	</div>
+</form>
+</dialog>
+
+<dialog id="dlgCreds" class="sheet" aria-labelledby="hCreds">
+	<div class="dlg-head"><h2 id="hCreds">Đã tạo tài khoản</h2></div>
+	<div class="dlg-body">
+		<div class="creds-hero">
+			<img src="/static/site/admin-key-vault-3d.png" alt="">
+			<div>
+				<b style="color:var(--gold);display:block;margin-bottom:2px">Kim Ấn Định Danh Hoàn Tất</b>
+				<span class="hint">Mật khẩu chỉ hiển thị một lần. Hãy sao chép và gửi cho người dùng trước khi đóng.</span>
+			</div>
+		</div>
+		<div class="group creds">
+			<div class="row"><span class="row-label">Tên đăng nhập</span><span class="row-value" id="credUser"></span></div>
+			<div class="row"><span class="row-label">Mật khẩu</span><span class="row-value" id="credPass"></span></div>
+			<div class="row"><span class="row-label">Máy chủ</span><span class="row-value" id="credServer"></span></div>
+		</div>
+	</div>
+	<div class="dlg-foot">
+		<button class="btn btn-quiet" data-close>Xong</button>
+		<button class="btn btn-gold" id="btnCopyCreds"><span class="i i-copy"></span><span class="lbl">Sao chép thông tin</span></button>
+	</div>
+</dialog>
+
+<dialog id="dlgDelete" class="alert" aria-labelledby="hDelete" aria-describedby="delBody">
+<form id="formDelete" novalidate autocomplete="off">
+	<div class="dlg-head"><h2 id="hDelete">Xoá tài khoản?</h2></div>
+	<div class="dlg-body">
+		<p id="delBody">Tài khoản cùng tiến độ đọc, dấu trang, từ vựng và lịch sử ôn tập đã đồng bộ sẽ bị xoá vĩnh viễn. Không thể hoàn tác.</p>
+		<p class="warn-line" id="delAdminWarn" hidden>Đây là tài khoản quản trị.</p>
+		<div class="field"><label for="delConfirm">Nhập <span class="expect" id="delExpect"></span> để xác nhận</label><input class="input mono" id="delConfirm"></div>
+		<p class="form-error" id="delError" role="alert" hidden></p>
+	</div>
+	<div class="dlg-foot">
+		<button type="button" class="btn btn-quiet" data-close>Huỷ</button>
+		<button class="btn btn-danger" id="btnDelete" disabled><span class="lbl">Xoá vĩnh viễn</span></button>
+	</div>
+</form>
+</dialog>
+
+<dialog id="dlgPretranslate" class="sheet" aria-labelledby="hPretranslate">
+<form id="formPretranslate" novalidate autocomplete="off">
+	<div class="dlg-head">
+		<h2 id="hPretranslate">Dịch AI trước lưu vào Kho MiniPC</h2>
+		<button type="button" class="icon-btn" data-close aria-label="Đóng"><span class="i i-close"></span></button>
+	</div>
+	<p class="dlg-sub" id="preNovelSub">Chọn khoảng chương muốn dịch sẵn trên máy chủ</p>
+	<div class="dlg-body">
+		<div class="vip-presets" id="prePresets" style="margin-bottom:14px">
+			<button type="button" class="vip-chip" data-range="1-20">Chương 1 → 20</button>
+			<button type="button" class="vip-chip" data-range="1-50">Chương 1 → 50</button>
+			<button type="button" class="vip-chip" data-range="1-100">Chương 1 → 100</button>
+			<button type="button" class="vip-chip" data-range="next20">20 chương kế tiếp</button>
+			<button type="button" class="vip-chip" data-range="next50">50 chương kế tiếp</button>
+			<button type="button" class="vip-chip" data-range="all"><span class="i i-zap"></span><span>Dịch hết đến cuối truyện</span></button>
+		</div>
+		<div class="range-grid">
+			<div class="field">
+				<label for="preFrom">Từ chương</label>
+				<input class="input" id="preFrom" type="number" min="1" max="10000" value="1">
+			</div>
+			<div class="field">
+				<label for="preTo">Đến chương</label>
+				<input class="input" id="preTo" type="number" min="1" max="10000" value="20">
+			</div>
+		</div>
+		<p class="hint" id="preRangeHint" style="margin-top:8px">Các chương đã có bản dịch trên ổ 1 TB sẽ được bỏ qua tự động để tiết kiệm tài nguyên AI.</p>
+		<p class="form-error" id="preError" role="alert" hidden></p>
+	</div>
+	<div class="dlg-foot">
+		<button type="button" class="btn btn-quiet" data-close>Huỷ</button>
+		<button class="btn btn-gold" id="btnStartPretranslate"><span class="i i-ai"></span><span class="lbl">Bắt đầu dịch ngầm</span></button>
+	</div>
+</form>
+</dialog>
+
+<dialog id="dlgGlossary" class="sheet" aria-labelledby="hGlossary">
+<form id="formGlossary" novalidate autocomplete="off">
+	<div class="dlg-head">
+		<h2 id="hGlossary">Bảng Thuật ngữ &amp; Tên riêng</h2>
+		<button type="button" class="icon-btn" data-close aria-label="Đóng"><span class="i i-close"></span></button>
+	</div>
+	<p class="dlg-sub" id="glossNovelSub">Cố định tên nhân vật, địa danh, chiêu thức xuyên suốt mọi chương</p>
+	<div class="dlg-body">
+		<div class="field">
+			<label for="inGlossaryText">Mỗi dòng một cặp <code>Chữ Hán = Bản dịch tiếng Việt</code></label>
+			<textarea class="input mono" id="inGlossaryText" rows="10" placeholder="Ví dụ:&#10;霍格沃茨 = Hogwarts&#10;陈默 = Trần Mặc&#10;麻省理工 = MIT"></textarea>
+			<p class="hint">AI tự trích xuất tên riêng sau mỗi chương dịch. Bạn có thể sửa hoặc thêm tại đây để cố định 100% cho các chương tiếp theo.</p>
+		</div>
+		<p class="form-error" id="glossError" role="alert" hidden></p>
+	</div>
+	<div class="dlg-foot">
+		<button type="button" class="btn btn-quiet" data-close>Đóng</button>
+		<button class="btn btn-gold" id="btnSaveGlossary"><span class="i i-check"></span><span class="lbl">Lưu bảng thuật ngữ</span></button>
+	</div>
+</form>
+</dialog>
+
+<dialog id="dlgNovelInspector" class="sheet" aria-labelledby="hInspector">
+<form id="formNovelInspector" novalidate autocomplete="off">
+	<div class="dlg-head">
+		<h2 id="hInspector">Đọc thử &amp; Chỉnh sửa Truyện trong Kho 1TB</h2>
+		<button type="button" class="icon-btn" data-close aria-label="Đóng"><span class="i i-close"></span></button>
+	</div>
+	<p class="dlg-sub" id="inspSub">Chỉnh sửa tên tiếng Việt, văn án, ảnh bìa hoặc đọc/sửa trực tiếp chương dịch AI</p>
+	<div class="dlg-body">
+		<div class="group pad" style="margin-bottom:12px;padding-bottom:10px">
+			<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
+				<div style="font-weight:700;color:var(--gold)">1. Thông tin hiển thị trên App</div>
+				<button type="button" class="btn btn-gold btn-sm" id="btnSaveNovelMeta"><span class="i i-check"></span><span class="lbl">Lưu thông tin truyện</span></button>
+			</div>
+			<div style="display:grid;grid-template-columns:2fr 1fr 1.4fr;gap:10px">
+				<div class="field" style="margin-bottom:8px">
+					<label for="inspTitleVi">Tên truyện tiếng Việt</label>
+					<input class="input" id="inspTitleVi" maxlength="240" style="min-height:38px;padding:6px 12px">
+				</div>
+				<div class="field" style="margin-bottom:8px">
+					<label for="inspAuthor">Tác giả</label>
+					<input class="input" id="inspAuthor" maxlength="160" style="min-height:38px;padding:6px 12px">
+				</div>
+				<div class="field" style="margin-bottom:8px">
+					<label for="inspCoverUrl">URL Ảnh bìa</label>
+					<input class="input mono" id="inspCoverUrl" maxlength="600" placeholder="https://..." style="min-height:38px;padding:6px 12px">
+				</div>
+			</div>
+			<div class="field" style="margin-bottom:4px">
+				<label for="inspDesc">Văn án / Giới thiệu tiếng Việt</label>
+				<textarea class="input" id="inspDesc" rows="2" maxlength="5000" style="padding:6px 12px"></textarea>
+			</div>
+		</div>
+
+		<div class="group pad" style="padding-bottom:12px">
+			<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px">
+				<div style="font-weight:700;color:var(--accent)">2. Đọc thử &amp; Chỉnh sửa Chương Dịch Song Ngữ</div>
+				<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px">
+					<button type="button" class="btn btn-quiet btn-sm" id="btnInspPrevCh">← Chương trước</button>
+					<input class="input mono" id="inspChNum" type="number" min="1" max="10000" value="1" style="width:84px;min-height:34px;padding:4px 10px;text-align:center" aria-label="Số chương">
+					<button type="button" class="btn btn-quiet btn-sm" id="btnInspLoadCh">Tải chương</button>
+					<button type="button" class="btn btn-quiet btn-sm" id="btnInspNextCh">Chương sau →</button>
+					<button type="button" class="btn btn-quiet btn-sm" id="btnInspRetranslate"><span class="i i-ai"></span><span class="lbl">Dịch AI chương này</span></button>
+				</div>
+			</div>
+			<div id="inspChChips" class="ch-chip-bar" aria-label="Các chương đã lưu trên ổ đĩa"></div>
+			<div class="field" style="margin-top:4px;margin-bottom:8px">
+				<label for="inspChTitleVi">Tiêu đề chương (Tiếng Việt / Gốc)</label>
+				<input class="input" id="inspChTitleVi" maxlength="240" placeholder="Chương 1: ..." style="min-height:38px;padding:6px 12px">
+			</div>
+			<div class="reader-split">
+				<div class="field" style="margin-bottom:0">
+					<label for="inspChRaw">Bản gốc tiếng Trung trên ổ 1TB</label>
+					<textarea class="input mono" id="inspChRaw" rows="10" readonly style="font-size:13px;line-height:1.55"></textarea>
+				</div>
+				<div class="field" style="margin-bottom:0">
+					<label for="inspChTrans">Bản dịch tiếng Việt (có thể sửa trực tiếp)</label>
+					<textarea class="input" id="inspChTrans" rows="10" style="font-size:13.5px;line-height:1.6" placeholder="Chương này chưa có bản dịch trên ổ 1TB. Bấm 'Dịch AI chương này' hoặc nhập bản dịch tại đây…"></textarea>
+				</div>
+			</div>
+			<p class="hint" id="inspChEngineInfo" style="margin-top:6px"></p>
+		</div>
+		<p class="form-error" id="inspError" role="alert" hidden style="margin-top:10px"></p>
+	</div>
+	<div class="dlg-foot">
+		<button type="button" class="btn btn-quiet" data-close>Đóng</button>
+		<button type="submit" class="btn btn-primary" id="btnSaveInspChapter"><span class="i i-check"></span><span class="lbl">Lưu bản dịch chương</span></button>
+	</div>
+</form>
+</dialog>
+
+<dialog id="dlgUserStudio" class="sheet" aria-labelledby="hUserStudio">
+<form id="formUserStudio" novalidate autocomplete="off">
+	<div class="dlg-head">
+		<h2 id="hUserStudio">Hồ sơ Độc giả &amp; Hoạt động Đồng bộ</h2>
+		<button type="button" class="icon-btn" data-close aria-label="Đóng"><span class="i i-close"></span></button>
+	</div>
+	<p class="dlg-sub" id="usSub">Chỉnh sửa thông tin định danh, hạng thẻ VIP, quyền Quản trị và xem tiến độ đọc</p>
+	<div class="dlg-body">
+		<div class="studio-grid">
+			<div>
+				<div class="field">
+					<label for="usName">Tên hiển thị</label>
+					<input class="input" id="usName" maxlength="60">
+				</div>
+				<div class="field">
+					<label for="usEmail">Email liên kết</label>
+					<input class="input" id="usEmail" type="email" maxlength="120">
+				</div>
+				<div class="field">
+					<label for="usVip">Danh hiệu / Hạng thẻ VIP</label>
+					<input class="input" id="usVip" maxlength="60">
+				</div>
+				<div class="field">
+					<label for="usBio">Tiểu sử / Ghi chú thẻ</label>
+					<input class="input" id="usBio" maxlength="240">
+				</div>
+				<label class="switch-row" style="margin:0;padding:10px 4px">
+					<span>Cấp quyền Quản trị viên (Admin)</span>
+					<input type="checkbox" role="switch" class="switch" id="usAdmin">
+				</label>
+			</div>
+			<div>
+				<div class="group pad" style="padding-bottom:14px">
+					<div style="font-weight:700;color:var(--accent);margin-bottom:8px">Dữ liệu đã đồng bộ đám mây</div>
+					<div id="usSyncSummary" class="hint" style="margin-bottom:10px">Đang tải dữ liệu đồng bộ…</div>
+					<div id="usProgressList" style="display:grid;gap:8px;max-height:260px;overflow:auto"></div>
+				</div>
+			</div>
+		</div>
+		<p class="form-error" id="usError" role="alert" hidden style="margin-top:10px"></p>
+	</div>
+	<div class="dlg-foot">
+		<button type="button" class="btn btn-quiet" data-close>Đóng</button>
+		<button type="submit" class="btn btn-gold" id="btnSaveUserStudio"><span class="i i-check"></span><span class="lbl">Lưu hồ sơ độc giả</span></button>
+	</div>
+</form>
+</dialog>
+
+<div class="toasts" id="toasts" popover="manual" aria-live="polite"></div>
+
+<script nonce="__CSP_NONCE__">
+'use strict';
+// Dữ liệu máy chủ vào DOM qua textContent/createElement (renderUserList: chuỗi HTML qua escapeHtml). Chỉ sessionStorage, không log.
+const PROD = 'https://truyen.achatvn.com';
+const loc = window.location || {};
+// file:// gọi máy chủ thật; còn lại gọi chính máy chủ phục vụ trang.
+const API = loc.protocol === 'file:' || !loc.origin || loc.origin === 'null' ? PROD : loc.origin;
+const SHARE = /^https:/.test(API) ? API : PROD;
+const STORE = 'truyencloud_admin_session';
+const GENRES = ['Tiên hiệp / Huyền huyễn', 'Đô thị / Ngôn tình', 'Võ hiệp / Kiếm hiệp', 'Khoa huyễn / Mạt thế'];
+const RATIOS = ['Thuần Việt mềm mại', 'Cân bằng tự nhiên', 'Cổ trang Hán Việt'];
+const MODES = [['translated', 'Bản dịch'], ['original', 'Bản gốc'], ['bilingual', 'Song ngữ']];
+const PREFETCH = [['0', 'Tắt'], ['1', '1 chương'], ['3', '3 chương'], ['5', '5 chương']];
+const EFFORT = { low: 'Thấp', medium: 'Vừa', high: 'Cao' };
+const TTS = { ready: ['ok', 'Sẵn sàng'], loading: ['info', 'Đang nạp mô hình'], unloaded: ['', 'Chưa nạp'], disabled: ['', 'Đang tắt'], failed: ['err', 'Lỗi'] };
+const CHECKS = { ok: ['ok', 'Ổn định'], ready: ['ok', 'Sẵn sàng'], warning: ['warn', 'Sắp đầy'], degraded: ['warn', 'Suy giảm'], not_found: ['warn', 'Không tìm thấy'] };
+const ICONS = {
+	book: '<path d="M12 6.5C10.4 5 8 4.5 3.5 4.5v14c4.5 0 6.9.5 8.5 2 1.6-1.5 4-2 8.5-2v-14C16 4.5 13.6 5 12 6.5zM12 6.5v14"/>',
+	users: '<circle cx="12" cy="8" r="4"/><path d="M4 20.5a8 8 0 0 1 16 0"/>',
+	ai: '<path d="M3.5 5.5h9M8 3.5v2M11 5.5c-.6 4-3 7-7 8.5M6 9c1.3 2.2 3 3.8 5.5 4.8M12.5 20.5l4-9 4 9M14 17.5h5"/>',
+	pulse: '<path d="M2.5 12h4l2.5-6.5 4.5 13 2.5-6.5h5.5"/>',
+	phone: '<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/>',
+	logout: '<path d="M9.5 20.5h-4a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2h4M16 16.5l4.5-4.5L16 7.5M20.5 12h-11"/>',
+	plus: '<path d="M12 5v14M5 12h14"/>',
+	refresh: '<path d="M20 11.5A8 8 0 0 0 6 6.6L3.5 9M3.5 4.5V9H8M4 12.5a8 8 0 0 0 14 4.9l2.5-2.4M20.5 19.5V15H16"/>',
+	key: '<circle cx="8" cy="15.5" r="4.5"/><path d="M11.3 12.2L20.5 3M17 6.5l3 3M14.5 9l2 2"/>',
+	trash: '<path d="M4 6.5h16M9.5 6.5V4h5v2.5M6 6.5l.9 12.6A2 2 0 0 0 8.9 21h6.2a2 2 0 0 0 2-1.9L18 6.5M10 11v5.5M14 11v5.5"/>',
+	copy: '<rect x="8.5" y="8.5" width="12" height="12" rx="2.5"/><path d="M15.5 5.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8.5a2 2 0 0 0 2 2h.5"/>',
+	eye: '<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+	dice: '<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8.5 8.5h.01M15.5 8.5h.01M12 12h.01M8.5 15.5h.01M15.5 15.5h.01" stroke-width="2.8"/>',
+	check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+	close: '<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
+	alert: '<path d="M10.3 4.2L2.6 17.5A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0zM12 9.5v4M12 17h.01"/>',
+	moon: '<path d="M18 5h4M20 3v4M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>',
+	epub: '<path d="M12 13V7M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><path d="m9 10 3 3 3-3"/>',
+	audio: '<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>',
+	download: '<path d="M12 13v8l-4-4m4 4 4-4M4.393 15.269A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.436 8.284"/>',
+	glossary: '<path d="M10 2v7.75a.25.25 0 0 0 .407.195l2.28-1.834a.5.5 0 0 1 .627 0l2.28 1.834A.25.25 0 0 0 16 9.75V2"/><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/>',
+	zap: '<path d="M15.914 4a1.5 1.5 0 0 0-2.474-1.561l-9 9A1.5 1.5 0 0 0 5.5 14h4.002a.5.5 0 0 1 .471.666L8.086 20a1.5 1.5 0 0 0 2.475 1.56l9-9A1.5 1.5 0 0 0 18.5 10h-3.997a.5.5 0 0 1-.472-.667z"/>',
+	fullscreen: '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>',
+};
+const $ = (id) => document.getElementById(id);
+const pick = (map, key) => (Object.prototype.hasOwnProperty.call(map, key) ? map[key] : undefined);
+const $$ = (selector) => document.querySelectorAll(selector);
+const userListContainer = $('userListContainer');
+const inputSearch = $('inputSearch');
+const usersState = $('usersState');
+let session = readSession();
+let entered = false, byKey = false, usersData = [], usersLoaded = false, userFilter = 'all';
+let novelsData = [], novelsLoaded = false, pendingNovel = null, jobPollTimer = null;
+let catalog = null, profile = null, aiLoaded = false, pendingUser = '', creds = null, lastFocus = null;
+
+function readSession() {
+	try {
+		const s = JSON.parse(sessionStorage.getItem(STORE) || 'null');
+		const secret = s && (s.mode === 'key' ? s.key : s.mode === 'account' ? s.token : null);
+		if (typeof secret === 'string' && secret) return s;
+	} catch (_) {}
+	return null;
+}
+function saveSession() { try { sessionStorage.setItem(STORE, JSON.stringify(session)); } catch (_) {} }
+function dropSession() {
+	session = null;
+	try { sessionStorage.removeItem(STORE); sessionStorage.removeItem('truyencloud_admin_key'); } catch (_) {}
+}
+class ApiError extends Error { constructor(status, message) { super(message); this.status = status; } }
+const detailOf = (d) => (d && typeof d.detail === 'string' ? d.detail : '');
+const keyDisabled = (d) => /^Quản trị bị tắt/.test(detailOf(d));
+function describeError(status, data, retry) {
+	if (status === 401) return session && session.mode === 'key' ? 'Mã quản trị không đúng hoặc đã được đổi.' : 'Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại.';
+	if (status === 403) return 'Tài khoản này không có quyền quản trị.';
+	if (status === 429) return 'Bạn thao tác quá nhanh. Thử lại sau ' + Math.max(1, Math.ceil(num(data && data.retry_after_seconds) || num(retry) || 5)) + ' giây.';
+	if (status === 503) return keyDisabled(data) ? 'Quản trị bằng mã đang tắt vì máy chủ chưa cấu hình ADMIN_KEY. Hãy đăng nhập bằng tài khoản quản trị.' : 'Máy chủ tạm thời chưa sẵn sàng. Thử lại sau ít phút.';
+	if (status === 422) return 'Dữ liệu chưa hợp lệ. Kiểm tra lại các ô đã nhập.';
+	return status >= 500 ? 'Máy chủ gặp lỗi (mã ' + status + '). Thử lại sau.' : detailOf(data) || 'Yêu cầu không thành công (mã ' + status + ').';
+}
+async function api(path, method, body, noAuth) {
+	const headers = { Accept: 'application/json' };
+	if (session && !noAuth) headers[session.mode === 'key' ? 'X-Admin-Key' : 'Authorization'] = session.mode === 'key' ? session.key : 'Bearer ' + session.token;
+	if (body) headers['Content-Type'] = 'application/json';
+	let res, data = null;
+	try {
+		res = await fetch(API + path, { method: method || 'GET', headers, body: body && JSON.stringify(body), cache: 'no-store' });
+	} catch (_) {
+		throw new ApiError(0, 'Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại.');
+	}
+	try { data = JSON.parse((await res.text()) || 'null'); } catch (_) {}
+	if (res.ok) return data;
+	const error = new ApiError(res.status, describeError(res.status, data, res.headers.get('Retry-After')));
+	if (entered && !noAuth && (res.status === 401 || res.status === 403 || (res.status === 503 && session.mode === 'key' && keyDisabled(data)))) {
+		error.authLost = true;
+		signOut(error.message, 'error');
+	}
+	throw error;
+}
+
+function el(spec, ...kids) {
+	const [tag, ...classes] = spec.split('.');
+	const node = document.createElement(tag);
+	if (classes.length) node.className = classes.join(' ');
+	for (const kid of kids) {
+		if (kid === null || kid === undefined || kid === false || kid === '') continue;
+		if (typeof kid !== 'object' || kid.nodeType) node.append(kid);
+		else for (const [k, v] of Object.entries(kid)) if (v !== undefined && !/^on/i.test(k)) node.setAttribute(k, v);
+	}
+	return node;
+}
+const clear = (node) => { if (node) node.textContent = ''; return node; };
+const icon = (name) => el('span.i.i-' + name);
+const pill = (kind, text) => el('span.pill' + (kind ? '.' + kind : ''), text);
+const iconButton = (name, label) => el('button.icon-btn', { type: 'button', 'aria-label': label, title: label }, icon(name));
+const skeleton = (n) => el('div.skel', { 'aria-hidden': 'true' }, ...Array.from({ length: n }, () => el('span')));
+const showError = (box, message) => { if (!box) return; box.textContent = message || ''; box.hidden = !message; };
+const txt = (v) => (v && typeof v === 'object' && !v.nodeType ? String(v) : v);
+const row = (label, value, sub) => el('div.row', el('span.row-label', label), el('span.row-value', txt(value), sub && el('span.row-sub', txt(sub))));
+function meter(percent, warn) {
+	const bar = el('span');
+	bar.style.width = Math.max(0, Math.min(100, num(percent))) + '%';
+	return el('div.meter' + (warn ? '.warn' : ''), bar);
+}
+function copyRow(label, value, empty) {
+	const text = String(value || '');
+	const r = row(label, el('span.mono', text || empty));
+	r.classList.add('stack');
+	if (text) {
+		const button = iconButton('copy', 'Sao chép ' + label);
+		button.addEventListener('click', () => copyText(text).then((ok) => toast(ok ? 'Đã sao chép ' + label + '.' : 'Không sao chép được, hãy chép thủ công.')));
+		r.lastChild.append(button);
+	}
+	return r;
+}
+function stateBox(error, name, title, body, actionLabel, action) {
+	const button = el('button.btn.btn-quiet', actionLabel);
+	button.addEventListener('click', action);
+	return el('div.state' + (error ? '.err' : ''), icon(name), el('p', title), el('p', body), button);
+}
+function toast(message, kind) {
+	const failed = kind === 'error' || /^Không /.test(message);
+	const box = $('toasts');
+	const item = el('div.toast' + (failed ? '.error' : ''), { role: failed ? 'alert' : 'status' }, icon(failed ? 'alert' : 'check'), el('span', message));
+	box.append(item);
+	while (box.children.length > 3) box.firstElementChild.remove();
+	try { if (box.matches(':popover-open')) box.hidePopover(); box.showPopover(); } catch (_) {}
+	setTimeout(() => { item.classList.add('out'); setTimeout(() => item.remove(), 300); }, failed ? 6000 : 3500);
+}
+function setBusy(button, busy, text) {
+	if (!button) return;
+	const label = button.querySelector('.lbl');
+	if (label && busy) { button.dataset.idle = label.textContent; if (text) label.textContent = text; }
+	if (label && !busy && button.dataset.idle) label.textContent = button.dataset.idle;
+	button.disabled = busy;
+	button.classList.toggle('busy', busy);
+}
+async function withBusy(button, text, task) {
+	setBusy(button, true, text);
+	try { await task(); } catch (error) { if (!error.authLost) toast(error.message, 'error'); } finally { setBusy(button, false); }
+}
+const copyText = (text) => Promise.resolve().then(() => navigator.clipboard.writeText(text)).then(() => true, () => false);
+
+function num(value) { const n = Number(value); return Number.isFinite(n) ? n : 0; }
+const fmt = (value, digits) => new Intl.NumberFormat('vi-VN', { maximumFractionDigits: digits || 0 }).format(num(value));
+const formatHours = (value) => fmt(Math.max(0, num(value)), 1);
+const formatInt = (value) => fmt(Math.max(0, Math.round(num(value))));
+function formatDate(value, withTime) {
+	const text = String(value || '');
+	const day = /^(\d{4})-(\d\d)-(\d\d)$/.exec(text);
+	const date = day ? new Date(day[1], day[2] - 1, day[3]) : new Date(text.replace(/(\.\d{3})\d+/, '$1'));
+	if (!text || Number.isNaN(date.getTime())) return text || 'Không rõ';
+	return date.toLocaleString('vi-VN', withTime ? { dateStyle: 'medium', timeStyle: 'short' } : { dateStyle: 'long' });
+}
+const fold = (value) => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'd').toLowerCase().trim();
+function initialsOf(name) {
+	const letters = String(name || '').trim().split(/\s+/).map((w) => (w.match(/[\p{L}\p{N}]/u) || [''])[0]).filter(Boolean);
+	return letters.length ? (letters[0] + (letters.length > 1 ? letters[letters.length - 1] : '')).toUpperCase() : '?';
+}
+const tierOf = (id) => ((/-(low|medium|high)$/i.exec(id || '') || [])[1] || '').toLowerCase();
+const effortLabel = (e) => pick(EFFORT, String(e || '').toLowerCase()) || String(e || 'Không rõ');
+function hostOf(url) { try { return new URL(url).host; } catch (_) { return String(url); } }
+
+function setMode(key) {
+	byKey = key;
+	$('userField').hidden = key;
+	$('keyHint').hidden = !key;
+	$('passLabel').textContent = key ? 'Mã quản trị' : 'Mật khẩu';
+	$('inPass').value = '';
+	$('inPass').autocomplete = key ? 'off' : 'current-password';
+	setReveal($('inPass'), false);
+	$('btnSignin').firstChild.textContent = key ? 'Mở trang quản trị' : 'Đăng nhập';
+	$('btnSwitchMode').textContent = key ? 'Đăng nhập bằng tài khoản' : 'Dùng mã quản trị';
+	showError($('signinError'));
+	setTimeout(() => (key || $('inUser').value ? $('inPass') : $('inUser')).focus(), 0);
+}
+function showSignin(message, kind) {
+	entered = false;
+	$('viewApp').hidden = true;
+	$('viewSignin').hidden = false;
+	document.title = 'Đăng nhập · TruyenCloud Admin';
+	showError($('signinNotice'), message);
+	$('signinNotice').className = 'notice' + (kind === 'info' ? ' info' : '');
+	setMode(byKey);
+}
+async function signIn(event) {
+	event.preventDefault();
+	const box = $('signinError'), button = $('btnSignin');
+	const login = $('inUser').value.trim(), secret = byKey ? $('inPass').value.trim() : $('inPass').value;
+	if (!secret || (!byKey && !login)) return showError(box, byKey ? 'Nhập mã quản trị.' : 'Nhập tên đăng nhập và mật khẩu.');
+	showError(box);
+	setBusy(button, true, byKey ? 'Đang kiểm tra…' : 'Đang đăng nhập…');
+	try {
+		if (byKey) session = { mode: 'key', key: secret };
+		else {
+			const data = await api('/v1/auth/login', 'POST', { email: login, password: secret }, true);
+			const user = (data && data.user) || {};
+			if (!data || typeof data.token !== 'string') throw new ApiError(0, 'Máy chủ trả về dữ liệu không hợp lệ.');
+			// Không phải quản trị: bỏ token, không lưu.
+			if (user.is_admin !== true) throw new ApiError(-1, 'Tài khoản này không có quyền quản trị. Hãy dùng tài khoản quản trị hoặc mã quản trị.');
+			session = { mode: 'account', token: data.token, userId: String(user.id || ''), login: login.toLowerCase(), name: String(user.display_name || login) };
+		}
+		const list = await api('/v1/admin/users');
+		saveSession();
+		$('inPass').value = '';
+		enterApp(list);
+	} catch (error) {
+		session = null;
+		if (error.status === -1) $('inPass').value = '';
+		showError(box, error.status === 401 ? (byKey ? 'Mã quản trị không đúng.' : 'Tên đăng nhập hoặc mật khẩu không đúng.') : error.message);
+	} finally {
+		setBusy(button, false);
+	}
+}
+function signOut(message, kind) {
+	dropSession();
+	if (jobPollTimer) { clearTimeout(jobPollTimer); jobPollTimer = null; }
+	$$('dialog[open]').forEach((d) => { delete d.dataset.busy; d.close(); });
+	usersData = []; novelsData = []; usersLoaded = novelsLoaded = aiLoaded = false; catalog = profile = creds = pendingNovel = null;
+	inputSearch.value = '';
+	['userListContainer', 'novelLibGrid', 'novelSearchResults', 'modelSelect', 'sysServer', 'sysTts', 'appDetails', 'appChangelog'].forEach((id) => clear($(id)));
+	$('aiBody').hidden = $('appBody').hidden = $('novelSearchWrap').hidden = true;
+	showSignin(message, kind);
+}
+
+const SECTIONS = { accounts: ['Tài khoản', () => usersLoaded || loadUsers()], novels: ['Kho truyện', () => novelsLoaded || loadNovels()], ai: ['Dịch AI', () => aiLoaded || loadAi()], system: ['Hệ thống', () => $('sysServer').children.length || loadSystem()], app: ['Ứng dụng', () => $('appDetails').children.length || loadAppInfo()] };
+function enterApp(list) {
+	entered = true;
+	$('viewSignin').hidden = true;
+	$('viewApp').hidden = false;
+	if (list) setUsers(list);
+	updateWho();
+	showSection(loc.hash, true);
+}
+function updateWho() {
+	const handle = session.mode === 'account' ? '@' + (session.username || session.login) : '';
+	$('whoName').textContent = handle ? session.name || handle : 'Mã quản trị';
+	$('whoSub').textContent = handle ? handle + ' · quản trị viên' : 'Không gắn với tài khoản';
+	$('whoShort').textContent = 'Quản trị · ' + (handle || 'mã quản trị');
+}
+function showSection(id, focusHeading) {
+	const asked = String(id || '').replace('#', '');
+	const name = Object.prototype.hasOwnProperty.call(SECTIONS, asked) ? asked : 'accounts';
+	$$('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== name; });
+	$$('[data-section]').forEach((b) => (b.dataset.section === name ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current')));
+	document.title = SECTIONS[name][0] + ' · TruyenCloud Admin';
+	try { history.replaceState(null, '', '#' + name); } catch (_) {}
+	window.scrollTo(0, 0);
+	if (focusHeading) $('h-' + name).focus({ preventScroll: true });
+	SECTIONS[name][1]();
+}
+
+function isSelf(user) {
+	if (!session || session.mode !== 'account' || !user) return false;
+	if (session.userId && user.id) return String(user.id) === session.userId;
+	return [user.username, user.email].some((v) => String(v || '').toLowerCase() === session.login);
+}
+// Máy chủ chuẩn hoá strip().lower(): so cùng cách để "Admin " không lách.
+const nameKey = (name) => String(name || '').trim().toLowerCase();
+function isSelfName(name) {
+	const key = nameKey(name);
+	const users = usersData.filter((u) => nameKey(u.username) === key);
+	return users.some(isSelf) || (!users.length && !!session && session.mode === 'account' && key === nameKey(session.username || session.login));
+}
+function setUsers(list) {
+	usersLoaded = true;
+	usersData = (Array.isArray(list) ? list : []).filter((u) => u && typeof u.username === 'string')
+		.sort((a, b) => isSelf(b) - isSelf(a) || (b.is_admin === true) - (a.is_admin === true) || a.username.localeCompare(b.username, 'vi'));
+	const me = usersData.find(isSelf);
+	if (me) { session.username = me.username; session.name = me.display_name || me.username; saveSession(); updateWho(); }
+	const admins = usersData.filter((u) => u.is_admin === true).length;
+	const hours = usersData.reduce((sum, u) => sum + Math.max(0, num(u.total_reading_hours)), 0);
+	const chapters = usersData.reduce((sum, u) => sum + Math.max(0, num(u.total_chapters_read)), 0);
+	const maxStreak = usersData.reduce((max, u) => Math.max(max, num(u.reading_streak)), 0);
+	$('usersSummary').textContent = usersData.length + ' tài khoản · ' + admins + ' quản trị · ' + formatHours(hours) + ' giờ đọc';
+	if ($('kpiTotalUsers')) {
+		$('kpiTotalUsers').textContent = formatInt(usersData.length);
+		$('kpiSubUsers').textContent = formatInt(usersData.length - admins) + ' độc giả thành viên';
+		$('kpiAdmins').textContent = formatInt(admins);
+		$('kpiSubAdmins').textContent = admins ? 'Có toàn quyền điều phối' : 'Chưa gắn quản trị';
+		$('kpiHours').textContent = formatHours(hours);
+		$('kpiChapters').textContent = formatInt(chapters);
+		$('kpiSubStreak').textContent = 'Chuỗi đọc cao nhất: ' + formatInt(maxStreak) + ' ngày';
+	}
+	renderUserList(usersData);
+}
+async function loadUsers() {
+	const button = $('btnReloadUsers');
+	if (!usersData.length) showUsersState('loading');
+	setBusy(button, true);
+	try {
+		setUsers(await api('/v1/admin/users'));
+	} catch (error) {
+		if (!error.authLost && usersData.length) toast(error.message, 'error');
+		else if (!error.authLost) showUsersState('error', error.message);
+	} finally {
+		setBusy(button, false);
+	}
+}
+function matchesUser(user, query) {
+	if (userFilter !== 'all' && (user.is_admin === true) !== (userFilter === 'admin')) return false;
+	return !query || [user.username, user.display_name, user.email, user.vip_tier, user.bio].some((v) => fold(v).includes(query));
+}
+function showUsersState(kind, message) {
+	usersState.hidden = false;
+	clear(usersState);
+	if (kind === 'loading') { clear(userListContainer); usersState.append(skeleton(4)); }
+	else if (kind === 'error') usersState.append(stateBox(true, 'alert', 'Không tải được danh sách tài khoản', message, 'Thử lại', loadUsers));
+	else if (kind === 'empty') usersState.append(stateBox(false, 'users', 'Chưa có tài khoản nào', 'Tạo tài khoản đầu tiên cho người đọc.', 'Tạo tài khoản', openCreate));
+	else usersState.append(stateBox(false, 'users', 'Không có tài khoản phù hợp', 'Thử từ khoá khác hoặc bỏ bộ lọc.', 'Xoá bộ lọc', () => { inputSearch.value = ''; setUserFilter('all'); }));
+}
+function setUserFilter(value) {
+	userFilter = value;
+	$$('#userFilter button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.filter === value));
+	renderUserList(usersData);
+}
+
+function renderUserList(users) {
+	const query = fold(inputSearch.value);
+	const filtered = users.filter((u) => matchesUser(u, query));
+	if (filtered.length) { usersState.hidden = true; clear(usersState); } else showUsersState(users.length ? 'nomatch' : 'empty');
+	// Mọi giá trị qua escapeHtml; không có thuộc tính sự kiện inline.
+	userListContainer.innerHTML = filtered.map((u) => {
+		const admin = u.is_admin === true;
+		const self = isSelf(u);
+		const name = u.display_name || u.username;
+		const hours = formatHours(u.total_reading_hours);
+		const chapters = formatInt(u.total_chapters_read);
+		const streak = formatInt(u.reading_streak);
+		const ownAvatar = safeAvatarUrl(u.avatar_url);
+		const avatar = ownAvatar || fallbackAvatarUrl(name);
+		const fallbackAttr = ownAvatar ? '' : ' data-fallback';
+		const roleClass = admin ? 'badge badge-accent' : 'badge';
+		const roleLabel = admin ? 'Quản trị' : 'Thành viên';
+		const vipLabel = u.vip_tier ? String(u.vip_tier) : '';
+		const selfLabel = self ? 'Bạn' : '';
+		const deleteState = self ? 'disabled' : '';
+		const deleteTitle = self ? 'Không thể xoá tài khoản bạn đang đăng nhập' : 'Xoá tài khoản';
+		return `<div class="user-card" role="listitem" data-username="${escapeHtml(u.username)}">
+<span class="avatar" data-initials="${escapeHtml(initialsOf(name))}"><img src="${escapeHtml(avatar)}" alt="" loading="lazy"${escapeHtml(fallbackAttr)}></span>
+<div class="user-id"><div class="user-name"><span>${escapeHtml(name)}</span><span class="${escapeHtml(roleClass)}">${escapeHtml(roleLabel)}</span><span class="badge badge-vip">${escapeHtml(vipLabel)}</span><span class="badge badge-self">${escapeHtml(selfLabel)}</span></div><div class="user-handle">@${escapeHtml(u.username)}</div></div>
+<div class="user-email" title="${escapeHtml(u.email)}">${escapeHtml(u.email)}</div>
+<div class="user-stats"><span>${escapeHtml(hours)} giờ đọc</span><span>${escapeHtml(chapters)} chương</span><span>${escapeHtml(streak)} ngày đọc</span></div>
+<div class="user-actions"><button class="btn btn-quiet btn-sm" data-action="edit-profile" aria-label="Hồ sơ @${escapeHtml(u.username)}"><span class="i i-users"></span><span>Hồ sơ</span></button><button class="btn btn-quiet btn-sm" data-action="change-password" aria-label="Đổi mật khẩu @${escapeHtml(u.username)}"><span class="i i-key"></span><span>Đổi mật khẩu</span></button><button class="btn btn-quiet btn-sm btn-danger-text" data-action="delete" aria-label="Xoá tài khoản @${escapeHtml(u.username)}" title="${escapeHtml(deleteTitle)}" ${escapeHtml(deleteState)}><span class="i i-trash"></span><span>Xoá</span></button></div>
+</div>`;
+	}).join('');
+	// Bỏ ảnh dự phòng ngoài (chỉ test cần) trước khi tải: không gọi ra ngoài, chữ cái đầu hiện thay.
+	if (userListContainer.querySelectorAll) userListContainer.querySelectorAll('img[data-fallback]').forEach((img) => img.remove());
+}
+
+// Uỷ quyền sự kiện: tên lấy từ data-username, không dùng onclick.
+userListContainer.addEventListener('click', (event) => {
+	const button = event.target && event.target.closest ? event.target.closest('button[data-action]') : null;
+	const card = button && button.closest('.user-card');
+	const username = card ? card.getAttribute('data-username') : '';
+	if (!username) return;
+	const action = button.getAttribute('data-action');
+	if (action === 'change-password') window.openChangePasswordModal(username);
+	else if (action === 'delete') window.deleteUserPrompt(username);
+	else if (action === 'edit-profile') openUserStudioModal(username);
+});
+userListContainer.addEventListener('error', (event) => {
+	if (event.target && event.target.tagName === 'IMG') event.target.classList.add('broken');
+}, true);
+
+function escapeHtml(str) {
+	if (str === null || str === undefined || str === false) return '';
+	return String(str).replace(/[&<>"'`]/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '`': '&#96;' })[m]);
+}
+// Ảnh đại diện: chỉ http(s) hoặc đường dẫn tương đối.
+function safeAvatarUrl(url) {
+	const value = String(url || '').trim();
+	if (!value || /[\u0000-\u001f\u007f\\]/.test(value)) return '';
+	if (value.startsWith('//')) return '';
+	if (value.startsWith('/')) return value;
+	try {
+		const parsed = new URL(value);
+		return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? value : '';
+	} catch (_) {
+		return /^[A-Za-z0-9_.~-][A-Za-z0-9_.~/%-]*$/.test(value) ? value : '';
+	}
+}
+// Ảnh chữ cái cho URL không hợp lệ (renderUserList bỏ trước khi tải).
+function fallbackAvatarUrl(name) {
+	return 'https://ui-avatars.com/api/?name=' + encodeURIComponent(initialsOf(name));
+}
+
+function openDialog(dialog, focusTarget) {
+	lastFocus = document.activeElement;
+	if (!dialog.open) dialog.showModal();
+	setTimeout(() => focusTarget && focusTarget.focus(), 40);
+}
+function setReveal(input, show) {
+	if (!input) return;
+	const button = input.nextElementSibling;
+	input.type = show ? 'text' : 'password';
+	if (button) {
+		button.setAttribute('aria-pressed', show);
+		button.setAttribute('aria-label', show ? 'Ẩn mật khẩu' : 'Hiện mật khẩu');
+	}
+}
+function generatePassword() {
+	const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+	const limit = 256 - (256 % alphabet.length);
+	let out = '';
+	while (out.length < 12) {
+		for (const b of window.crypto.getRandomValues(new Uint8Array(24))) if (b < limit && out.length < 12) out += alphabet[b % alphabet.length];
+	}
+	return out.slice(0, 4) + '-' + out.slice(4, 8) + '-' + out.slice(8);
+}
+function passwordScore(pw) {
+	const s = String(pw || '');
+	if (!s) return 0;
+	if (s.length < 8) return 1;
+	let pts = 2;
+	if (/[A-Z]/.test(s) && /[a-z]/.test(s) && /\d/.test(s)) pts++;
+	if (s.length >= 12 || /[^A-Za-z0-9]/.test(s)) pts++;
+	return Math.min(4, pts);
+}
+function updateCreatePreview() {
+	const u = ($('cuUser') && $('cuUser').value.trim()) || 'ten-dang-nhap';
+	const n = ($('cuName') && $('cuName').value.trim()) || u;
+	const e = ($('cuEmail') && $('cuEmail').value.trim()) || (u + '@truyencloud.vn');
+	const v = ($('cuVip') && $('cuVip').value.trim()) || 'VIP Tinh Anh 2026';
+	const b = ($('cuBio') && $('cuBio').value.trim()) || 'Đồng bộ đám mây · Dịch AI · Từ vựng FSRS';
+	if ($('pvInitials')) $('pvInitials').textContent = initialsOf(n);
+	if ($('pvName')) $('pvName').textContent = n;
+	if ($('pvHandle')) $('pvHandle').textContent = '@' + u;
+	if ($('pvEmail')) $('pvEmail').textContent = e;
+	if ($('pvVip')) $('pvVip').textContent = v;
+	if ($('pvBio')) $('pvBio').textContent = b;
+	if ($('pwStrengthMeter') && $('cuPass')) {
+		const score = passwordScore($('cuPass').value);
+		$('pwStrengthMeter').setAttribute('data-score', String(score));
+		const labels = [
+			'Ít nhất 8 ký tự. Bấm xúc xắc để tạo mật khẩu ngẫu nhiên chuẩn bảo mật.',
+			'Mật khẩu quá ngắn (cần tối thiểu 8 ký tự).',
+			'Độ mạnh trung bình · nên thêm chữ hoa, số hoặc ký tự đặc biệt.',
+			'Mật khẩu tốt · đủ điều kiện bảo mật.',
+			'Mật khẩu cực mạnh · chuẩn an toàn Kim Ấn.',
+		];
+		if ($('pwStrengthText')) $('pwStrengthText').textContent = labels[score];
+	}
+}
+function passwordProblem(password) {
+	if (password.length < 8) return 'Mật khẩu cần ít nhất 8 ký tự.';
+	return password === password.trim() ? '' : 'Mật khẩu không được bắt đầu hoặc kết thúc bằng dấu cách.';
+}
+async function runDialog(dialogId, buttonId, errorId, busyText, task) {
+	const dialog = $(dialogId), button = $(buttonId), box = $(errorId);
+	showError(box);
+	dialog.dataset.busy = '1';
+	setBusy(button, true, busyText);
+	let after = null;
+	try { after = await task(); } catch (error) { if (!error.authLost) showError(box, error.message); }
+	delete dialog.dataset.busy;
+	setBusy(button, false);
+	if (after) { dialog.close(); after(); }
+}
+function openCreate() {
+	$('formCreate').reset();
+	showError($('createError'));
+	setReveal($('cuPass'), false);
+	updateCreatePreview();
+	openDialog($('dlgCreate'), $('cuUser'));
+}
+function submitCreate(event) {
+	event.preventDefault();
+	const username = $('cuUser').value.trim().toLowerCase();
+	const name = $('cuName').value.trim();
+	const email = $('cuEmail').value.trim();
+	const vip = $('cuVip') ? $('cuVip').value.trim() : '';
+	const bio = $('cuBio') ? $('cuBio').value.trim() : '';
+	const password = $('cuPass').value;
+	const problem = !/^[a-z0-9_.-]{3,30}$/.test(username) ? 'Tên đăng nhập cần 3–30 ký tự: chữ thường không dấu, số, dấu chấm, gạch dưới hoặc gạch ngang.'
+		: usersData.some((u) => u.username === username) ? 'Tên đăng nhập @' + username + ' đã có người dùng.'
+		: email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Email chưa đúng định dạng.' : passwordProblem(password);
+	if (problem) return showError($('createError'), problem);
+	const body = { username, password };
+	if (name) body.display_name = name;
+	if (email) body.email = email;
+	if (vip) body.vip_tier = vip;
+	if (bio) body.bio = bio;
+	runDialog('dlgCreate', 'btnCreate', 'createError', 'Đang tạo…', async () => {
+		const made = await api('/v1/admin/users', 'POST', body);
+		return () => { showCreds('Đã tạo tài khoản', made.username, password); setUsers([...usersData, made]); };
+	});
+}
+window.openChangePasswordModal = function (username) {
+	pendingUser = String(username || '');
+	$('pwTarget').textContent = '@' + pendingUser;
+	$('newPass').value = '';
+	setReveal($('newPass'), false);
+	showError($('pwError'));
+	openDialog($('dlgPassword'), $('newPass'));
+};
+function submitPassword(event) {
+	event.preventDefault();
+	const username = pendingUser, password = $('newPass').value;
+	const problem = passwordProblem(password);
+	if (problem) return showError($('pwError'), problem);
+	runDialog('dlgPassword', 'btnSavePass', 'pwError', 'Đang lưu…', async () => {
+		await api('/v1/admin/users/' + encodeURIComponent(username) + '/password', 'PUT', { new_password: password });
+		return () => showCreds('Đã đặt mật khẩu mới', username, password);
+	});
+}
+function showCreds(title, username, password) {
+	creds = { username, password };
+	$('hCreds').textContent = title;
+	$('credUser').textContent = username;
+	$('credPass').textContent = password;
+	$('credServer').textContent = hostOf(SHARE);
+	openDialog($('dlgCreds'), $('btnCopyCreds'));
+}
+async function copyCreds() {
+	if (!creds) return;
+	const ok = await copyText('Tài khoản TruyenCloud\nTên đăng nhập: ' + creds.username + '\nMật khẩu: ' + creds.password + '\nMáy chủ: ' + SHARE);
+	const label = $('btnCopyCreds').lastChild;
+	label.textContent = ok ? 'Đã sao chép' : 'Không sao chép được';
+	setTimeout(() => { label.textContent = 'Sao chép thông tin'; }, 2200);
+}
+window.deleteUserPrompt = function (username) {
+	const name = String(username || '');
+	if (isSelfName(name)) return toast('Không thể xoá tài khoản bạn đang dùng để đăng nhập.');
+	const user = usersData.find((u) => u.username === name);
+	pendingUser = name;
+	$('hDelete').replaceChildren('Xoá tài khoản ', el('bdi', '@' + name), '?');
+	$('delAdminWarn').hidden = !(user && user.is_admin === true);
+	$('delExpect').textContent = name;
+	$('delConfirm').value = '';
+	$('btnDelete').disabled = true;
+	showError($('delError'));
+	openDialog($('dlgDelete'), $('delConfirm'));
+};
+function submitDelete(event) {
+	event.preventDefault();
+	const name = pendingUser;
+	if (!name || $('delConfirm').value.trim() !== name || isSelfName(name)) return;
+	runDialog('dlgDelete', 'btnDelete', 'delError', 'Đang xoá…', async () => {
+		await api('/v1/admin/users/' + encodeURIComponent(name), 'DELETE');
+		return () => { toast('Đã xoá tài khoản @' + name + '.'); setUsers(usersData.filter((u) => u.username !== name)); };
+	});
+}
+
+function fillSelect(select, options, current) {
+	const list = options.map((o) => (Array.isArray(o) ? o : [o, o]));
+	const value = current === undefined || current === null ? '' : String(current);
+	if (value && !list.some(([v]) => v === value)) list.push([value, value]);
+	clear(select).append(...list.map(([v, label]) => el('option', { value: v }, label)));
+	select.value = value || (list[0] || [''])[0];
+}
+async function loadAi() {
+	const state = $('aiState');
+	if (!catalog) { clear(state).append(skeleton(3)); state.hidden = false; }
+	const [models, prof] = await Promise.allSettled([api('/v1/settings/models'), api('/v1/settings/profile')]);
+	if (!entered || [models, prof].some((r) => r.reason && r.reason.authLost)) return;
+	if (models.value) renderCatalog(models.value);
+	else if (!catalog) clear(state).append(stateBox(true, 'alert', 'Không tải được cấu hình dịch', models.reason.message, 'Thử lại', loadAi));
+	else toast(models.reason.message, 'error');
+	if (prof.value) renderProfile(prof.value);
+	else if (catalog) toast('Không tải được hồ sơ văn phong: ' + prof.reason.message);
+}
+function renderCatalog(data) {
+	catalog = data;
+	aiLoaded = true;
+	$('aiState').hidden = true;
+	$('aiBody').hidden = false;
+	const models = Array.isArray(catalog.models) ? catalog.models : [];
+	const active = models.find((m) => m.id === catalog.active_model) || {};
+	$('aiSub').textContent = 'Đang dùng ' + (active.name || catalog.active_model || 'chưa chọn') + ' cho mọi người đọc';
+	$('cliInfo').textContent = 'Antigravity CLI ' + (catalog.cli_version || 'không rõ phiên bản') + ' · danh mục cập nhật ' + (catalog.last_updated ? formatDate(catalog.last_updated, true) : 'chưa quét') + ' · ' + models.length + ' mô hình.';
+	fillSelect($('modelSelect'), models.map((m) => [m.id, m.name || m.id]), catalog.active_model);
+	$('inTimeout').value = catalog.timeout_seconds || '';
+	syncModelForm();
+}
+function syncModelForm() {
+	if (!catalog) return;
+	const chosen = $('modelSelect').value, tier = tierOf(chosen), timeout = Number($('inTimeout').value);
+	const model = (catalog.models || []).find((m) => m.id === chosen) || {};
+	// Mức suy luận theo đuôi -low/-medium/-high của tên mô hình: chỉ hiển thị.
+	$('modelInfo').textContent = [chosen, model.provider, 'mức suy luận ' + (tier ? effortLabel(tier).toLowerCase() + ' (theo đuôi tên mô hình)' : effortLabel(catalog.active_effort).toLowerCase())].filter(Boolean).join(' · ');
+	$('btnApplyModel').disabled = !((chosen && chosen !== catalog.active_model) || (timeout && timeout !== Number(catalog.timeout_seconds)));
+}
+function applyModel(event) {
+	event.preventDefault();
+	const timeout = Number($('inTimeout').value);
+	if (!Number.isInteger(timeout) || timeout < 10 || timeout > 3600) return toast('Thời gian chờ phải là số nguyên từ 10 đến 3600 giây.', 'error');
+	withBusy($('btnApplyModel'), 'Đang áp dụng…', async () => {
+		renderCatalog(await api('/v1/settings/models/select', 'POST', { model_id: $('modelSelect').value, timeout_seconds: timeout }));
+		toast('Đã áp dụng. ' + $('aiSub').textContent + '.');
+	}).then(syncModelForm);
+}
+const refreshModels = () => withBusy($('btnRefreshModels'), 'Đang quét…', async () => {
+	renderCatalog(await api('/v1/settings/models/refresh', 'POST'));
+	toast('Đã quét lại danh mục: ' + catalog.models.length + ' mô hình.');
+});
+function renderProfile(data) {
+	profile = data;
+	fillSelect($('pfGenre'), GENRES, profile.genre);
+	fillSelect($('pfRatio'), RATIOS, profile.sino_vietnamese_ratio);
+	fillSelect($('pfMode'), MODES, profile.reader_mode);
+	fillSelect($('pfPrefetch'), PREFETCH, num(profile.prefetch_chapters));
+	$('pfPrompt').value = profile.custom_prompt || '';
+	$('pfRecrawl').checked = profile.auto_recrawl === true;
+	syncProfileForm();
+}
+const profileValues = () => ({
+	genre: $('pfGenre').value, sino_vietnamese_ratio: $('pfRatio').value, custom_prompt: $('pfPrompt').value.trim(),
+	reader_mode: $('pfMode').value, prefetch_chapters: num($('pfPrefetch').value), auto_recrawl: $('pfRecrawl').checked,
+});
+function syncProfileForm() {
+	if (!profile) return;
+	const values = profileValues();
+	$('btnSaveProfile').disabled = Object.keys(values).every((k) => String(values[k]) === String(k === 'custom_prompt' ? String(profile[k] || '').trim() : profile[k]));
+}
+function saveProfile(event) {
+	event.preventDefault();
+	withBusy($('btnSaveProfile'), 'Đang lưu…', async () => {
+		const res = await api('/v1/settings/profile', 'POST', profileValues());
+		renderProfile((res && res.profile) || profileValues());
+		toast('Đã lưu hồ sơ văn phong.');
+	}).then(syncProfileForm);
+}
+
+const checkPill = (status) => pill(...(pick(CHECKS, status) || ['err', 'Lỗi']));
+async function loadSystem() {
+	const button = $('btnRefreshSystem');
+	if (!$('sysServer').children.length) [$('sysServer'), $('sysAiEngines'), $('sysTts'), $('sysCaches')].forEach((box) => box && clear(box).append(skeleton(1)));
+	setBusy(button, true, 'Đang kiểm tra…');
+	const results = await Promise.allSettled([
+		api('/v1/health'),
+		api('/v1/health/deep'),
+		api('/v1/tts/status'),
+		api('/v1/admin/system/ai-engines'),
+		api('/v1/admin/system/caches'),
+	]);
+	setBusy(button, false);
+	if (!entered || results.some((r) => r.reason && r.reason.authLost)) return;
+	renderSystem(...results.map((r) => r.reason || r.value || {}));
+}
+function renderSystem(h, d, t, ai, caches) {
+	const failed = (r) => r instanceof Error;
+	const voice = failed(t) ? ['err', 'Không phản hồi'] : pick(TTS, t.state) || ['', String(t.state || 'Không rõ')];
+	const issues = [failed(h) || h.status !== 'healthy', failed(d) || d.status !== 'healthy', voice[0] === 'err'].filter(Boolean).length;
+	$('sysUpdated').textContent = (issues ? issues + ' mục cần chú ý' : 'Mọi dịch vụ hoạt động bình thường') + ' · cập nhật lúc ' + new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+	const server = clear($('sysServer'));
+	server.append(row('Máy chủ API', failed(h) ? pill('err', 'Không phản hồi') : pill(h.status === 'healthy' ? 'ok' : 'warn', h.status === 'healthy' ? 'Hoạt động' : 'Bất thường'), failed(h) ? h.message : 'Phiên bản ' + (h.version || 'không rõ')));
+	if (failed(d)) server.append(row('Kiểm tra sâu', pill('err', 'Không kiểm tra được'), d.message));
+	else {
+		const checks = d.checks || {};
+		const sqlite = checks.sqlite || {}, disk = checks.disk || {}, cli = checks.antigravity_cli || {};
+		const diskRow = disk.status === 'error' ? row('Ổ đĩa', checkPill('error'), disk.error)
+			: row('Ổ đĩa', fmt(disk.free_gb, 1) + ' GB trống / ' + fmt(disk.total_gb, 1) + ' GB', 'Đã dùng ' + fmt(disk.used_percent, 1) + '%' + (disk.status === 'warning' ? ' · sắp đầy' : ''));
+		if (disk.status !== 'error') diskRow.append(meter(disk.used_percent, disk.status === 'warning' || num(disk.used_percent) >= 90));
+		server.append(row('Cơ sở dữ liệu SQLite', checkPill(sqlite.status), sqlite.detail || sqlite.error), diskRow,
+			row('Antigravity CLI', checkPill(cli.status), cli.path));
+	}
+	const aiBox = clear($('sysAiEngines'));
+	if (aiBox) {
+		if (failed(ai) || !ai || !ai.gemini) {
+			aiBox.append(row('Cụm AI Dịch thuật', pill('warn', 'Đang cập nhật'), 'Kiểm tra kết nối các tầng dịch'));
+		} else {
+			const g = ai.gemini || {}, q = ai.qwen_offline || {}, m = ai.title_mt || {};
+			aiBox.append(
+				row('1. Gemini Antigravity CLI (Dịch chính)', pill('ok', g.active_model || 'gemini-3-flash'), 'CLI ' + (g.cli_version || 'sẵn sàng') + ' · Timeout ' + formatInt(g.timeout_seconds || 90) + 's'),
+				row('2. Qwen3-4B Local GGUF (Dịch ngầm Ban đêm)', pill(q.healthy ? 'ok' : 'warn', q.healthy ? 'Sẵn sàng (Offline 100%)' : 'Chưa bật'), (q.model || 'Qwen3-4B-Q4_K_M.gguf') + ' · ' + (q.endpoint || '')),
+				row('3. Qwen2.5-1.5B Title MT (Dịch nhanh tên & văn án)', pill(m.healthy ? 'ok' : 'warn', m.healthy ? 'Sẵn sàng' : 'Chưa bật'), (m.model || 'Title MT') + ' · ' + (m.endpoint || ''))
+			);
+		}
+	}
+	const box = clear($('sysTts'));
+	if (!failed(t)) {
+		const rtf = num(t.avg_rtf), limit = num(t.cache_limit_mb), used = num(t.cache_mb);
+		const cacheRow = row('Bộ đệm âm thanh', fmt(used, 1) + ' MB' + (limit ? ' / ' + fmt(limit) + ' MB' : ''), formatInt(t.cache_files) + ' tệp');
+		if (limit) cacheRow.append(meter(used / limit * 100, used / limit >= 0.9));
+		box.append(
+			row('Trạng thái', pill(...voice), t.reason),
+			row('Mô hình', 'VieNeu ' + (t.model || ''), t.model_loaded ? 'Đã nạp' : 'Chưa nạp'),
+			row('Hàng đợi dựng', formatInt(t.queue_length) + ' đoạn'),
+			row('Tốc độ dựng (RTF)', rtf ? fmt(rtf, 2) : 'Chưa có số liệu', rtf ? (rtf < 1 ? 'Nhanh gấp ' + fmt(1 / rtf, 1) + ' lần thời gian thực' : 'Chậm hơn thời gian thực') : ''),
+			cacheRow);
+	} else {
+		box.append(row('Trạng thái', pill(...voice), t.message));
+	}
+	const cBox = $('sysCaches');
+	if (cBox) {
+		clear(cBox);
+		if (failed(caches) || !caches || !caches.directories) {
+			cBox.append(row('Bộ đệm Ổ 1TB', pill('warn', 'Đang cập nhật'), 'Kiểm tra dung lượng các thư mục bộ đệm'));
+		} else {
+			const dirs = caches.directories || {};
+			for (const [label, info] of Object.entries(dirs)) {
+				const rNode = row('Bộ đệm ' + label, fmt(info.mb, 1) + ' MB / ' + fmt(info.limit_mb, 0) + ' MB', formatInt(info.files) + ' tệp · Đã dùng ' + fmt(info.usage_percent, 1) + '%');
+				rNode.append(meter(num(info.usage_percent), num(info.usage_percent) >= 85));
+				cBox.append(rNode);
+			}
+			const tInfo = caches.titles || {};
+			const dictInfo = tInfo.dictionary || {}, cacheCounts = tInfo.cache || {};
+			const dictReady = dictInfo.state === 'ready' || Boolean(dictInfo.loaded);
+			const totalTitlesCached = num(cacheCounts.total) || (num(cacheCounts.refined) + num(cacheCounts.converted));
+			cBox.append(
+				row('Từ điển Hán-Việt & Tên truyện', pill(dictReady ? 'ok' : 'warn', dictReady ? 'Sẵn sàng (VietPhrase + Names)' : 'Đang nạp'), 'Cache tên truyện: ' + formatInt(totalTitlesCached) + ' tựa đề'),
+				row('Tiến trình dọn tự động (CacheJanitor)', pill(caches.janitor_running ? 'ok' : 'warn', caches.janitor_running ? 'Đang bật (mỗi 6 giờ)' : 'Tạm dừng'), caches.last_sweep ? 'Lần dọn gần nhất: ' + formatDate(caches.last_sweep) : 'Sẵn sàng dọn thủ công bất kỳ lúc nào')
+			);
+		}
+	}
+}
+
+async function loadAppInfo() {
+	const state = $('appState'), body = $('appBody'), button = $('btnRefreshApp');
+	if (body.hidden) { clear(state).append(skeleton(2)); state.hidden = false; }
+	setBusy(button, true);
+	try {
+		renderApp(await api('/v1/app/check-update?platform=android'));
+		state.hidden = true;
+		body.hidden = false;
+	} catch (error) {
+		if (!error.authLost && body.hidden) clear(state).append(stateBox(true, 'alert', 'Không tải được thông tin phát hành', error.message, 'Thử lại', loadAppInfo));
+		else if (!error.authLost) toast(error.message, 'error');
+	} finally {
+		setBusy(button, false);
+	}
+}
+function renderApp(info) {
+	const data = info || {};
+	const published = num(data.version_code) > 0 && data.version_name;
+	clear($('appDetails')).append(
+		row('Android', el('span.big', published ? String(data.version_name) : 'Chưa phát hành'), published && 'Bản dựng ' + formatInt(data.version_code)),
+		row('Ngày phát hành', formatDate(data.release_date)),
+		row('Dung lượng', num(data.file_size_bytes) > 0 ? fmt(num(data.file_size_bytes) / 1048576, 1) + ' MB' : 'Không rõ'),
+		row('Bản dựng tối thiểu', formatInt(data.min_version_code), 'Bản dựng thấp hơn phải cập nhật'),
+		row('Cập nhật bắt buộc', data.is_mandatory === true ? 'Có' : 'Không'),
+		row('Tệp truyencloud-latest.apk', data.apk_exists ? pill('ok', 'Có trên máy chủ') : pill('', 'Không có'), data.apk_exists ? '' : 'App tải theo đường dẫn bên dưới'),
+		copyRow('Đường dẫn tải', data.download_url, 'Chưa có'),
+		copyRow('SHA-256', data.sha256, 'Chưa có mã băm'));
+	const lines = String(data.changelog || '').split('\n').map((s) => s.replace(/^\s*[-*•]\s*/, '').trim()).filter(Boolean);
+	clear($('appChangelog')).append(...(lines.length ? lines.map((text) => el('li', text)) : [el('li.muted', 'Chưa có ghi chú phát hành.')]));
+	if ($('appVerCode')) $('appVerCode').value = String(num(data.version_code) || 1);
+	if ($('appVerName')) $('appVerName').value = data.version_name || '1.0.0';
+	if ($('appMinVerCode')) $('appMinVerCode').value = String(num(data.min_version_code) || 1);
+	if ($('appReleaseDate')) $('appReleaseDate').value = data.release_date || new Date().toISOString().slice(0, 10);
+	if ($('appChangelogInput')) $('appChangelogInput').value = data.changelog || '';
+	if ($('appMandatory')) $('appMandatory').checked = Boolean(data.is_mandatory);
+}
+
+let libStatus = 'all', libPage = 1, libPageSize = 24, overnightData = null;
+
+async function loadNovels(silent) {
+	const button = $('btnRefreshNovels'), state = $('novelsState');
+	if (!novelsLoaded && !silent) {
+		clear(state).append(skeleton(3));
+		state.hidden = false;
+	}
+	if (!silent) setBusy(button, true, 'Đang tải…');
+	try {
+		const [res, harv, ov] = await Promise.all([
+			api('/v1/admin/novels'),
+			api('/v1/admin/novels/harvester/status').catch(() => null),
+			api('/v1/admin/novels/overnight/status').catch(() => null),
+		]);
+		novelsLoaded = true;
+		novelsData = Array.isArray(res && res.items) ? res.items : [];
+		overnightData = ov;
+		state.hidden = true;
+		renderHarvesterStatus(harv);
+		renderOvernightDashboard(ov);
+		renderLibraryNovels(novelsData);
+		scheduleNovelJobPoll((harv && harv.running) || (ov && ov.current_novel_id));
+	} catch (error) {
+		if (!error.authLost && !novelsLoaded) {
+			clear(state).append(stateBox(true, 'alert', 'Không tải được kho truyện', error.message, 'Thử lại', () => loadNovels(false)));
+			state.hidden = false;
+		} else if (!error.authLost && !silent) {
+			toast(error.message, 'error');
+		}
+	} finally {
+		if (!silent) setBusy(button, false);
+	}
+}
+
+function renderOvernightDashboard(ov) {
+	const box = $('overnightDashBox');
+	if (!box) return;
+	const enabled = Array.isArray(ov && ov.enabled_novels) ? ov.enabled_novels : [];
+	const curId = (ov && ov.current_novel_id) || '';
+	const curTitle = (ov && ov.current_novel_title) || curId;
+	const curBatch = Array.isArray(ov && ov.current_batch) ? ov.current_batch : [];
+	box.hidden = false;
+	clear(box);
+	const statusLine = curId && curBatch.length
+		? 'Đang dịch ngầm: "' + curTitle + '" · Chương ' + formatInt(curBatch[0]) + (curBatch.length > 1 ? ' → ' + formatInt(curBatch[curBatch.length - 1]) : '')
+		: (enabled.length ? 'Đang chờ lượt xoay vòng cho ' + formatInt(enabled.length) + ' bộ truyện đã bật Dịch Ngầm' : 'Chưa có truyện nào đang bật Dịch Ngầm · Bấm nút "Dịch ngầm" trên thẻ truyện bất kỳ bên dưới để đưa vào hàng đợi tự động.');
+	box.append(
+		el('div', { style: 'display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px' },
+			el('strong', { style: 'color:var(--gold);font-size:14px;display:inline-flex;align-items:center;gap:6px' },
+				icon('moon'),
+				'Bảng Điều Phối Dịch Ngầm Ban Đêm (Gemini 3.8 Flash Medium + Qwen3-4B-Q4_K_M.gguf)'
+			),
+			pill(enabled.length ? 'ok' : 'info', enabled.length + ' truyện đang bật · Đã dịch ' + formatInt(ov && ov.translated_total) + ' chương trong phiên')
+		),
+		el('div.hint', { style: 'color:var(--text)' }, statusLine)
+	);
+	if (enabled.length) {
+		const listNode = el('div.overnight-list');
+		for (const item of enabled) {
+			const stopBtn = el('button', { type: 'button', title: 'Tắt dịch ngầm cho truyện này' }, '✕');
+			stopBtn.addEventListener('click', async () => {
+				try {
+					await api('/v1/admin/novels/' + encodeURIComponent(item.id) + '/overnight/stop', 'POST');
+					toast('Đã tắt Dịch Ngầm cho "' + item.title + '".');
+					loadNovels(true);
+				} catch (err) {
+					toast(err.message, 'error');
+				}
+			});
+			listNode.append(
+				el('span.overnight-chip',
+					icon('moon'),
+					el('span', String(item.title || item.id).slice(0, 38) + ' (' + formatInt(item.translated_chapters) + '/' + (num(item.total_chapters) ? formatInt(item.total_chapters) : '?') + ' ch.)'),
+					stopBtn
+				)
+			);
+		}
+		box.append(listNode);
+	}
+}
+
+function scheduleNovelJobPoll(harvesterRunning) {
+	if (jobPollTimer) { clearTimeout(jobPollTimer); jobPollTimer = null; }
+	const hasRunning = Boolean(harvesterRunning) || novelsData.some((n) => n && n.active_job && n.active_job.status === 'running');
+	if (hasRunning && entered) {
+		jobPollTimer = setTimeout(() => loadNovels(true), 4000);
+	}
+}
+
+function renderHarvesterStatus(st) {
+	const box = $('harvesterStatusBox'), btnStart = $('btnStartHarvester'), btnStop = $('btnStopHarvester');
+	if (!box) return;
+	if (!st || (!st.running && !num(st.target_novels) && !num(st.imported_novels))) {
+		box.hidden = true;
+		if (btnStop) btnStop.hidden = true;
+		if (btnStart) btnStart.disabled = false;
+		return;
+	}
+	box.hidden = false;
+	clear(box);
+	const running = Boolean(st.running);
+	if (btnStop) btnStop.hidden = !running;
+	if (btnStart) btnStart.disabled = running;
+	const target = Math.max(1, num(st.target_novels));
+	const imported = num(st.imported_novels);
+	const pct = Math.min(100, Math.round((imported / target) * 100));
+	const recent = Array.isArray(st.recent_titles) && st.recent_titles.length
+		? 'Mới nhập: ' + st.recent_titles.slice(0, 4).join(' · ')
+		: '';
+	box.append(
+		el('strong', icon(running ? 'zap' : 'check'), ' ' + (running ? 'Đang thu thập tự động: ' : 'Thu thập tự động: ') + (st.pack_label || st.pack || '') + ' (' + formatInt(imported) + '/' + formatInt(target) + ' bộ mới · ' + formatInt(st.raw_chapters_downloaded) + ' chương gốc)'),
+		el('div', st.message || '')
+	);
+	if (recent) box.append(el('div.hint', { style: 'margin-top:4px' }, recent));
+	if (running) box.append(meter(pct, false));
+}
+
+function buildCoverNode(coverUrl, titleText) {
+	const wrap = el('div.novel-cover');
+	const fallback = String(titleText || 'TC').slice(0, 2).toUpperCase();
+	if (coverUrl && /^https?:\/\//i.test(String(coverUrl))) {
+		const img = el('img', { src: String(coverUrl), alt: String(titleText || ''), loading: 'lazy', referrerpolicy: 'no-referrer' });
+		img.addEventListener('error', () => { clear(wrap).append(fallback); });
+		wrap.append(img);
+	} else {
+		wrap.append(fallback);
+	}
+	return wrap;
+}
+
+function setLibStatusFilter(status) {
+	libStatus = status;
+	libPage = 1;
+	$$('#libStatusFilter button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.libstatus === status));
+	renderLibraryNovels(novelsData);
+}
+
+function filterAndSortLibrary(items) {
+	const q = fold(($('inLibFilter') && $('inLibFilter').value) || '');
+	const src = ($('selLibSource') && $('selLibSource').value) || 'all';
+	const sortBy = ($('selLibSort') && $('selLibSort').value) || 'recent';
+	const filtered = items.filter((n) => {
+		const isRunning = Boolean((n.active_job && n.active_job.status === 'running') || n.overnight_enabled);
+		const trans = num(n.translated_chapters);
+		if (libStatus === 'active' && !isRunning) return false;
+		if (libStatus === 'translated' && trans <= 0) return false;
+		if (libStatus === 'untranslated' && trans > 0) return false;
+		const nSrc = String(n.source_id || n.source || '').toLowerCase();
+		if (src !== 'all' && !nSrc.includes(src)) return false;
+		if (!q) return true;
+		return [n.title_vi, n.title, n.original_title, n.author, n.id, n.description].some((v) => fold(v).includes(q));
+	});
+	filtered.sort((a, b) => {
+		if (sortBy === 'translated_desc') return num(b.translated_chapters) - num(a.translated_chapters) || num(b.updated_ms) - num(a.updated_ms);
+		if (sortBy === 'cached_desc') return num(b.cached_chapters) - num(a.cached_chapters) || num(b.updated_ms) - num(a.updated_ms);
+		if (sortBy === 'title_asc') return String(a.title_vi || a.title || '').localeCompare(String(b.title_vi || b.title || ''), 'vi');
+		const aRun = (a.active_job && a.active_job.status === 'running') ? 1 : 0;
+		const bRun = (b.active_job && b.active_job.status === 'running') ? 1 : 0;
+		return bRun - aRun || num(b.updated_ms) - num(a.updated_ms);
+	});
+	return filtered;
+}
+
+function renderLibraryNovels(items) {
+	const grid = $('novelLibGrid'), pager = $('novelLibPager');
+	clear(grid);
+	if (pager) { clear(pager); pager.hidden = true; }
+	const totalTranslated = items.reduce((s, n) => s + num(n.translated_chapters), 0);
+	const runningCount = items.filter((n) => (n.active_job && n.active_job.status === 'running') || n.overnight_enabled).length;
+	const filtered = filterAndSortLibrary(items);
+	$('hLibCount').textContent = 'Truyện đã lưu trong Kho MiniPC (' + (filtered.length !== items.length ? formatInt(filtered.length) + '/' : '') + formatInt(items.length) + ')';
+	$('novelsSub').textContent = formatInt(items.length) + ' bộ truyện trong ổ 1 TB · ' + formatInt(totalTranslated) + ' chương đã dịch sẵn' + (runningCount ? ' · ' + runningCount + ' bộ đang bật dịch ngầm' : '');
+
+	if (!items.length) {
+		grid.append(el('div.state', icon('book'), el('p', 'Kho truyện trên MiniPC đang trống'), el('p', 'Hãy tìm tên truyện hoặc dán URL ở khung phía trên để tải truyện về ổ 1 TB và dịch trước cho độc giả.')));
+		return;
+	}
+	if (!filtered.length) {
+		grid.append(stateBox(false, 'book', 'Không có bộ truyện nào khớp bộ lọc', 'Thử từ khoá khác hoặc xoá bộ lọc kho truyện.', 'Xoá bộ lọc kho', () => {
+			if ($('inLibFilter')) $('inLibFilter').value = '';
+			if ($('selLibSource')) $('selLibSource').value = 'all';
+			setLibStatusFilter('all');
+		}));
+		return;
+	}
+
+	const totalPages = Math.max(1, Math.ceil(filtered.length / libPageSize));
+	if (libPage > totalPages) libPage = totalPages;
+	const startIdx = (libPage - 1) * libPageSize;
+	const pageItems = filtered.slice(startIdx, startIdx + libPageSize);
+
+	for (const novel of pageItems) {
+		const title = novel.title_vi || novel.title || novel.original_title || novel.id;
+		const origTitle = novel.title || novel.original_title || '';
+		const subTitle = origTitle && origTitle !== title ? origTitle : '';
+		const totalCh = Math.max(0, num(novel.total_chapters));
+		const transCh = Math.max(0, num(novel.translated_chapters));
+		const cachedCh = Math.max(0, num(novel.cached_chapters));
+		const pct = totalCh > 0 ? Math.min(100, Math.round((transCh / totalCh) * 100)) : 0;
+		const srcName = novel.source_id || novel.source || '';
+		const desc = novel.description || novel.synopsis || '';
+		const isOvernight = Boolean(novel.overnight_enabled);
+
+		const badges = el('div.novel-badges',
+			pill('ok', 'Đã dịch ' + formatInt(transCh) + '/' + (totalCh ? formatInt(totalCh) : '?') + ' ch.'),
+			cachedCh > transCh ? pill('info', 'Đã tải gốc ' + formatInt(cachedCh) + ' ch.') : null,
+			isOvernight ? pill('info', '🌙 Đang bật Dịch ngầm') : null,
+			srcName ? pill('', String(srcName)) : null
+		);
+
+		let jobNode = null;
+		const job = novel.active_job;
+		if (job && job.status === 'running') {
+			const done = num(job.completed) + num(job.skipped);
+			const totalJob = Math.max(1, num(job.total));
+			const jobPct = Math.min(100, Math.round((done / totalJob) * 100));
+			const isRawJob = job.kind === 'raw_mirror';
+			jobNode = el('div.job-box',
+				el('strong', icon(isRawJob ? 'download' : 'zap'), ' ' + (isRawJob ? 'Đang tải bản gốc Offline chương ' : 'Đang dịch ngầm chương ') + formatInt(job.from_chapter) + ' → ' + formatInt(job.to_chapter) + ' (' + formatInt(done) + '/' + formatInt(job.total) + ')'),
+				el('div', job.message || ('Đang xử lý chương ' + formatInt(job.current_chapter || job.from_chapter))),
+				meter(jobPct, false)
+			);
+		} else if (job && job.status === 'completed') {
+			jobNode = el('div.job-box',
+				el('strong', icon('check'), ' Hoàn tất chương ' + formatInt(job.from_chapter) + ' → ' + formatInt(job.to_chapter)),
+				el('div', 'Đã xử lý mới ' + formatInt(job.completed) + ' chương · Bỏ qua ' + formatInt(job.skipped) + ' chương đã có' + (num(job.failed) ? ' · Lỗi ' + formatInt(job.failed) : ''))
+			);
+		}
+
+		const btnInspect = el('button.btn.btn-primary.btn-sm', { type: 'button', title: 'Đọc thử chương dịch song ngữ & Sửa thông tin truyện' }, icon('book'), el('span.lbl', 'Đọc & Sửa'));
+		btnInspect.addEventListener('click', () => openNovelInspector(novel));
+
+		const btnOvernight = el('button.btn.' + (isOvernight ? 'btn-quiet' : 'btn-gold') + '.btn-sm', { type: 'button', title: 'Dịch ngầm toàn bộ truyện ban đêm bằng Gemini 3.8 Flash Medium + Qwen3-4B-Q4_K_M.gguf' }, icon('moon'), el('span.lbl', isOvernight ? 'Tắt dịch ngầm' : 'Dịch ngầm'));
+		btnOvernight.addEventListener('click', () => startOvernightTranslation(novel, btnOvernight));
+
+		const btnPre = el('button.btn.btn-quiet.btn-sm', { type: 'button' }, icon('ai'), el('span.lbl', job && job.status === 'running' ? 'Đổi khoảng dịch' : 'Chọn chương…'));
+		btnPre.addEventListener('click', () => openPretranslateDialog(novel));
+
+		const btnNext20 = el('button.btn.btn-quiet.btn-sm', { type: 'button' }, icon('plus'), el('span.lbl', 'Dịch +20 ch.'));
+		btnNext20.addEventListener('click', () => quickPretranslateNext(novel, 20, btnNext20));
+
+		const btnRaw = el('button.btn.btn-quiet.btn-sm', { type: 'button', title: 'Tải nhanh 200 chương gốc tiếp theo vào ổ 1TB (không tốn AI)' }, icon('download'), el('span.lbl', 'Tải gốc +200 ch.'));
+		btnRaw.addEventListener('click', () => quickDownloadRaw(novel, 200, btnRaw));
+
+		let btnStop = null;
+		if (job && job.status === 'running') {
+			btnStop = el('button.btn.btn-quiet.btn-sm.danger-text', { type: 'button' }, icon('close'), el('span.lbl', 'Dừng tác vụ'));
+			btnStop.addEventListener('click', () => cancelNovelJob(novel, btnStop));
+		}
+
+		const btnTts = el('button.btn.btn-quiet.btn-sm', { type: 'button', title: 'Tạo sẵn giọng đọc VieNeu-TTS vào ổ 1TB' }, icon('audio'), el('span.lbl', 'Tạo Audio'));
+		btnTts.addEventListener('click', () => quickPrerenderTts(novel, btnTts));
+
+		const glossCount = num(novel.glossary_count);
+		const btnGloss = el('button.btn.btn-quiet.btn-sm', { type: 'button', title: 'Bảng thuật ngữ & tên nhân vật' }, icon('glossary'), el('span.lbl', 'Thuật ngữ' + (glossCount ? ' (' + formatInt(glossCount) + ')' : '')));
+		btnGloss.addEventListener('click', () => openGlossaryDialog(novel));
+
+		let btnEpub = null;
+		if (transCh > 0 || cachedCh > 0) {
+			btnEpub = el('button.btn.btn-quiet.btn-sm', { type: 'button', title: 'Tải sách điện tử EPUB tiếng Việt' }, icon('epub'), el('span.lbl', 'Xuất EPUB'));
+			btnEpub.addEventListener('click', () => exportNovelEpub(novel, btnEpub));
+		}
+
+		const btnDel = el('button.btn.btn-quiet.btn-sm.danger-text', { type: 'button', title: 'Xoá khỏi kho' }, icon('trash'), el('span.lbl', 'Xoá'));
+		btnDel.addEventListener('click', () => deleteNovelFromServer(novel, btnDel));
+
+		const card = el('div.novel-card.tilt-surface',
+			el('div.novel-top',
+				buildCoverNode(novel.cover_url, title),
+				el('div.novel-info',
+					el('h3.novel-title', title),
+					el('div.novel-author', [novel.author || 'Khuyết danh', subTitle].filter(Boolean).join(' · ')),
+					badges,
+					desc ? el('p.novel-desc', String(desc)) : null
+				)
+			),
+			jobNode,
+			el('div.novel-foot',
+				el('div', { style: 'flex:1;min-width:120px' },
+					el('div.hint', { style: 'margin-bottom:4px' }, 'Tiến độ dịch sẵn trong kho: ' + pct + '%'),
+					meter(pct, false)
+				),
+				el('div.novel-btns', btnInspect, btnOvernight, btnPre, btnNext20, btnRaw, btnStop, btnTts, btnGloss, btnEpub, btnDel)
+			)
+		);
+		grid.append(card);
+	}
+
+	if (pager && filtered.length > 24) {
+		pager.hidden = false;
+		const btnPrev = el('button.btn.btn-quiet.btn-sm', { type: 'button' }, '← Trang trước');
+		btnPrev.disabled = libPage <= 1;
+		btnPrev.addEventListener('click', () => { if (libPage > 1) { libPage--; renderLibraryNovels(novelsData); } });
+
+		const btnNext = el('button.btn.btn-quiet.btn-sm', { type: 'button' }, 'Trang sau →');
+		btnNext.disabled = libPage >= totalPages;
+		btnNext.addEventListener('click', () => { if (libPage < totalPages) { libPage++; renderLibraryNovels(novelsData); } });
+
+		const btnAll = el('button.btn.btn-quiet.btn-sm', { type: 'button' }, libPageSize >= filtered.length ? 'Thu gọn 24 bộ/trang' : 'Hiện tất cả (' + formatInt(filtered.length) + ')');
+		btnAll.addEventListener('click', () => {
+			libPageSize = libPageSize >= filtered.length ? 24 : 1000;
+			libPage = 1;
+			renderLibraryNovels(novelsData);
+		});
+
+		pager.append(
+			el('span.hint', { style: 'font-size:13px;color:var(--text-2)' }, 'Đang hiển thị ' + formatInt(startIdx + 1) + '–' + formatInt(Math.min(filtered.length, startIdx + pageItems.length)) + ' trong tổng số ' + formatInt(filtered.length) + ' bộ truyện (Trang ' + formatInt(libPage) + '/' + formatInt(totalPages) + ')'),
+			el('div', { style: 'display:flex;gap:8px;align-items:center' }, btnPrev, btnNext, btnAll)
+		);
+	}
+}
+
+let suggestTimer = null;
+
+async function handleNovelQueryInput() {
+	const box = $('novelSuggestBox');
+	if (!box) return;
+	const q = $('inNovelQuery').value.trim();
+	if (!q || q.length < 2 || /^https?:\/\//i.test(q)) {
+		box.hidden = true;
+		clear(box);
+		return;
+	}
+	clearTimeout(suggestTimer);
+	suggestTimer = setTimeout(async () => {
+		try {
+			const res = await api('/v1/novels/suggest?q=' + encodeURIComponent(q));
+			const list = Array.isArray(res && res.suggestions) ? res.suggestions : [];
+			if ($('inNovelQuery').value.trim() !== q || !list.length) {
+				box.hidden = true;
+				clear(box);
+				return;
+			}
+			clear(box);
+			for (const s of list) {
+				const tag = s.kind === 'local' ? 'Kho 1TB' : (s.kind === 'title' ? 'Truyện hot' : 'Từ điển');
+				const tagTone = s.kind === 'local' ? 'ok' : (s.kind === 'title' ? 'gold' : 'info');
+				const row = el('button.suggest-item', { type: 'button' },
+					el('div',
+						el('div.suggest-main', s.label || s.query),
+						el('div.suggest-sub', s.sub || '')
+					),
+					pill(tagTone, tag)
+				);
+				row.addEventListener('click', () => {
+					$('inNovelQuery').value = s.query || s.label;
+					box.hidden = true;
+					clear(box);
+					$('formSearchNovel').requestSubmit();
+				});
+				box.append(row);
+			}
+			box.hidden = false;
+		} catch (_) {
+			box.hidden = true;
+		}
+	}, 120);
+}
+
+async function submitNovelSearch(event) {
+	event.preventDefault();
+	if ($('novelSuggestBox')) $('novelSuggestBox').hidden = true;
+	const query = $('inNovelQuery').value.trim();
+	const preCount = Math.max(0, Math.min(200, num($('selImportPretranslate').value)));
+	const btn = $('btnSearchNovel'), state = $('novelSearchState'), wrap = $('novelSearchWrap'), grid = $('novelSearchResults');
+	if (!query) return toast('Hãy nhập tên truyện hoặc dán URL truyện.', 'error');
+
+	if (/^https?:\/\//i.test(query)) {
+		await importNovelByUrl(query, preCount, btn);
+		return;
+	}
+
+	setBusy(btn, true, 'Đang tìm…');
+	clear(state).append(skeleton(2));
+	state.hidden = false;
+	wrap.hidden = true;
+	try {
+		const res = await api('/v1/novels/search?q=' + encodeURIComponent(query));
+		const results = Array.isArray(res && res.results) ? res.results : [];
+		state.hidden = true;
+		wrap.hidden = false;
+		$('novelSearchTitle').textContent = 'Kết quả tìm kiếm cho "' + query + '" (' + formatInt(results.length) + ')';
+		renderSearchResults(results);
+	} catch (error) {
+		state.hidden = true;
+		if (!error.authLost) toast(error.message, 'error');
+	} finally {
+		setBusy(btn, false);
+	}
+}
+
+function renderSearchResults(results) {
+	const grid = $('novelSearchResults');
+	clear(grid);
+	if (!results.length) {
+		grid.append(el('div.state', icon('alert'), el('p', 'Không tìm thấy truyện phù hợp'), el('p', 'Bạn có thể thử từ khoá Hán Việt / tiếng Trung hoặc dán trực tiếp URL truyện từ 69shuba, piaotia, uukanshu.')));
+		return;
+	}
+	for (const item of results) {
+		const title = item.title_vi || item.title || item.original_title || item.id || 'Truyện chưa rõ tên';
+		const origTitle = item.title || item.original_title || '';
+		const subTitle = origTitle && origTitle !== title ? origTitle : '';
+		const srcName = item.source_id || item.source || 'web';
+		const itemUrl = item.url || item.source_url || '';
+		const desc = item.description || item.synopsis || '';
+		const inLib = srcName === 'local' || srcName === 'library' || novelsData.some((n) => n.id === item.id || (itemUrl && n.source_url === itemUrl));
+		const badges = el('div.novel-badges',
+			inLib ? pill('ok', 'Đã có trong Kho MiniPC') : pill('info', 'Nguồn: ' + srcName),
+			num(item.total_chapters) > 0 ? pill('', formatInt(item.total_chapters) + ' chương') : null
+		);
+		const btnImport = el('button.btn.btn-sm.' + (inLib ? 'btn-quiet' : 'btn-gold'), { type: 'button' },
+			icon(inLib ? 'refresh' : 'plus'),
+			el('span.lbl', inLib ? 'Cập nhật + Dịch trước' : 'Nhập vào Kho + Dịch trước')
+		);
+		btnImport.addEventListener('click', () => {
+			const preCount = Math.max(0, Math.min(200, num($('selImportPretranslate').value)));
+			if (itemUrl && /^https?:\/\//i.test(itemUrl)) {
+				importNovelByUrl(itemUrl, preCount, btnImport);
+			} else if (item.id) {
+				const found = novelsData.find((n) => n.id === item.id);
+				if (found) openPretranslateDialog(found);
+			}
+		});
+
+		const card = el('div.novel-card',
+			el('div.novel-top',
+				buildCoverNode(item.cover_url, title),
+				el('div.novel-info',
+					el('h3.novel-title', title),
+					el('div.novel-author', [item.author || 'Khuyết danh', subTitle].filter(Boolean).join(' · ')),
+					badges,
+					desc ? el('p.novel-desc', String(desc)) : null
+				)
+			),
+			el('div.novel-foot',
+				el('span.hint.mono', String(itemUrl || item.id || '').slice(0, 48)),
+				el('div.novel-btns', btnImport)
+			)
+		);
+		grid.append(card);
+	}
+}
+
+async function importNovelByUrl(sourceUrl, pretranslateCount, button) {
+	await withBusy(button, 'Đang nhập kho…', async () => {
+		const res = await api('/v1/admin/novels/import', 'POST', {
+			source_url: sourceUrl,
+			pretranslate_count: pretranslateCount,
+		});
+		const nv = (res && res.novel) || {};
+		const name = nv.title_vi || nv.title || nv.id;
+		const msg = pretranslateCount > 0
+			? 'Đã lưu "' + name + '" vào Kho MiniPC và bắt đầu dịch ngầm ' + pretranslateCount + ' chương đầu!'
+			: 'Đã lưu "' + name + '" (' + formatInt(nv.total_chapters) + ' chương) vào Kho MiniPC!';
+		toast(msg);
+		if ($('inNovelQuery').value.trim() === sourceUrl) $('inNovelQuery').value = '';
+		await loadNovels(true);
+	});
+}
+
+function openPretranslateDialog(novel) {
+	if (!novel || !novel.id) return;
+	pendingNovel = novel;
+	const name = novel.title_vi || novel.title || novel.id;
+	const total = Math.max(1, num(novel.total_chapters) || 10000);
+	const trans = Math.max(0, num(novel.translated_chapters));
+	const nextStart = Math.min(total, trans + 1);
+	const nextEnd = Math.min(total, nextStart + 19);
+	$('preNovelSub').textContent = name + ' · Đã dịch ' + formatInt(trans) + '/' + formatInt(novel.total_chapters) + ' chương';
+	$('preFrom').max = String(total);
+	$('preTo').max = String(total);
+	$('preFrom').value = String(nextStart);
+	$('preTo').value = String(nextEnd);
+	showError($('preError'));
+	openDialog($('dlgPretranslate'), $('preTo'));
+}
+
+function applyPretranslatePreset(rangeKey) {
+	if (!pendingNovel) return;
+	const total = Math.max(1, num(pendingNovel.total_chapters) || 10000);
+	const trans = Math.max(0, num(pendingNovel.translated_chapters));
+	let fromCh = 1, toCh = 20;
+	if (rangeKey === '1-20') { fromCh = 1; toCh = Math.min(total, 20); }
+	else if (rangeKey === '1-50') { fromCh = 1; toCh = Math.min(total, 50); }
+	else if (rangeKey === '1-100') { fromCh = 1; toCh = Math.min(total, 100); }
+	else if (rangeKey === 'next20') { fromCh = Math.min(total, trans + 1); toCh = Math.min(total, fromCh + 19); }
+	else if (rangeKey === 'next50') { fromCh = Math.min(total, trans + 1); toCh = Math.min(total, fromCh + 49); }
+	else if (rangeKey === 'all') { fromCh = Math.min(total, trans + 1); toCh = Math.min(total, fromCh + 2999); }
+	$('preFrom').value = String(fromCh);
+	$('preTo').value = String(toCh);
+}
+
+function submitPretranslate(event) {
+	event.preventDefault();
+	if (!pendingNovel || !pendingNovel.id) return;
+	const fromCh = Math.max(1, Math.round(num($('preFrom').value)));
+	const toCh = Math.max(fromCh, Math.round(num($('preTo').value)));
+	if (toCh - fromCh + 1 > 3000) {
+		return showError($('preError'), 'Mỗi lượt dịch ngầm tối đa 3.000 chương.');
+	}
+	runDialog('dlgPretranslate', 'btnStartPretranslate', 'preError', 'Đang khởi chạy…', async () => {
+		await api('/v1/admin/novels/' + encodeURIComponent(pendingNovel.id) + '/pretranslate', 'POST', {
+			from_chapter: fromCh,
+			to_chapter: toCh,
+		});
+		return () => {
+			toast('Đã bắt đầu dịch ngầm chương ' + fromCh + ' → ' + toCh + ' cho "' + (pendingNovel.title_vi || pendingNovel.title || pendingNovel.id) + '".');
+			loadNovels(true);
+		};
+	});
+}
+
+async function startOvernightTranslation(novel, button) {
+	if (!novel || !novel.id) return;
+	const isStopping = Boolean(novel.overnight_enabled);
+	await withBusy(button, isStopping ? 'Đang tắt…' : 'Đang bật…', async () => {
+		const path = isStopping
+			? '/v1/admin/novels/' + encodeURIComponent(novel.id) + '/overnight/stop'
+			: '/v1/admin/novels/' + encodeURIComponent(novel.id) + '/overnight';
+		const res = await api(path, 'POST');
+		toast((res && res.message) || (isStopping ? 'Đã tắt Dịch ngầm.' : 'Đã bật Dịch ngầm cho "' + (novel.title_vi || novel.title || novel.id) + '"!'));
+		await loadNovels(true);
+	});
+}
+
+async function quickPretranslateNext(novel, count, button) {
+	const total = Math.max(1, num(novel.total_chapters) || 10000);
+	const fromCh = Math.min(total, Math.max(1, num(novel.translated_chapters) + 1));
+	const toCh = Math.min(total, fromCh + count - 1);
+	await withBusy(button, 'Đang xếp hàng…', async () => {
+		await api('/v1/admin/novels/' + encodeURIComponent(novel.id) + '/pretranslate', 'POST', {
+			from_chapter: fromCh,
+			to_chapter: toCh,
+		});
+		toast('Đang dịch ngầm chương ' + fromCh + ' → ' + toCh + ' cho "' + (novel.title_vi || novel.title || novel.id) + '".');
+		await loadNovels(true);
+	});
+}
+
+async function cancelNovelJob(novel, button) {
+	if (!novel || !novel.id) return;
+	await withBusy(button, 'Đang dừng…', async () => {
+		const res = await api('/v1/admin/novels/' + encodeURIComponent(novel.id) + '/cancel-job', 'POST');
+		toast((res && res.message) || 'Đã gửi lệnh dừng tác vụ.');
+		await loadNovels(true);
+	});
+}
+
+async function quickDownloadRaw(novel, count, button) {
+	if (!novel || !novel.id) return;
+	const total = Math.max(1, num(novel.total_chapters) || 5000);
+	const fromCh = Math.min(total, Math.max(1, num(novel.cached_chapters) + 1));
+	const toCh = Math.min(total, fromCh + count - 1);
+	await withBusy(button, 'Đang xếp hàng…', async () => {
+		const res = await api('/v1/admin/novels/' + encodeURIComponent(novel.id) + '/download-raw', 'POST', {
+			from_chapter: fromCh,
+			to_chapter: toCh,
+		});
+		toast((res && res.message) || ('Đang tải ngầm bản gốc chương ' + fromCh + ' → ' + toCh + ' vào ổ 1TB.'));
+		await loadNovels(true);
+	});
+}
+
+async function submitHarvester(event) {
+	event.preventDefault();
+	const pack = $('selHarvesterPack') ? $('selHarvesterPack').value : 'all';
+	const maxNovels = Math.max(1, num($('selHarvesterMaxNovels') && $('selHarvesterMaxNovels').value) || 30);
+	const modeParts = String(($('selHarvesterRawCh') && $('selHarvesterRawCh').value) || '20:10').split(':');
+	const rawCh = Math.max(0, num(modeParts[0]));
+	const preCh = Math.max(0, num(modeParts[1]));
+	await withBusy($('btnStartHarvester'), 'Đang khởi chạy…', async () => {
+		const res = await api('/v1/admin/novels/harvester/start', 'POST', {
+			pack,
+			max_novels: maxNovels,
+			raw_chapters: rawCh,
+			pretranslate_chapters: preCh,
+		});
+		toast((res && res.message) || 'Đã bắt đầu thu thập truyện tự động vào ổ 1TB.');
+		await loadNovels(true);
+	});
+}
+
+async function stopHarvester() {
+	await withBusy($('btnStopHarvester'), 'Đang dừng…', async () => {
+		const res = await api('/v1/admin/novels/harvester/stop', 'POST');
+		toast((res && res.message) || 'Đã gửi lệnh dừng thu thập.');
+		await loadNovels(true);
+	});
+}
+
+async function quickPrerenderTts(novel, button) {
+	if (!novel || !novel.id) return;
+	const toCh = Math.max(1, Math.min(20, num(novel.translated_chapters) || 20));
+	const voice = ($('selTtsVoiceLib') && $('selTtsVoiceLib').value) || 'mai_phuong';
+	await withBusy(button, 'Đang xếp Audio…', async () => {
+		const res = await api('/v1/admin/novels/' + encodeURIComponent(novel.id) + '/prerender-tts', 'POST', {
+			from_chapter: 1,
+			to_chapter: toCh,
+			voice,
+		});
+		toast((res && res.message) || ('Đã xếp hàng tạo Audio (' + voice + ') vào ổ 1TB.'));
+	});
+}
+
+async function exportNovelEpub(novel, button) {
+	if (!novel || !novel.id) return;
+	await withBusy(button, 'Đang đóng gói…', async () => {
+		const headers = {};
+		if (session) headers[session.mode === 'key' ? 'X-Admin-Key' : 'Authorization'] = session.mode === 'key' ? session.key : 'Bearer ' + session.token;
+		const res = await fetch(API + '/v1/admin/novels/' + encodeURIComponent(novel.id) + '/export.epub', { headers });
+		if (!res.ok) throw new ApiError(res.status, 'Chưa có chương nào đủ điều kiện để xuất EPUB.');
+		const blob = await res.blob();
+		const disp = res.headers.get('Content-Disposition') || '';
+		const m = /filename="([^"]+)"/.exec(disp);
+		const fname = (m && m[1]) || ((novel.title_vi || novel.id) + '.epub');
+		const url = URL.createObjectURL(blob);
+		const a = el('a', { href: url, download: fname });
+		document.body.append(a);
+		a.click();
+		a.remove();
+		setTimeout(() => URL.revokeObjectURL(url), 5000);
+		toast('Đã tải xuống "' + fname + '".');
+	});
+}
+
+async function openGlossaryDialog(novel) {
+	if (!novel || !novel.id) return;
+	pendingNovel = novel;
+	const name = novel.title_vi || novel.title || novel.id;
+	$('glossNovelSub').textContent = name + ' · Đang tải bảng thuật ngữ…';
+	$('inGlossaryText').value = '';
+	showError($('glossError'));
+	openDialog($('dlgGlossary'), $('inGlossaryText'));
+	try {
+		const res = await api('/v1/admin/novels/' + encodeURIComponent(novel.id) + '/glossary');
+		const terms = Array.isArray(res && res.terms) ? res.terms : [];
+		$('glossNovelSub').textContent = name + ' · ' + formatInt(terms.length) + ' thuật ngữ đang áp dụng';
+		$('inGlossaryText').value = terms.map((t) => t.source + ' = ' + t.target).join('\n');
+	} catch (err) {
+		showError($('glossError'), err.message);
+	}
+}
+
+function submitGlossary(event) {
+	event.preventDefault();
+	if (!pendingNovel || !pendingNovel.id) return;
+	const lines = $('inGlossaryText').value.split('\n');
+	const terms = [];
+	for (const raw of lines) {
+		const line = raw.trim();
+		if (!line || line.startsWith('#')) continue;
+		const sep = line.indexOf('=') >= 0 ? '=' : (line.indexOf('->') >= 0 ? '->' : ':');
+		const idx = line.indexOf(sep);
+		if (idx <= 0) continue;
+		const source = line.slice(0, idx).trim();
+		const target = line.slice(idx + sep.length).trim();
+		if (source && target) terms.push({ source, target });
+	}
+	runDialog('dlgGlossary', 'btnSaveGlossary', 'glossError', 'Đang lưu…', async () => {
+		const res = await api('/v1/admin/novels/' + encodeURIComponent(pendingNovel.id) + '/glossary', 'PUT', { terms });
+		return () => {
+			toast((res && res.message) || 'Đã cập nhật bảng thuật ngữ.');
+			loadNovels(true);
+		};
+	});
+}
+
+async function deleteNovelFromServer(novel, button) {
+	if (!novel || !novel.id) return;
+	const title = novel.title || novel.id;
+	if (!window.confirm('Xoá truyện "' + title + '" cùng toàn bộ chương đã tải khỏi Kho MiniPC?')) return;
+	await withBusy(button, 'Đang xoá…', async () => {
+		await api('/v1/admin/novels/' + encodeURIComponent(novel.id), 'DELETE');
+		toast('Đã xoá "' + title + '" khỏi Kho MiniPC.');
+		novelsData = novelsData.filter((n) => n.id !== novel.id);
+		renderLibraryNovels(novelsData);
+	});
+}
+
+let inspectorNovel = null, inspectorCurrentCh = 1;
+
+async function openNovelInspector(novel) {
+	if (!novel || !novel.id) return;
+	inspectorNovel = novel;
+	inspectorCurrentCh = 1;
+	const name = novel.title_vi || novel.title || novel.id;
+	$('inspSub').textContent = name + ' · Mã truyện: ' + novel.id + ' · ' + formatInt(novel.translated_chapters) + '/' + formatInt(novel.total_chapters) + ' chương đã dịch';
+	$('inspTitleVi').value = novel.title_vi || novel.title || '';
+	$('inspAuthor').value = novel.author || '';
+	$('inspCoverUrl').value = novel.cover_url || '';
+	$('inspDesc').value = novel.description || '';
+	$('inspChNum').value = '1';
+	showError($('inspError'));
+	openDialog($('dlgNovelInspector'), $('inspTitleVi'));
+	await loadInspectorChapter(0);
+}
+
+async function loadInspectorChapter(chNum) {
+	if (!inspectorNovel || !inspectorNovel.id) return;
+	const reqCh = Math.max(0, Math.round(num(chNum)));
+	$('inspChEngineInfo').textContent = reqCh > 0 ? ('Đang tải chương ' + reqCh + '…') : 'Đang tải chương đã dịch…';
+	showError($('inspError'));
+	try {
+		const res = await api('/v1/admin/novels/' + encodeURIComponent(inspectorNovel.id) + '/chapters-preview?chapter=' + reqCh);
+		const ch = Math.max(1, num(res && res.chapter_number) || reqCh || 1);
+		inspectorCurrentCh = ch;
+		if ($('inspChNum')) $('inspChNum').value = String(ch);
+		const chList = Array.isArray(res && res.available_chapters) ? res.available_chapters : [];
+		const origText = (res && res.original_content) || '';
+		const transText = (res && res.translated_content) || '';
+		$('inspChTitleVi').value = (res && (res.title_vi || res.title)) || ('Chương ' + ch);
+		$('inspChRaw').value = origText || '(Chương này chưa tải bản gốc tiếng Trung vào ổ 1TB)';
+		$('inspChTrans').value = transText;
+		const engineLabel = (res && res.translation_engine) ? ' · Engine: ' + res.translation_engine : '';
+		$('inspChEngineInfo').textContent = 'Chương ' + ch + ' · ' + (transText.length > 50 ? 'Đã có bản dịch (' + formatInt(transText.length) + ' ký tự)' : (origText.length > 20 ? 'Mới có bản gốc (' + formatInt(origText.length) + ' ký tự)' : 'Chưa tải')) + engineLabel;
+
+		const chipBar = $('inspChChips');
+		if (chipBar) {
+			clear(chipBar);
+			for (const item of chList.slice(0, 80)) {
+				const cls = 'ch-chip' + (item.chapter_number === ch ? ' active' : '') + (item.translated ? ' has-trans' : (item.raw ? ' has-raw' : ''));
+				const btn = el('button.' + cls.replace(/\s+/g, '.'), { type: 'button', title: item.title || ('Chương ' + item.chapter_number) }, 'Ch.' + item.chapter_number);
+				btn.addEventListener('click', () => loadInspectorChapter(item.chapter_number));
+				chipBar.append(btn);
+			}
+		}
+	} catch (err) {
+		showError($('inspError'), err.message);
+	}
+}
+
+async function saveNovelMeta() {
+	if (!inspectorNovel || !inspectorNovel.id) return;
+	const btn = $('btnSaveNovelMeta');
+	await withBusy(btn, 'Đang lưu…', async () => {
+		const body = {
+			title_vi: $('inspTitleVi').value.trim(),
+			author: $('inspAuthor').value.trim(),
+			cover_url: $('inspCoverUrl').value.trim(),
+			description: $('inspDesc').value.trim(),
+		};
+		const res = await api('/v1/admin/novels/' + encodeURIComponent(inspectorNovel.id) + '/meta', 'PUT', body);
+		toast((res && res.message) || 'Đã lưu thông tin truyện.');
+		await loadNovels(true);
+	});
+}
+
+async function saveChapterTranslation(event) {
+	event.preventDefault();
+	if (!inspectorNovel || !inspectorNovel.id) return;
+	const btn = $('btnSaveInspChapter');
+	await withBusy(btn, 'Đang lưu bản dịch…', async () => {
+		const body = {
+			title_vi: $('inspChTitleVi').value.trim(),
+			translated_content: $('inspChTrans').value,
+		};
+		const res = await api('/v1/admin/novels/' + encodeURIComponent(inspectorNovel.id) + '/chapters/' + inspectorCurrentCh, 'PUT', body);
+		toast((res && res.message) || ('Đã lưu bản dịch chương ' + inspectorCurrentCh + '.'));
+		await loadInspectorChapter(inspectorCurrentCh);
+		await loadNovels(true);
+	});
+}
+
+async function retranslateInspectorChapter() {
+	if (!inspectorNovel || !inspectorNovel.id) return;
+	const btn = $('btnInspRetranslate');
+	await withBusy(btn, 'Đang dịch lại…', async () => {
+		await api('/v1/admin/novels/' + encodeURIComponent(inspectorNovel.id) + '/pretranslate', 'POST', {
+			from_chapter: inspectorCurrentCh,
+			to_chapter: inspectorCurrentCh,
+		});
+		toast('Đã xếp hàng dịch lại chương ' + inspectorCurrentCh + ' bằng AI. Hãy bấm Tải chương sau vài giây.');
+		setTimeout(() => loadInspectorChapter(inspectorCurrentCh), 4500);
+	});
+}
+
+async function openUserStudioModal(username) {
+	const u = usersData.find((x) => x.username === username);
+	if (!u) return;
+	pendingUser = u.username;
+	$('usSub').textContent = '@' + u.username + ' · Chỉnh sửa thông tin định danh, hạng thẻ VIP, quyền Quản trị và xem tiến độ đọc';
+	$('usName').value = u.display_name || '';
+	$('usEmail').value = u.email || '';
+	$('usVip').value = u.vip_tier || '';
+	$('usBio').value = u.bio || '';
+	$('usAdmin').checked = Boolean(u.is_admin);
+	showError($('usError'));
+	$('usSyncSummary').textContent = 'Đang tải dữ liệu đồng bộ…';
+	clear($('usProgressList')).append(skeleton(2));
+	openDialog($('dlgUserStudio'), $('usName'));
+	try {
+		const act = await api('/v1/admin/users/' + encodeURIComponent(u.username) + '/activity');
+		const listNode = $('usProgressList');
+		clear(listNode);
+		const items = Array.isArray(act.reading_progress) ? act.reading_progress : [];
+		$('usSyncSummary').textContent = 'Đang đọc ' + formatInt(items.length) + ' bộ truyện · ' + formatInt(act.vocab_count) + ' từ vựng FSRS · ' + formatInt(act.bookmark_count) + ' dấu trang đã lưu';
+		if (!items.length) {
+			listNode.append(el('div.hint', 'Độc giả này chưa đồng bộ lịch sử đọc truyện nào lên máy chủ.'));
+		} else {
+			for (const item of items) {
+				listNode.append(el('div.overnight-chip', { style: 'justify-content:space-between;width:100%' },
+					el('div',
+						el('strong', { style: 'color:var(--text)' }, item.novel_title || item.novel_id),
+						el('span', { style: 'margin-left:8px;color:var(--text-2)' }, 'Đang đọc Chương ' + formatInt(item.current_chapter) + (item.total_chapters ? '/' + formatInt(item.total_chapters) : ''))
+					),
+					el('span.hint', item.shelf_name || 'reading')
+				));
+			}
+		}
+	} catch (err) {
+		showError($('usError'), err.message);
+	}
+}
+
+function submitUserStudio(event) {
+	event.preventDefault();
+	if (!pendingUser) return;
+	runDialog('dlgUserStudio', 'btnSaveUserStudio', 'usError', 'Đang lưu hồ sơ…', async () => {
+		const body = {
+			display_name: $('usName').value.trim(),
+			email: $('usEmail').value.trim(),
+			vip_tier: $('usVip').value.trim(),
+			bio: $('usBio').value.trim(),
+			is_admin: $('usAdmin').checked,
+		};
+		const res = await api('/v1/admin/users/' + encodeURIComponent(pendingUser) + '/profile', 'PUT', body);
+		return () => {
+			toast((res && res.message) || ('Đã cập nhật hồ sơ @' + pendingUser));
+			loadUsers();
+		};
+	});
+}
+
+async function sweepSystemCache() {
+	await withBusy($('btnSweepCache'), 'Đang dọn bộ đệm…', async () => {
+		const res = await api('/v1/admin/system/sweep-cache', 'POST');
+		toast((res && res.message) || 'Đã dọn rác bộ đệm và gộp SQLite WAL.');
+		await loadSystem();
+	});
+}
+
+async function exportSystemBackup() {
+	await withBusy($('btnExportBackup'), 'Đang đóng gói…', async () => {
+		const headers = {};
+		if (session) headers[session.mode === 'key' ? 'X-Admin-Key' : 'Authorization'] = session.mode === 'key' ? session.key : 'Bearer ' + session.token;
+		const res = await fetch(API + '/v1/admin/backup/export', { headers });
+		if (!res.ok) throw new ApiError(res.status, 'Không thể xuất bản sao lưu hệ thống.');
+		const blob = await res.blob();
+		const disp = res.headers.get('Content-Disposition') || '';
+		const m = /filename="([^"]+)"/.exec(disp);
+		const fname = (m && m[1]) || ('truyencloud-backup-' + new Date().toISOString().slice(0, 10) + '.json');
+		const url = URL.createObjectURL(blob);
+		const a = el('a', { href: url, download: fname });
+		document.body.append(a);
+		a.click();
+		a.remove();
+		setTimeout(() => URL.revokeObjectURL(url), 5000);
+		toast('Đã tải xuống bản sao lưu "' + fname + '".');
+	});
+}
+
+async function submitPlaygroundTranslate(event) {
+	event.preventDefault();
+	const text = ($('pgSourceText') && $('pgSourceText').value.trim()) || '';
+	if (!text) return toast('Hãy nhập đoạn văn tiếng Trung cần dịch thử.', 'error');
+	const engine = ($('pgEngineSelect') && $('pgEngineSelect').value) || 'qwen';
+	await withBusy($('btnPgTranslate'), 'Đang dịch thử…', async () => {
+		const res = await api('/v1/admin/ai/playground-translate', 'POST', { text, engine });
+		if ($('pgOutputText')) $('pgOutputText').value = (res && res.translated_text) || '';
+		if ($('pgMetaInfo')) $('pgMetaInfo').textContent = '✓ Động cơ: ' + ((res && res.engine_used) || engine) + ' · Thời gian phản hồi: ' + formatInt(res && res.elapsed_ms) + ' ms';
+		toast('Đã dịch thử thành công (' + formatInt(res && res.elapsed_ms) + ' ms).');
+	});
+}
+
+function playPlaygroundTts() {
+	const text = (($('pgOutputText') && $('pgOutputText').value.trim()) || ($('pgSourceText') && $('pgSourceText').value.trim()) || '').slice(0, 1200);
+	if (!text) return toast('Hãy nhập hoặc dịch một đoạn văn tiếng Việt để nghe thử.', 'error');
+	const voice = ($('pgVoiceSelect') && $('pgVoiceSelect').value) || 'mai_phuong';
+	const player = $('pgAudioPlayer');
+	if (!player) return;
+	player.src = API + '/v1/tts/stream?voice=' + encodeURIComponent(voice) + '&text=' + encodeURIComponent(text);
+	player.play().catch(() => {});
+	toast('Đang phát giọng đọc ' + voice + '…');
+}
+
+async function submitUploadApk(event) {
+	event.preventDefault();
+	const fileInput = $('inApkFile');
+	const file = fileInput && fileInput.files && fileInput.files[0];
+	if (!file) return toast('Hãy chọn tệp .apk trên máy tính trước khi tải lên.', 'error');
+	await withBusy($('btnUploadApk'), 'Đang tải APK…', async () => {
+		const headers = {};
+		if (session) headers[session.mode === 'key' ? 'X-Admin-Key' : 'Authorization'] = session.mode === 'key' ? session.key : 'Bearer ' + session.token;
+		const fd = new FormData();
+		fd.append('file', file);
+		const res = await fetch(API + '/v1/admin/app/upload-apk', { method: 'POST', headers, body: fd });
+		const data = await res.json().catch(() => ({}));
+		if (!res.ok) throw new ApiError(res.status, data.detail || 'Tải lên APK thất bại.');
+		toast(data.message || 'Đã tải lên APK và cập nhật SHA-256.');
+		if (data.version) renderApp(data.version);
+		else await loadAppInfo();
+	});
+}
+
+async function submitPublishApp(event) {
+	event.preventDefault();
+	const vCode = Math.max(1, Math.round(num($('appVerCode') && $('appVerCode').value) || 1));
+	const vName = ($('appVerName') && $('appVerName').value.trim()) || '1.0.0';
+	const minCode = Math.max(1, Math.round(num($('appMinVerCode') && $('appMinVerCode').value) || 1));
+	const relDate = ($('appReleaseDate') && $('appReleaseDate').value.trim()) || new Date().toISOString().slice(0, 10);
+	const changelog = ($('appChangelogInput') && $('appChangelogInput').value.trim()) || '- Cập nhật hiệu năng và sửa lỗi';
+	const mandatory = Boolean($('appMandatory') && $('appMandatory').checked);
+	await withBusy($('btnSaveAppVersion'), 'Đang phát hành…', async () => {
+		const res = await api('/v1/app/version', 'POST', {
+			version_code: vCode,
+			version_name: vName,
+			min_version_code: minCode,
+			release_date: relDate,
+			changelog,
+			is_mandatory: mandatory,
+		});
+		toast((res && res.message) || ('Đã phát hành bản cập nhật OTA v' + vName + ' (Build ' + vCode + ').'));
+		await loadAppInfo();
+	});
+}
+
+async function triggerAutoUpdater() {
+	await withBusy($('btnTriggerAutoUpdater'), 'Đang kích hoạt…', async () => {
+		const res = await api('/v1/admin/novels/auto-updater/trigger', 'POST');
+		toast((res && res.message) || 'Đã kích hoạt quét chương mới tự động cho kho truyện.');
+	});
+}
+
+async function bulkToggleOvernight(enable) {
+	const list = enable ? filterAndSortLibrary(novelsData) : novelsData;
+	const ids = list.map((n) => n.id).filter(Boolean);
+	if (!ids.length) return toast('Không có bộ truyện nào trong danh sách.', 'error');
+	const btn = $(enable ? 'btnBulkEnableOvernight' : 'btnBulkDisableOvernight');
+	await withBusy(btn, 'Đang cập nhật…', async () => {
+		const res = await api('/v1/admin/novels/bulk-action', 'POST', {
+			action: enable ? 'enable_overnight' : 'disable_overnight',
+			novel_ids: ids,
+		});
+		toast((res && res.message) || 'Đã cập nhật Dịch Ngầm hàng loạt.');
+		await loadNovels(true);
+	});
+}
+
+function init3dEffects() {
+	// Hiệu ứng nghiêng 3D theo chuột cho thẻ độc giả & KPI
+	document.addEventListener('pointermove', (e) => {
+		const card = e.target && e.target.closest ? e.target.closest('.user-card, .tilt-surface') : null;
+		if (!card || !card.getBoundingClientRect) return;
+		const r = card.getBoundingClientRect();
+		if (!r.width || !r.height) return;
+		const px = (e.clientX - r.left) / r.width;
+		const py = (e.clientY - r.top) / r.height;
+		const rx = ((0.5 - py) * 7).toFixed(2) + 'deg';
+		const ry = ((px - 0.5) * 9).toFixed(2) + 'deg';
+		card.style.setProperty('--rx', rx);
+		card.style.setProperty('--ry', ry);
+		card.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
+		card.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
+	});
+	document.addEventListener('pointerout', (e) => {
+		const card = e.target && e.target.closest ? e.target.closest('.user-card, .tilt-surface') : null;
+		if (card && (!e.relatedTarget || !card.contains(e.relatedTarget))) {
+			card.style.setProperty('--rx', '0deg');
+			card.style.setProperty('--ry', '0deg');
+		}
+	});
+
+	// Bầu trời sao 3D Thiên Văn trên nền Canvas
+	const canvas = $('bgCanvas');
+	if (!canvas || !canvas.getContext) return;
+	const ctx = canvas.getContext('2d');
+	if (!ctx) return;
+	let w = 0, h = 0;
+	const stars = Array.from({ length: 58 }, (_, i) => ({
+		x: Math.random() * 2 - 1,
+		y: Math.random() * 2 - 1,
+		z: Math.random(),
+		gold: i % 3 === 0,
+	}));
+	function resize() {
+		w = canvas.width = window.innerWidth || 1280;
+		h = canvas.height = window.innerHeight || 800;
+	}
+	resize();
+	window.addEventListener('resize', resize);
+	function draw() {
+		ctx.clearRect(0, 0, w, h);
+		const cx = w * 0.5, cy = h * 0.5;
+		for (const s of stars) {
+			s.z -= 0.0012;
+			if (s.z <= 0.05) s.z = 1;
+			const sx = cx + (s.x / s.z) * (w * 0.42);
+			const sy = cy + (s.y / s.z) * (h * 0.42);
+			if (sx < 0 || sx > w || sy < 0 || sy > h) continue;
+			const rad = Math.max(0.8, (1 - s.z) * 2.6);
+			const alpha = Math.min(0.75, (1 - s.z) * 0.9);
+			ctx.beginPath();
+			ctx.fillStyle = s.gold ? `rgba(245, 194, 91, ${alpha})` : `rgba(34, 211, 182, ${alpha})`;
+			ctx.arc(sx, sy, rad, 0, Math.PI * 2);
+			ctx.fill();
+		}
+		requestAnimationFrame(draw);
+	}
+	requestAnimationFrame(draw);
+}
+
+function toggleFullscreen() {
+	const doc = document;
+	const root = doc.documentElement;
+	if (!doc.fullscreenElement && !doc.webkitFullscreenElement) {
+		const req = root && (root.requestFullscreen || root.webkitRequestFullscreen);
+		if (req) req.call(root).catch(() => {});
+	} else {
+		const exit = doc.exitFullscreen || doc.webkitExitFullscreen;
+		if (exit) exit.call(doc).catch(() => {});
+	}
+}
+function syncFullscreenButtons() {
+	const active = Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+	$$('[data-fullscreen] .lbl').forEach((node) => { node.textContent = active ? 'Thoát toàn màn hình' : 'Toàn màn hình'; });
+}
+
+function init() {
+	const head = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">';
+	const styleNode = $('adminStyle');
+	if (styleNode) {
+		styleNode.append(Object.entries(ICONS).map(([name, body]) => '.i-' + name + '{--m:url("data:image/svg+xml,' + encodeURIComponent(head + body + '</svg>') + '")}').join(''));
+	}
+	$('hostLabel').textContent = 'Máy chủ: ' + hostOf(API) + '.';
+	$$('input:not([type=checkbox]):not(#cuName):not(#cuVip):not(#cuBio):not(#inspTitleVi):not(#inspAuthor):not(#inspChTitleVi):not(#usName):not(#usVip):not(#usBio)').forEach((input) => { input.setAttribute('autocapitalize', 'none'); input.spellcheck = false; });
+	$$('.pw').forEach((wrap) => {
+		const input = wrap.firstElementChild;
+		const reveal = iconButton('eye', 'Hiện mật khẩu');
+		reveal.setAttribute('aria-pressed', 'false');
+		reveal.addEventListener('click', () => { setReveal(input, input.type === 'password'); input.focus(); });
+		wrap.append(reveal);
+		if (!wrap.classList.contains('gen')) return;
+		const dice = iconButton('dice', 'Tạo mật khẩu ngẫu nhiên');
+		dice.addEventListener('click', () => { input.value = generatePassword(); setReveal(input, true); updateCreatePreview(); input.focus(); });
+		wrap.append(dice);
+	});
+	$$('#vipPresets button').forEach((chip) => {
+		chip.addEventListener('click', () => {
+			if ($('cuVip')) { $('cuVip').value = chip.dataset.vip || ''; updateCreatePreview(); }
+		});
+	});
+	$$('#prePresets button').forEach((chip) => {
+		chip.addEventListener('click', () => applyPretranslatePreset(chip.dataset.range || ''));
+	});
+	const handlers = [
+		['#formSignin', 'submit', signIn], ['#btnSwitchMode', 'click', () => setMode(!byKey)],
+		['[data-section]', 'click', (e) => showSection(e.currentTarget.dataset.section)], ['[data-signout]', 'click', () => signOut('Bạn đã đăng xuất.', 'info')],
+		['[data-fullscreen]', 'click', toggleFullscreen],
+		['#userFilter button', 'click', (e) => setUserFilter(e.currentTarget.dataset.filter)], ['#inputSearch', 'input', () => renderUserList(usersData)],
+		['#btnReloadUsers', 'click', loadUsers], ['#btnOpenCreate', 'click', openCreate], ['#formCreate', 'submit', submitCreate],
+		['#formCreate', 'input', updateCreatePreview],
+		['#btnRefreshNovels', 'click', () => loadNovels(false)], ['#formSearchNovel', 'submit', submitNovelSearch],
+		['#formHarvester', 'submit', submitHarvester], ['#btnStopHarvester', 'click', stopHarvester],
+		['#inNovelQuery', 'input', handleNovelQueryInput],
+		['#btnClearSearch', 'click', () => { $('novelSearchWrap').hidden = true; clear($('novelSearchResults')); }],
+		['#inLibFilter', 'input', () => { libPage = 1; renderLibraryNovels(novelsData); }],
+		['#libStatusFilter button', 'click', (e) => setLibStatusFilter(e.currentTarget.dataset.libstatus || e.currentTarget.dataset.libfilter)],
+		['#selLibSource', 'change', () => { libPage = 1; renderLibraryNovels(novelsData); }],
+		['#selLibSort', 'change', () => { libPage = 1; renderLibraryNovels(novelsData); }],
+		['#btnTriggerAutoUpdater', 'click', triggerAutoUpdater],
+		['#btnBulkEnableOvernight', 'click', () => bulkToggleOvernight(true)],
+		['#btnBulkDisableOvernight', 'click', () => bulkToggleOvernight(false)],
+		['#btnSaveNovelMeta', 'click', saveNovelMeta],
+		['#btnInspPrevCh', 'click', () => loadInspectorChapter(Math.max(1, inspectorCurrentCh - 1))],
+		['#btnInspNextCh', 'click', () => loadInspectorChapter(inspectorCurrentCh + 1)],
+		['#btnInspLoadCh', 'click', () => loadInspectorChapter(Math.max(1, num($('inspChNum') && $('inspChNum').value) || 1))],
+		['#btnInspRetranslate', 'click', retranslateInspectorChapter],
+		['#formNovelInspector', 'submit', saveChapterTranslation],
+		['#formUserStudio', 'submit', submitUserStudio],
+		['#formPlayground', 'submit', submitPlaygroundTranslate],
+		['#btnPgSpeak', 'click', playPlaygroundTts],
+		['#btnSweepCache', 'click', sweepSystemCache],
+		['#btnExportBackup', 'click', exportSystemBackup],
+		['#formUploadApk', 'submit', submitUploadApk],
+		['#formPublishApp', 'submit', submitPublishApp],
+		['#formPretranslate', 'submit', submitPretranslate],
+		['#formGlossary', 'submit', submitGlossary],
+		['#formPassword', 'submit', submitPassword], ['#formDelete', 'submit', submitDelete], ['#btnCopyCreds', 'click', copyCreds],
+		['#delConfirm', 'input', (e) => { $('btnDelete').disabled = e.target.value.trim() !== pendingUser; }],
+		['#cuUser', 'input', (e) => {
+			const clean = e.target.value.toLowerCase().replace(/[^a-z0-9_.-]/g, '');
+			if (clean !== e.target.value) e.target.value = clean;
+			$('cuEmail').placeholder = (clean || 'ten-dang-nhap') + '@truyencloud.vn';
+			updateCreatePreview();
+		}],
+		['#formModel', 'change', syncModelForm], ['#formModel', 'input', syncModelForm], ['#formModel', 'submit', applyModel],
+		['#btnRefreshModels', 'click', refreshModels], ['#formProfile', 'change', syncProfileForm], ['#formProfile', 'input', syncProfileForm],
+		['#formProfile', 'submit', saveProfile], ['#btnRefreshSystem', 'click', loadSystem], ['#btnRefreshApp', 'click', loadAppInfo],
+	];
+	handlers.forEach(([selector, type, handler]) => $$(selector).forEach((node) => node.addEventListener(type, handler)));
+	$$('dialog').forEach((dialog) => {
+		dialog.addEventListener('cancel', (e) => dialog.dataset.busy && e.preventDefault());
+		dialog.addEventListener('click', (e) => { if (e.target === dialog && !dialog.dataset.busy && dialog.matches('.sheet:not(#dlgCreds)')) dialog.close(); });
+		dialog.addEventListener('close', () => {
+			if (dialog.id === 'dlgCreds') { creds = null; clear($('credUser')); clear($('credPass')); }
+			dialog.querySelectorAll('input.mono').forEach((input) => { input.value = ''; });
+			if (lastFocus && lastFocus.isConnected && !document.querySelector('dialog[open]')) lastFocus.focus();
+		});
+		dialog.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => dialog.dataset.busy || dialog.close()));
+	});
+	window.addEventListener('hashchange', () => entered && showSection(loc.hash));
+	if (document.addEventListener) {
+		document.addEventListener('fullscreenchange', syncFullscreenButtons);
+		document.addEventListener('webkitfullscreenchange', syncFullscreenButtons);
+	}
+	try { sessionStorage.removeItem('truyencloud_admin_key'); } catch (_) {}
+	init3dEffects();
+	if (session) enterApp(null); else showSignin();
+}
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
