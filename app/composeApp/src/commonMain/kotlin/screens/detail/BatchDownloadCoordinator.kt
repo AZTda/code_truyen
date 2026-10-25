@@ -34,6 +34,7 @@ internal class BatchDownloadCoordinator(
 ) {
     private var job: Job? = null
     private var overnightWatchJob: Job? = null
+    private var autoPullJob: Job? = null
 
     fun start(novelId: String, fromChapter: Int, toChapter: Int) {
         job?.cancel()
@@ -185,8 +186,8 @@ internal class BatchDownloadCoordinator(
         val anchor = anchorChapter.coerceAtLeast(1)
         val allMissing = serverTranslatedChapters.filter { it !in localReady }
         val missing = (allMissing.filter { it >= anchor } + allMissing.filter { it < anchor }).take(40)
-        if (missing.isEmpty()) return
-        scope.launch {
+        if (missing.isEmpty() || autoPullJob?.isActive == true) return
+        autoPullJob = scope.launch {
             try {
                 chapterRepository.downloadSpecificChapters(novelId, missing, requireAi = false)
             } catch (e: CancellationException) {
@@ -216,6 +217,10 @@ internal class BatchDownloadCoordinator(
     fun cancel() {
         job?.cancel()
         job = null
+        overnightWatchJob?.cancel()
+        overnightWatchJob = null
+        autoPullJob?.cancel()
+        autoPullJob = null
     }
 
     private suspend fun run(novelId: String, from: Int, to: Int) {
@@ -297,7 +302,7 @@ internal class BatchDownloadCoordinator(
                 )
             }
             when (status.status) {
-                "succeeded" -> {
+                "succeeded", "completed" -> {
                     downloadToDevice(novelId, from, to, loggedIn = true)
                     return
                 }

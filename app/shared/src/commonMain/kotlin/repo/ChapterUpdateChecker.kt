@@ -126,7 +126,12 @@ class ChapterUpdateChecker(
         val notices = response.updates.mapNotNull { update ->
             val novel = novelById[update.novel_id]
             if (novel != null && update.total_chapters > novel.totalChapters) {
-                runCatching { novelDao.upsertNovel(novel.copy(totalChapters = update.total_chapters)) }
+                runCatching {
+                    val fresh = novelDao.getNovelById(novel.id) ?: novel
+                    if (update.total_chapters > fresh.totalChapters) {
+                        novelDao.upsertNovel(fresh.copy(totalChapters = update.total_chapters))
+                    }
+                }
             }
             // Đã báo đúng số chương này rồi thì thôi — nếu không, mỗi lần tiến trình
             // nền thức dậy người dùng lại nhận đúng một thông báo cũ.

@@ -2083,6 +2083,7 @@ dependencies = [
  "tracing-subscriber",
  "truyencloud-core",
  "uuid",
+ "zip",
 ]
 
 [[package]]

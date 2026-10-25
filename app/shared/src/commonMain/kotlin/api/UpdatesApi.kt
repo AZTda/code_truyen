@@ -46,9 +46,11 @@ class UpdatesApi {
      */
     suspend fun checkBatch(novels: List<ShelfNovelState>): CheckUpdatesBatchResponse {
         if (novels.isEmpty()) return CheckUpdatesBatchResponse()
-        return client.post("$base/v1/novels/updates/check-batch") {
+        val resp = client.post("$base/v1/novels/updates/check-batch") {
             contentType(ContentType.Application.Json)
             setBody(CheckUpdatesBatchBody(novels))
-        }.body()
+        }
+        resp.requireSuccess("Kiểm tra chương mới")
+        return resp.body()
     }
 }

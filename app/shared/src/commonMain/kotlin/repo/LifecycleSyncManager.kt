@@ -115,7 +115,8 @@ object LifecycleSyncManager {
      */
     fun onAppForeground(
         readerRepository: ReaderRepository? = null,
-        bookmarkRepository: BookmarkRepository? = null
+        bookmarkRepository: BookmarkRepository? = null,
+        vocabularyRepository: VocabularyRepository? = null
     ) {
         lastBackgroundEventAt = 0L
         _isForeground.value = true
@@ -127,6 +128,7 @@ object LifecycleSyncManager {
         scope.launch {
             safely { readerRepository?.flushDirtyProgress() }
             safely { bookmarkRepository?.syncWithServer(force = false) }
+            safely { vocabularyRepository?.syncIfLoggedIn() }
             safely { extra?.invoke() }
         }
     }

@@ -71,6 +71,8 @@ class ReaderEnglishCoordinator(
                     // Đã bấm Lưu từ trước khi tra xong thì điền phần từ điển vào thẻ.
                     wordSaver.onLookupArrived(cleanWord, res)
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 uiStateFlow.value = uiStateFlow.value.copy(isExplainingWord = false, englishWordData = null, wordLookupError = e.message ?: "Không kết nối được máy chủ.")
             }
@@ -110,6 +112,8 @@ class ReaderEnglishCoordinator(
                 } else {
                     uiStateFlow.value = uiStateFlow.value.copy(isAnalyzingSentence = false, sentenceAnalysis = res, sentenceAnalysisError = null)
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 uiStateFlow.value = uiStateFlow.value.copy(isAnalyzingSentence = false, sentenceAnalysis = null, sentenceAnalysisError = e.message ?: "Không kết nối được máy chủ.")
             }
@@ -181,6 +185,8 @@ class ReaderEnglishCoordinator(
                     progressiveReplacedCount = res.replacedCount
                 )
                 onContentUpdated()
+            } catch (e: CancellationException) {
+                throw e
             } catch (_: Exception) {
                 uiStateFlow.value = uiStateFlow.value.copy(isWeavingProgressive = false)
             }

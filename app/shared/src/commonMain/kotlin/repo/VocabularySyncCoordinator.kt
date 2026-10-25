@@ -51,28 +51,28 @@ class VocabularySyncCoordinator(
             if (userInitiated) SyncStatus.reportFailure(MSG_NOT_LOGGED_IN)
             return VocabularySyncResult.NotLoggedIn
         }
-        val account = SyncAccount.keyFor(token)
         return mutex.withLock {
             try {
-                val hasLocalData = hasLocalData()
-                // Máy trống mà con trỏ báo "đã kéo tới mốc X": dữ liệu đã bị xoá SAU lần kéo ấy (xoá dữ liệu trên máy,
-                // đổi tài khoản) và máy chủ sẽ chỉ trả phần đổi sau X -> kéo lại từ đầu để khôi phục toàn bộ.
-                val stored = store.cursor(account)
-                val cursor = if (hasLocalData) stored else 0L
-                val push = pushChanges(cursor)
-                // Máy chủ báo có từ "cũ hơn bản của nó" mà mốc since có thể không phủ tới -> kéo lại toàn bộ lượt này.
-                val pull = pullAndMerge(if (push.staleIds.isNotEmpty()) 0L else cursor)
-                store.saveCursor(account, pull.serverTimeMs)
-                SyncStatus.reportSuccess()
-                VocabularySyncResult.Success(push.words, push.logs, pull.words, pull.logs)
+                runSyncForAccount(SyncAccount.keyFor(token))
             } catch (e: CancellationException) {
                 throw e
             } catch (e: VocabularySyncHttpException) {
                 if (e.status == 401) {
                     val refreshedToken = TruyenCloudApi.authToken
                     val silentlyRefreshed = refreshedToken.isNotBlank() && refreshedToken != token
-                    if (!silentlyRefreshed) SyncStatus.reportSessionExpired()
-                    VocabularySyncResult.Failure("Phiên đăng nhập đã hết hạn", sessionExpired = !silentlyRefreshed)
+                    if (silentlyRefreshed) {
+                        return@withLock try {
+                            runSyncForAccount(SyncAccount.keyFor(refreshedToken))
+                        } catch (re: CancellationException) {
+                            throw re
+                        } catch (re: Exception) {
+                            val msg = re.message?.takeIf { it.isNotBlank() } ?: "Không kết nối được máy chủ"
+                            SyncStatus.reportFailure(msg)
+                            VocabularySyncResult.Failure(msg)
+                        }
+                    }
+                    SyncStatus.reportSessionExpired()
+                    VocabularySyncResult.Failure("Phiên đăng nhập đã hết hạn", sessionExpired = true)
                 } else {
                     val msg = "Lỗi máy chủ (${e.status}): ${e.message}"
                     SyncStatus.reportFailure(msg)
@@ -84,6 +84,17 @@ class VocabularySyncCoordinator(
                 VocabularySyncResult.Failure(msg)
             }
         }
+    }
+
+    private suspend fun runSyncForAccount(account: String): VocabularySyncResult {
+        val hasLocalData = hasLocalData()
+        val stored = store.cursor(account)
+        val cursor = if (hasLocalData) stored else 0L
+        val push = pushChanges(cursor)
+        val pull = pullAndMerge(if (push.staleIds.isNotEmpty()) 0L else cursor)
+        store.saveCursor(account, pull.serverTimeMs)
+        SyncStatus.reportSuccess()
+        return VocabularySyncResult.Success(push.words, push.logs, pull.words, pull.logs)
     }
 
     /** Có ít nhất một từ (kể cả bia mộ) hoặc một lượt ôn trên máy. */

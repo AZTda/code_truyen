@@ -20,16 +20,19 @@ pub async fn admin_list_novels(State(state): State<AppState>) -> impl IntoRespon
         .load_all_novels()
         .into_iter()
         .map(|n| {
+            let (cached, tr, _) = state.get_chapter_counts(&n.id);
             let title_vi = n.display_title().to_string();
             let author = n.display_author().to_string();
+            let tr_count = tr.max(n.translated_chapters);
+            let cached_count = cached.max(tr_count);
             json!({
                 "id": n.id, "title": n.title, "title_vi": title_vi, "author": author,
                 "cover_url": n.cover_url, "description": n.description,
                 "source_id": if n.source_id.is_empty() { "69shuba" } else { &n.source_id },
                 "source_url": n.source_url,
                 "status": if n.status.is_empty() { "ongoing" } else { &n.status },
-                "total_chapters": n.total_chapters, "translated_chapters": n.translated_chapters,
-                "cached_chapters": n.total_chapters.max(n.translated_chapters),
+                "total_chapters": n.total_chapters.max(cached_count), "translated_chapters": tr_count,
+                "cached_chapters": cached_count,
                 "overnight_enabled": n.overnight_enabled, "active_job": null,
                 "updated_ms": 1761400000000i64
             })
@@ -39,10 +42,29 @@ pub async fn admin_list_novels(State(state): State<AppState>) -> impl IntoRespon
     (StatusCode::OK, Json(json!({ "items": items, "novels": items, "total": total })))
 }
 
-pub async fn admin_delete_novel(AxumPath(novel_id): AxumPath<String>) -> impl IntoResponse {
+pub async fn admin_delete_novel(
+    State(state): State<AppState>,
+    AxumPath(novel_id): AxumPath<String>,
+) -> impl IntoResponse {
+    let safe_id: String = novel_id.chars().filter(|c| c.is_alphanumeric() || *c == '_' || *c == '-').collect();
+    if safe_id.is_empty() {
+        return (StatusCode::BAD_REQUEST, Json(json!({"detail": "novel_id không hợp lệ"})));
+    }
+    let ndir = state.data_dir.join("novels").join(&safe_id);
+    let removed_disk = fs::remove_dir_all(&ndir).is_ok();
+    if let Ok(mut guard) = state.stats_cache.lock() {
+        guard.remove(&safe_id);
+    }
+    {
+        let _guard = state.db_lock.lock().ok();
+        if let Ok(conn) = state.open_db() {
+            let _ = conn.execute("DELETE FROM novels WHERE pkey = ?1 OR json_extract(data, '$.id') = ?1", rusqlite::params![safe_id]);
+            let _ = conn.execute("DELETE FROM chapters WHERE json_extract(data, '$.novel_id') = ?1", rusqlite::params![safe_id]);
+        }
+    }
     (
         StatusCode::OK,
-        Json(json!({ "status": "deleted", "novel_id": novel_id, "removed_disk": false })),
+        Json(json!({ "status": "deleted", "novel_id": safe_id, "removed_disk": removed_disk })),
     )
 }
 
@@ -51,13 +73,16 @@ pub async fn admin_update_novel_meta(
     AxumPath(novel_id): AxumPath<String>,
     Json(payload): Json<Value>,
 ) -> impl IntoResponse {
-    let info_path = state.data_dir.join("novels").join(&novel_id).join("novel_info.json");
+    let ndir = state.data_dir.join("novels").join(&novel_id);
+    let info_path = if ndir.join("info.json").exists() { ndir.join("info.json") } else { ndir.join("novel_info.json") };
     let mut info: Value = fs::read_to_string(&info_path)
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
+        .or_else(|| state.get_novel(&novel_id).and_then(|n| serde_json::to_value(n).ok()))
         .unwrap_or_else(|| json!({"id": novel_id}));
     if let Some(obj) = info.as_object_mut() {
-        for field in ["title_vi", "author", "description", "cover_url"] {
+        obj.insert("id".into(), Value::String(novel_id.clone()));
+        for field in ["title_vi", "author", "description", "cover_url", "status"] {
             if let Some(val) = payload.get(field).and_then(|v| v.as_str()) {
                 if !val.trim().is_empty() || field != "title_vi" {
                     obj.insert(field.into(), Value::String(val.trim().to_string()));
@@ -65,10 +90,7 @@ pub async fn admin_update_novel_meta(
             }
         }
     }
-    if let Some(parent) = info_path.parent() {
-        let _ = fs::create_dir_all(parent);
-    }
-    let _ = fs::write(&info_path, serde_json::to_string_pretty(&info).unwrap_or_default());
+    state.save_novel_info(&novel_id, &info);
     (
         StatusCode::OK,
         Json(json!({
@@ -112,42 +134,28 @@ pub async fn admin_novel_chapters_preview(
     let trans = ch_val.get("translated_content").and_then(|v| v.as_str()).unwrap_or("").to_string();
     let engine = ch_val.get("translation_engine").and_then(|v| v.as_str()).unwrap_or("").to_string();
 
-    let available: Vec<Value> = toc
-        .iter()
-        .take(120)
-        .map(|item| {
-            let num = item.get("chapter_number").and_then(|v| v.as_i64()).unwrap_or(1) as i32;
-            let is_tr = translated_nums.contains(&num);
-            json!({
-                "chapter_number": num,
-                "title": item.get("title_vi").or_else(|| item.get("title")).and_then(|v| v.as_str()).unwrap_or(&format!("Chương {}", num)),
-                "translated": is_tr,
-                "raw": true,
-                "engine": if is_tr { "ANTIGRAVITY_CLI" } else { "" }
-            })
+    let available: Vec<Value> = toc.iter().take(120).map(|item| {
+        let num = item.get("chapter_number").and_then(|v| v.as_i64()).unwrap_or(1) as i32;
+        let is_tr = translated_nums.contains(&num);
+        json!({
+            "chapter_number": num,
+            "title": item.get("title_vi").or_else(|| item.get("title")).and_then(|v| v.as_str()).unwrap_or(&format!("Chương {}", num)),
+            "translated": is_tr, "raw": true, "engine": if is_tr { "ANTIGRAVITY_CLI" } else { "" }
         })
-        .collect();
+    }).collect();
 
     let total_chapters = novel.as_ref().map(|n| n.total_chapters).unwrap_or(toc.len() as i32);
     let novel_title = novel.as_ref().map(|n| n.display_title().to_string()).unwrap_or_else(|| novel_id.clone());
 
-    (
-        StatusCode::OK,
-        Json(json!({
-            "novel_id": novel_id,
-            "novel_title": novel_title,
-            "total_chapters": total_chapters,
-            "cached_chapters": total_chapters,
-            "translated_chapters": translated_nums.len(),
-            "chapter_number": target_ch,
-            "title": ch_val.get("title").and_then(|v| v.as_str()).unwrap_or(&format!("Chương {}", target_ch)),
-            "title_vi": ch_val.get("title_vi").and_then(|v| v.as_str()).unwrap_or(""),
-            "original_content": orig,
-            "translated_content": trans,
-            "translation_engine": engine,
-            "available_chapters": available
-        })),
-    )
+    (StatusCode::OK, Json(json!({
+        "novel_id": novel_id, "novel_title": novel_title,
+        "total_chapters": total_chapters, "cached_chapters": total_chapters, "translated_chapters": translated_nums.len(),
+        "chapter_number": target_ch,
+        "title": ch_val.get("title").and_then(|v| v.as_str()).unwrap_or(&format!("Chương {}", target_ch)),
+        "title_vi": ch_val.get("title_vi").and_then(|v| v.as_str()).unwrap_or(""),
+        "original_content": orig, "translated_content": trans,
+        "translation_engine": engine, "available_chapters": available
+    })))
 }
 
 pub async fn admin_update_chapter(
@@ -249,15 +257,18 @@ pub async fn admin_download_raw(
     (StatusCode::OK, Json(json!({ "status": "queued", "novel_id": novel_id, "message": format!("Đang tải ngầm bản gốc chương {} → {} vào ổ 1TB.", from_ch, end_ch) })))
 }
 
-fn set_novel_overnight_flag(state: &AppState, novel_id: &str, enabled: bool) {
-    let info_path = state.data_dir.join("novels").join(novel_id).join("novel_info.json");
-    if let Ok(raw) = fs::read_to_string(&info_path) {
-        if let Ok(mut val) = serde_json::from_str::<Value>(&raw) {
-            if let Some(obj) = val.as_object_mut() {
-                obj.insert("overnight_enabled".into(), Value::Bool(enabled));
-                let _ = fs::write(&info_path, serde_json::to_string_pretty(&val).unwrap_or_default());
-            }
-        }
+pub fn set_novel_overnight_flag(state: &AppState, novel_id: &str, enabled: bool) {
+    let ndir = state.data_dir.join("novels").join(novel_id);
+    let info_path = if ndir.join("info.json").exists() { ndir.join("info.json") } else { ndir.join("novel_info.json") };
+    let mut val = fs::read_to_string(&info_path)
+        .ok()
+        .and_then(|r| serde_json::from_str::<Value>(&r).ok())
+        .or_else(|| state.get_novel(novel_id).and_then(|n| serde_json::to_value(n).ok()))
+        .unwrap_or_else(|| json!({"id": novel_id}));
+    if let Some(obj) = val.as_object_mut() {
+        obj.insert("id".into(), Value::String(novel_id.to_string()));
+        obj.insert("overnight_enabled".into(), Value::Bool(enabled));
+        state.save_novel_info(novel_id, &val);
     }
 }
 
@@ -282,24 +293,16 @@ pub async fn admin_prerender_novel_tts(AxumPath(novel_id): AxumPath<String>, Jso
 }
 
 pub async fn admin_import_novel(State(state): State<AppState>, Json(payload): Json<Value>) -> impl IntoResponse {
-    let src_url = payload.get("source_url").and_then(|v| v.as_str()).unwrap_or("");
-    for n in state.load_all_novels() {
-        if n.source_url == src_url || (!n.id.is_empty() && src_url.contains(&n.id)) {
-            return (
-                StatusCode::OK,
-                Json(json!({
-                    "novel": {
-                        "id": n.id, "title": n.title, "title_vi": n.display_title(),
-                        "author": n.display_author(), "cover_url": n.cover_url,
-                        "source_id": n.source_id, "source_url": n.source_url,
-                        "total_chapters": n.total_chapters, "translated_chapters": n.translated_chapters,
-                        "cached_chapters": n.total_chapters
-                    }
-                })),
-            );
-        }
+    let src_url = payload.get("source_url").or_else(|| payload.get("url")).and_then(|v| v.as_str()).unwrap_or("").to_string();
+    let req = crate::scraper::ScrapeRequest { url: src_url.clone(), source_url: src_url };
+    let resp = crate::scraper::scrape_url(State(state), Json(req)).await.into_response();
+    let status = resp.status();
+    let bytes = axum::body::to_bytes(resp.into_body(), 2 * 1024 * 1024).await.unwrap_or_default();
+    let val: Value = serde_json::from_slice(&bytes).unwrap_or_else(|_| json!({}));
+    if status.is_success() {
+        return (StatusCode::OK, Json(json!({ "novel": val })));
     }
-    (StatusCode::OK, Json(json!({ "novel": { "id": "imported", "title": "Truyện mới nhập", "title_vi": "Truyện mới nhập", "total_chapters": 1 } })))
+    (status, Json(val))
 }
 
 pub async fn admin_harvester_status(State(state): State<AppState>) -> impl IntoResponse {
@@ -322,21 +325,10 @@ pub async fn admin_trigger_auto_updater() -> impl IntoResponse {
 pub async fn admin_bulk_action(State(state): State<AppState>, Json(payload): Json<Value>) -> impl IntoResponse {
     let action = payload.get("action").and_then(|v| v.as_str()).unwrap_or("");
     let enable = action == "enable_overnight";
-    let ids: Vec<String> = payload
-        .get("novel_ids")
-        .and_then(|v| v.as_array())
+    let ids: Vec<String> = payload.get("novel_ids").and_then(|v| v.as_array())
         .map(|arr| arr.iter().filter_map(|x| x.as_str().map(ToOwned::to_owned)).collect())
         .unwrap_or_default();
-    for nid in &ids {
-        set_novel_overnight_flag(&state, nid, enable);
-    }
-    (
-        StatusCode::OK,
-        Json(json!({
-            "status": "ok",
-            "updated_count": ids.len(),
-            "overnight_enabled": enable,
-            "message": if enable { format!("Đã bật Dịch Ngầm Ban Đêm cho {} bộ truyện.", ids.len()) } else { format!("Đã tắt Dịch Ngầm Ban Đêm cho {} bộ truyện.", ids.len()) }
-        })),
-    )
+    for nid in &ids { set_novel_overnight_flag(&state, nid, enable); }
+    let msg = if enable { format!("Đã bật Dịch Ngầm Ban Đêm cho {} bộ truyện.", ids.len()) } else { format!("Đã tắt Dịch Ngầm Ban Đêm cho {} bộ truyện.", ids.len()) };
+    (StatusCode::OK, Json(json!({ "status": "ok", "updated_count": ids.len(), "overnight_enabled": enable, "message": msg })))
 }

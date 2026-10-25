@@ -86,7 +86,7 @@ internal fun PagedParagraphItem(
                     },
                     onTap = { offset ->
                         val layout = layoutResult
-                        if (layout != null) {
+                        if (layout != null && !isTtsActive && isTapInsideLineBounds(layout, offset)) {
                             val charOffset = layout.getOffsetForPosition(offset)
                             val (word, sentence) = extractWordAndSentence(chunk.text, charOffset)
                             if ((isEnglishMode || isBilingualMode || isProgressiveMode) && word.isNotBlank() && isEnglishWord(word)) {

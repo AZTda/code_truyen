@@ -27,6 +27,14 @@ internal fun isEnglishWord(word: String): Boolean {
     return word.all { (it in 'a'..'z') || (it in 'A'..'Z') || it == '\'' || it == '-' }
 }
 
+internal fun isTapInsideLineBounds(layout: TextLayoutResult, offset: androidx.compose.ui.geometry.Offset): Boolean {
+    if (layout.lineCount == 0 || offset.y < 0f || offset.y > layout.size.height) return false
+    val line = layout.getLineForVerticalPosition(offset.y)
+    if (line !in 0 until layout.lineCount) return false
+    if (offset.y < layout.getLineTop(line) || offset.y > layout.getLineBottom(line)) return false
+    return offset.x >= layout.getLineLeft(line) && offset.x <= layout.getLineRight(line)
+}
+
 @Composable
 internal fun ReaderParagraphItem(
     idx: Int,
@@ -104,7 +112,7 @@ internal fun ReaderParagraphItem(
                     },
                     onTap = { offset ->
                         val layout = layoutResult
-                        if (layout != null) {
+                        if (layout != null && !isTtsActive && isTapInsideLineBounds(layout, offset)) {
                             val charOffset = layout.getOffsetForPosition(offset)
                             val (word, sentence) = extractWordAndSentence(primaryText, charOffset)
                             if ((isEnglishMode || isBilingualMode || isProgressiveMode) && word.isNotBlank() && isEnglishWord(word)) {

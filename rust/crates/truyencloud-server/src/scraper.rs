@@ -173,32 +173,58 @@ pub async fn scrape_url(
     }
 
     if let Some(content) = fetch_chapter_body(&state.http_client, raw_url).await {
+        let mut hasher = md5::Md5::new();
+        use md5::Digest;
+        hasher.update(raw_url.as_bytes());
+        let hash_hex = hex::encode(hasher.finalize());
+        let novel_id = format!("web_{}", &hash_hex[..10]);
         let title_vi = translate_hanviet_phrases("Truyện mới nhập");
-        return (
-            StatusCode::OK,
-            Json(json!({
-                "id": "scraped_novel",
-                "title": "Truyện mới",
-                "title_vi": title_vi,
-                "author": "Khuyết danh",
-                "source_url": raw_url,
-                "url": raw_url,
-                "source_id": "69shuba",
-                "cover_url": "",
-                "description": content.chars().take(240).collect::<String>(),
-                "content": content,
-                "char_count": content.chars().count(),
-                "status": "ongoing",
-                "total_chapters": 1,
-                "translated_chapters": 0,
-                "overnight_enabled": false,
-                "translated_chapter_numbers": [],
-                "chapters": [
-                    {"chapter_number": 1, "title": "Chương 1", "title_vi": "Chương 1", "url": raw_url, "is_translated": false}
-                ],
-                "engine": "rust-scraper-gb18030"
-            })),
+        let desc: String = content.chars().take(240).collect();
+
+        let ch_val = json!({
+            "novel_id": novel_id,
+            "chapter_number": 1,
+            "title": "Chương 1",
+            "title_vi": "Chương 1",
+            "original_content": content,
+            "translated_content": null,
+            "url": raw_url
+        });
+        state.save_chapter_value(&novel_id, 1, &ch_val);
+
+        let toc = vec![json!({
+            "chapter_number": 1, "id": "1", "title": "Chương 1",
+            "title_vi": "Chương 1", "url": raw_url, "is_translated": false
+        })];
+        let novel_dir = state.data_dir.join("novels").join(&novel_id);
+        let _ = std::fs::create_dir_all(&novel_dir);
+        let _ = std::fs::write(
+            novel_dir.join("chapters_index.json"),
+            serde_json::to_string_pretty(&toc).unwrap_or_default(),
         );
+
+        let info = json!({
+            "id": novel_id,
+            "title": "Truyện mới",
+            "title_vi": title_vi,
+            "author": "Khuyết danh",
+            "source_url": raw_url,
+            "url": raw_url,
+            "source_id": "69shuba",
+            "cover_url": "",
+            "description": desc,
+            "content": content,
+            "char_count": content.chars().count(),
+            "status": "ongoing",
+            "total_chapters": 1,
+            "translated_chapters": 0,
+            "overnight_enabled": false,
+            "translated_chapter_numbers": [],
+            "chapters": toc,
+            "engine": "rust-scraper-gb18030"
+        });
+        state.save_novel_info(&novel_id, &info);
+        return (StatusCode::OK, Json(info));
     }
 
     (

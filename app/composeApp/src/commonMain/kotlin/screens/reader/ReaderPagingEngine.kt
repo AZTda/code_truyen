@@ -188,8 +188,14 @@ object ReaderPagingEngine {
                 while (lineEnd < lineCount) {
                     val candidateHeight = (layout.getLineBottom(lineEnd) - layout.getLineTop(lineStart)).toInt()
                     val isLastLine = (lineEnd + 1 >= lineCount)
-                    val extraIfEnd = if (isLastLine) subHeightTotalPx else 0
-                    if (candidateHeight + extraIfEnd <= (maxPageHeight - currentHeightUsed)) {
+                    val estSubPx = if (subHeightTotalPx > 0) {
+                        if (isLastLine && lineStart == 0) subHeightTotalPx
+                        else {
+                            val lineRatio = ((lineEnd - lineStart + 1).toFloat() / lineCount.toFloat()).coerceIn(0.25f, 1f)
+                            (subHeightTotalPx * lineRatio).toInt() + subSpacerPx
+                        }
+                    } else 0
+                    if (candidateHeight + estSubPx <= (maxPageHeight - currentHeightUsed)) {
                         chunkHeight = candidateHeight
                         lineEnd++
                     } else {

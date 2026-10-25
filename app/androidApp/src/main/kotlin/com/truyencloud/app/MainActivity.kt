@@ -54,17 +54,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        val db = Room.databaseBuilder(
-            applicationContext,
-            LocalCache::class.java,
-            "truyencloud_cache.db"
-        )
-            // KHONG dung fallbackToDestructiveMigration() tran lan: no XOA SACH database
-            // moi lan tang version, keo theo ca bo tu vung, lich su on tap FSRS va cac
-            // chuong da tai ve. Cac ban 7->8->9 deu co AutoMigration nen giu duoc du lieu;
-            // chi cac ban thu nghiem 1-6 (khong con ai dung) moi phai dung tam nay.
-            .fallbackToDestructiveMigrationFrom(true, 1, 2, 3, 4, 5, 6)
-            .build()
+        val db = obtainDatabase(applicationContext)
 
         val novelApi = NovelApi()
         val chapterApi = ChapterApi()
@@ -249,10 +239,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        // Quay lại ứng dụng: thử lại các thay đổi tiến độ đẩy hụt lúc trước và đồng bộ dấu trang.
+        // Quay lại ứng dụng: thử lại các thay đổi tiến độ đẩy hụt lúc trước và đồng bộ dấu trang + từ vựng.
         com.truyencloud.shared.repo.LifecycleSyncManager.onAppForeground(
             readerRepository = readerRepoRef,
-            bookmarkRepository = bookmarkRepoRef
+            bookmarkRepository = bookmarkRepoRef,
+            vocabularyRepository = vocabRepoRef
         )
     }
 
@@ -284,5 +275,21 @@ class MainActivity : ComponentActivity() {
         bookmarkRepoRef = null
         vocabRepoRef = null
         super.onDestroy()
+    }
+
+    companion object {
+        @Volatile
+        private var sharedDatabase: LocalCache? = null
+
+        fun obtainDatabase(context: android.content.Context): LocalCache =
+            sharedDatabase ?: synchronized(this) {
+                sharedDatabase ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    LocalCache::class.java,
+                    "truyencloud_cache.db"
+                ).fallbackToDestructiveMigrationFrom(true, 1, 2, 3, 4, 5, 6).build().also {
+                    sharedDatabase = it
+                }
+            }
     }
 }

@@ -124,7 +124,8 @@ fun MainViewController(): UIViewController = ComposeUIViewController(configure =
         ) { _ ->
             LifecycleSyncManager.onAppForeground(
                 readerRepository = container.readerRepo,
-                bookmarkRepository = container.bookmarkRepo
+                bookmarkRepository = container.bookmarkRepo,
+                vocabularyRepository = container.vocabRepo
             )
         }
         val resignObserver = center.addObserverForName(

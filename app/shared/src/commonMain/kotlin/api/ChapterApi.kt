@@ -74,7 +74,12 @@ class ChapterApi {
 
     suspend fun getChapterRecap(novelId: String, chapterNumber: Int): ChapterRecapResponse {
         val url = "$base/v1/novels/$novelId/chapters/$chapterNumber/recap"
-        val resp = client.get(url)
+        val resp = client.get(url) {
+            timeout {
+                requestTimeoutMillis = TruyenCloudApi.AI_REQUEST_TIMEOUT_MS
+                socketTimeoutMillis = TruyenCloudApi.AI_REQUEST_TIMEOUT_MS
+            }
+        }
         if (!resp.status.isSuccess()) {
             val errText = resp.bodyAsText()
             throw IllegalStateException("API error (${resp.status.value}): $errText")
@@ -87,6 +92,10 @@ class ChapterApi {
         val resp = client.post(url) {
             contentType(ContentType.Application.Json)
             setBody(LoreExplainRequest(term = term, context = context))
+            timeout {
+                requestTimeoutMillis = TruyenCloudApi.AI_REQUEST_TIMEOUT_MS
+                socketTimeoutMillis = TruyenCloudApi.AI_REQUEST_TIMEOUT_MS
+            }
         }
         if (!resp.status.isSuccess()) {
             val errText = resp.bodyAsText()

@@ -23,6 +23,11 @@ const PHRASE_DICT: &[(&str, &str)] = &[
     ("星际", "Tinh Tế"),
 ];
 
+/// Kiểm tra xem chuỗi có chứa ký tự chữ Hán (CJK Unified Ideographs) hay không.
+pub fn has_cjk(input: &str) -> bool {
+    input.chars().any(|c| ('\u{4E00}'..='\u{9FFF}').contains(&c))
+}
+
 /// Thay thế nhanh các cụm từ Hán-Việt phổ biến trong tiêu đề hoặc văn bản.
 pub fn translate_hanviet_phrases(input: &str) -> String {
     let mut out = input.trim().to_string();

@@ -4,12 +4,16 @@ mod routes_ai_tts;
 mod routes_auth;
 mod routes_english;
 mod routes_extra;
+mod routes_images;
+mod routes_import;
 mod routes_novels;
 mod routes_sync;
 mod routes_translate;
 mod scraper;
 mod state;
 
+use axum::extract::DefaultBodyLimit;
+use axum::middleware;
 use axum::routing::{delete, get, post, put};
 use axum::{Json, Router};
 use serde_json::json;
@@ -23,10 +27,52 @@ pub fn build_router(state: AppState) -> Router {
     let static_service = ServeDir::new(state.static_dir.clone());
     let flashcards_service = ServeDir::new(state.static_dir.join("flashcards"));
 
+    let admin_api = Router::new()
+        .route("/v1/admin/overview", get(routes_admin::admin_overview))
+        .route("/v1/admin/users", get(routes_admin::admin_list_users).post(routes_admin::admin_create_user))
+        .route("/v1/admin/users/:username/password", put(routes_admin::admin_update_user_password))
+        .route("/v1/admin/users/:username/profile", put(routes_admin::admin_update_user_profile))
+        .route("/v1/admin/users/:username/activity", get(routes_admin::admin_user_activity))
+        .route("/v1/admin/users/:username", delete(routes_admin::admin_delete_user))
+        .route("/v1/admin/novels", get(routes_admin_novels::admin_list_novels))
+        .route("/v1/admin/novels/import", post(routes_admin_novels::admin_import_novel))
+        .route("/v1/admin/novels/harvester/status", get(routes_admin_novels::admin_harvester_status))
+        .route("/v1/admin/novels/harvester/start", post(routes_admin_novels::admin_harvester_start))
+        .route("/v1/admin/novels/harvester/stop", post(routes_admin_novels::admin_harvester_stop))
+        .route("/v1/admin/novels/overnight/status", get(routes_extra::get_overnight_status))
+        .route("/v1/admin/novels/auto-updater/trigger", post(routes_admin_novels::admin_trigger_auto_updater))
+        .route("/v1/admin/novels/bulk-action", post(routes_admin_novels::admin_bulk_action))
+        .route("/v1/admin/novels/:novel_id", delete(routes_admin_novels::admin_delete_novel))
+        .route("/v1/admin/novels/:novel_id/meta", put(routes_admin_novels::admin_update_novel_meta))
+        .route("/v1/admin/novels/:novel_id/chapters-preview", get(routes_admin_novels::admin_novel_chapters_preview))
+        .route("/v1/admin/novels/:novel_id/chapters/:chapter_num", put(routes_admin_novels::admin_update_chapter))
+        .route("/v1/admin/novels/:novel_id/pretranslate", post(routes_admin_novels::admin_pretranslate_novel))
+        .route("/v1/admin/novels/:novel_id/download-raw", post(routes_admin_novels::admin_download_raw))
+        .route("/v1/admin/novels/:novel_id/overnight", post(routes_admin_novels::admin_start_overnight))
+        .route("/v1/admin/novels/:novel_id/overnight/stop", post(routes_admin_novels::admin_stop_overnight))
+        .route("/v1/admin/novels/:novel_id/cancel-job", post(routes_admin_novels::admin_cancel_novel_job))
+        .route("/v1/admin/novels/:novel_id/prerender-tts", post(routes_admin_novels::admin_prerender_novel_tts))
+        .route("/v1/admin/novels/:novel_id/export.epub", get(routes_novels::export_novel_epub))
+        .route("/v1/admin/novels/:novel_id/glossary", get(routes_extra::get_glossary).put(routes_extra::put_glossary))
+        .route("/v1/admin/system/caches", get(routes_admin::admin_caches_report))
+        .route("/v1/admin/system/sweep-cache", post(routes_admin::admin_sweep_cache))
+        .route("/v1/admin/system/ai-engines", get(routes_admin::admin_ai_engines))
+        .route("/v1/admin/ai/playground-translate", post(routes_admin::admin_playground_translate))
+        .route("/v1/admin/backup/export", get(routes_admin::admin_backup_export))
+        .route("/v1/admin/app/upload-apk", post(routes_import::admin_upload_apk))
+        .route_layer(middleware::from_fn_with_state(
+            state.clone(),
+            routes_admin::admin_auth_middleware,
+        ));
+
     Router::new()
+        .route("/", get(routes_import::serve_download_html))
+        .route("/download", get(routes_import::serve_download_html))
+        .route("/admin", get(routes_admin::serve_admin_html))
         .route("/v1/health", get(health_check))
         .route("/v1/health/deep", get(routes_admin::deep_health_check))
         .route("/v1/health/cache", get(routes_admin::admin_caches_report))
+        .route("/v1/images/proxy", get(routes_images::proxy_cover_image))
         // Auth routes
         .route("/v1/auth/login", post(routes_auth::login))
         .route("/v1/auth/refresh", post(routes_auth::refresh_token))
@@ -37,7 +83,7 @@ pub fn build_router(state: AppState) -> Router {
         .route("/v1/novels/search", get(routes_novels::search_novels))
         .route("/v1/novels/suggest", get(routes_novels::suggest_novels))
         .route("/v1/novels/crawl", post(scraper::scrape_url))
-        .route("/v1/novels/import", post(scraper::scrape_url))
+        .route("/v1/novels/import", post(routes_import::import_novel_flexible))
         .route("/v1/novels/updates/check-batch", post(routes_extra::check_updates_batch))
         .route("/v1/novels/:novel_id", get(routes_novels::get_novel_detail))
         .route("/v1/novels/:novel_id/check-updates", post(routes_extra::check_novel_updates))
@@ -57,6 +103,7 @@ pub fn build_router(state: AppState) -> Router {
         .route("/v1/vocabulary/sync", get(routes_sync::pull_vocabulary).post(routes_sync::push_vocabulary))
         .route("/v1/app/version", get(routes_sync::check_app_update).post(routes_admin::admin_publish_app_version))
         .route("/v1/app/check-update", get(routes_sync::check_app_update))
+        .route("/v1/app/download-latest", get(routes_import::download_latest_apk))
         // AI Translation, VieNeu-TTS & Scraper routes
         .route("/v1/translate", post(routes_translate::translate_chapter))
         .route("/v1/translate/batch", post(routes_extra::batch_translate))
@@ -95,41 +142,10 @@ pub fn build_router(state: AppState) -> Router {
         .route("/v1/english/comprehension-questions", post(routes_english::comprehension_questions))
         .route("/v1/english/word-graph", get(routes_english::word_graph).post(routes_english::word_graph))
         .route("/v1/english/pronunciation/evaluate", post(routes_english::evaluate_pronunciation))
-        // Web Admin Dashboard & Operations routes
-        .route("/admin", get(routes_admin::serve_admin_html))
-        .route("/v1/admin/overview", get(routes_admin::admin_overview))
-        .route("/v1/admin/users", get(routes_admin::admin_list_users).post(routes_admin::admin_create_user))
-        .route("/v1/admin/users/:username/password", put(routes_admin::admin_update_user_password))
-        .route("/v1/admin/users/:username/profile", put(routes_admin::admin_update_user_profile))
-        .route("/v1/admin/users/:username/activity", get(routes_admin::admin_user_activity))
-        .route("/v1/admin/users/:username", delete(routes_admin::admin_delete_user))
-        .route("/v1/admin/novels", get(routes_admin_novels::admin_list_novels))
-        .route("/v1/admin/novels/import", post(routes_admin_novels::admin_import_novel))
-        .route("/v1/admin/novels/harvester/status", get(routes_admin_novels::admin_harvester_status))
-        .route("/v1/admin/novels/harvester/start", post(routes_admin_novels::admin_harvester_start))
-        .route("/v1/admin/novels/harvester/stop", post(routes_admin_novels::admin_harvester_stop))
-        .route("/v1/admin/novels/overnight/status", get(routes_extra::get_overnight_status))
-        .route("/v1/admin/novels/auto-updater/trigger", post(routes_admin_novels::admin_trigger_auto_updater))
-        .route("/v1/admin/novels/bulk-action", post(routes_admin_novels::admin_bulk_action))
-        .route("/v1/admin/novels/:novel_id", delete(routes_admin_novels::admin_delete_novel))
-        .route("/v1/admin/novels/:novel_id/meta", put(routes_admin_novels::admin_update_novel_meta))
-        .route("/v1/admin/novels/:novel_id/chapters-preview", get(routes_admin_novels::admin_novel_chapters_preview))
-        .route("/v1/admin/novels/:novel_id/chapters/:chapter_num", put(routes_admin_novels::admin_update_chapter))
-        .route("/v1/admin/novels/:novel_id/pretranslate", post(routes_admin_novels::admin_pretranslate_novel))
-        .route("/v1/admin/novels/:novel_id/download-raw", post(routes_admin_novels::admin_download_raw))
-        .route("/v1/admin/novels/:novel_id/overnight", post(routes_admin_novels::admin_start_overnight))
-        .route("/v1/admin/novels/:novel_id/overnight/stop", post(routes_admin_novels::admin_stop_overnight))
-        .route("/v1/admin/novels/:novel_id/cancel-job", post(routes_admin_novels::admin_cancel_novel_job))
-        .route("/v1/admin/novels/:novel_id/prerender-tts", post(routes_admin_novels::admin_prerender_novel_tts))
-        .route("/v1/admin/novels/:novel_id/export.epub", get(routes_novels::export_novel_epub))
-        .route("/v1/admin/novels/:novel_id/glossary", get(routes_extra::get_glossary).put(routes_extra::put_glossary))
-        .route("/v1/admin/system/caches", get(routes_admin::admin_caches_report))
-        .route("/v1/admin/system/sweep-cache", post(routes_admin::admin_sweep_cache))
-        .route("/v1/admin/system/ai-engines", get(routes_admin::admin_ai_engines))
-        .route("/v1/admin/ai/playground-translate", post(routes_admin::admin_playground_translate))
-        .route("/v1/admin/backup/export", get(routes_admin::admin_backup_export))
+        .merge(admin_api)
         .nest_service("/static", static_service)
         .nest_service("/flashcards", flashcards_service)
+        .layer(DefaultBodyLimit::max(150 * 1024 * 1024))
         .layer(CorsLayer::permissive())
         .with_state(state)
 }

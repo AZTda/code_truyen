@@ -51,6 +51,7 @@ internal fun ReaderUiState.withChapterScopedStateCleared(): ReaderUiState = copy
     findQuery = "",
     findMatches = emptyList(),
     findCursor = 0,
+    scrollToParagraphIndex = null,
     // Banner của chương trước
     isProvisionalTranslation = false,
     translationError = null,

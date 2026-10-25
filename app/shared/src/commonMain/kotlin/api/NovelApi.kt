@@ -170,6 +170,7 @@ class NovelApi {
 
     suspend fun checkUpdates(novelId: String): String {
         val resp = client.post("$base/v1/novels/$novelId/check-updates")
+        resp.requireSuccess("Kiểm tra chương mới")
         return resp.bodyAsText()
     }
 

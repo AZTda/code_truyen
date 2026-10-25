@@ -116,14 +116,25 @@ internal fun ReaderContent(
         if (decision is ReaderScrollRestore.Decision.ScrollTo) {
             try {
                 listState.scrollToItem(decision.index)
+                settledKey = chapterKey
+                if (restoreScrollPosition > 0f) onScrollRestored()
             } catch (e: CancellationException) {
                 throw e
             } catch (_: Exception) {
                 // Danh sách chưa kịp bố cục: lần đổi kích thước kế tiếp sẽ thử lại
             }
+        } else {
+            settledKey = chapterKey
+            if (restoreScrollPosition > 0f) onScrollRestored()
         }
-        settledKey = chapterKey
-        if (restoreScrollPosition > 0f) onScrollRestored()
+    }
+
+    LaunchedEffect(scrollToParagraphIndex, isPaginatedMode, effectiveParagraphs.size) {
+        if (!isPaginatedMode && scrollToParagraphIndex != null && effectiveParagraphs.isNotEmpty()) {
+            val targetIdx = (scrollToParagraphIndex + 1).coerceIn(0, effectiveParagraphs.size)
+            try { listState.animateScrollToItem(targetIdx) } catch (_: Exception) {}
+            onParagraphScrolled()
+        }
     }
 
     // Theo dõi vị trí cuộn để lưu tiến độ (ViewModel tự giãn nhịp)
