@@ -14,6 +14,50 @@ pub struct ScrapeRequest {
     pub url: String,
 }
 
+/// Chuyển URL `69shuba.com` / `uukanshu.cc` qua cổng proxy `translate.goog` để vượt tường lửa Cloudflare.
+pub fn proxy_url_for(url: &str) -> String {
+    let clean = url.trim();
+    let lower = clean.to_ascii_lowercase();
+    if lower.contains("69shuba.com") && !lower.contains("translate.goog") {
+        let temp = clean
+            .replace("www.69shuba.com", "69shuba.com")
+            .replace("69shuba.com", "69shuba-com.translate.goog");
+        let sep = if temp.contains('?') { "&" } else { "?" };
+        return format!("{}{}_x_tr_sl=auto&_x_tr_tl=zh-CN", temp, sep);
+    }
+    if lower.contains("uukanshu.cc") && !lower.contains("translate.goog") {
+        let temp = clean
+            .replace("www.uukanshu.cc", "uukanshu.cc")
+            .replace("uukanshu.cc", "uukanshu-cc.translate.goog");
+        let sep = if temp.contains('?') { "&" } else { "?" };
+        return format!("{}{}_x_tr_sl=auto&_x_tr_tl=zh-TW", temp, sep);
+    }
+    clean.to_string()
+}
+
+/// Tải và bóc tách nội dung chương từ URL gốc (tự động đi qua proxy nếu là 69shuba/uukanshu).
+pub async fn fetch_chapter_body(client: &reqwest::Client, url: &str) -> Option<String> {
+    let target = proxy_url_for(url);
+    for candidate in [target.as_str(), url] {
+        let Ok(resp) = client.get(candidate).send().await else { continue; };
+        if !resp.status().is_success() {
+            continue;
+        }
+        let ct = resp
+            .headers()
+            .get(reqwest::header::CONTENT_TYPE)
+            .and_then(|v| v.to_str().ok())
+            .map(ToOwned::to_owned);
+        let Ok(bytes) = resp.bytes().await else { continue; };
+        let html = decode_html_bytes(&bytes, ct.as_deref());
+        let (_, body) = parse_chapter_html(&html);
+        if body.chars().count() > 50 {
+            return Some(body);
+        }
+    }
+    None
+}
+
 /// Giải mã tự động byte trang web tiếng Trung (`UTF-8` hoặc `GBK / GB18030` của `69shuba`, `piaotia`).
 pub fn decode_html_bytes(bytes: &[u8], content_type: Option<&str>) -> String {
     let ct_lower = content_type.unwrap_or("").to_ascii_lowercase();
@@ -52,6 +96,8 @@ pub fn parse_chapter_html(html: &str) -> (String, String) {
 
     let body_selectors = [
         "div.txtnav",
+        "div#txtcontent",
+        "div.txtcontent",
         "div#content",
         "div#htmlContent",
         "div.read-content",
@@ -87,43 +133,22 @@ pub async fn scrape_url(
         );
     }
 
-    let resp = match state.http_client.get(url).send().await {
-        Ok(r) => r,
-        Err(e) => {
-            return (
-                StatusCode::BAD_GATEWAY,
-                Json(json!({"detail": format!("Không tải được trang nguồn: {}", e)})),
-            );
-        }
-    };
-
-    let ct = resp
-        .headers()
-        .get(reqwest::header::CONTENT_TYPE)
-        .and_then(|v| v.to_str().ok())
-        .map(ToOwned::to_owned);
-    let bytes = match resp.bytes().await {
-        Ok(b) => b,
-        Err(e) => {
-            return (
-                StatusCode::BAD_GATEWAY,
-                Json(json!({"detail": format!("Lỗi đọc luồng byte: {}", e)})),
-            );
-        }
-    };
-
-    let html = decode_html_bytes(&bytes, ct.as_deref());
-    let (title, content) = parse_chapter_html(&html);
+    if let Some(content) = fetch_chapter_body(&state.http_client, url).await {
+        return (
+            StatusCode::OK,
+            Json(json!({
+                "url": url,
+                "title": "",
+                "content": content,
+                "char_count": content.chars().count(),
+                "engine": "rust-scraper-gb18030"
+            })),
+        );
+    }
 
     (
-        StatusCode::OK,
-        Json(json!({
-            "url": url,
-            "title": title,
-            "content": content,
-            "char_count": content.chars().count(),
-            "engine": "rust-scraper-gb18030"
-        })),
+        StatusCode::BAD_GATEWAY,
+        Json(json!({"detail": "Không tải được nội dung từ trang nguồn"})),
     )
 }
 

@@ -1,4 +1,4 @@
-use crate::scraper::{decode_html_bytes, parse_chapter_html};
+use crate::scraper::fetch_chapter_body;
 use crate::state::AppState;
 use axum::body::Body;
 use axum::extract::{Path, Query, State};
@@ -206,23 +206,12 @@ pub async fn get_chapter(
         .to_string();
 
     if orig.trim().is_empty() && ch_url.starts_with("http") {
-        if let Ok(resp) = state.http_client.get(&ch_url).send().await {
-            let ct = resp
-                .headers()
-                .get(reqwest::header::CONTENT_TYPE)
-                .and_then(|v| v.to_str().ok())
-                .map(ToOwned::to_owned);
-            if let Ok(bytes) = resp.bytes().await {
-                let html = decode_html_bytes(&bytes, ct.as_deref());
-                let (_, body) = parse_chapter_html(&html);
-                if !body.is_empty() {
-                    orig = body;
-                    if let Some(obj) = val.as_object_mut() {
-                        obj.insert("original_content".into(), Value::String(orig.clone()));
-                    }
-                    state.save_chapter_value(&novel_id, chapter_number, &val);
-                }
+        if let Some(body) = fetch_chapter_body(&state.http_client, &ch_url).await {
+            orig = body;
+            if let Some(obj) = val.as_object_mut() {
+                obj.insert("original_content".into(), Value::String(orig.clone()));
             }
+            state.save_chapter_value(&novel_id, chapter_number, &val);
         }
     }
 

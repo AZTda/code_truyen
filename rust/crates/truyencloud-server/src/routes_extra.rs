@@ -225,6 +225,46 @@ pub async fn translate_english_sentence(
     )
 }
 
+pub async fn batch_translate(Json(payload): Json<Value>) -> impl IntoResponse {
+    let nid = payload.get("novel_id").and_then(|v| v.as_str()).unwrap_or("");
+    let from_c = payload.get("from_chapter").and_then(|v| v.as_i64()).unwrap_or(1);
+    let to_c = payload.get("to_chapter").and_then(|v| v.as_i64()).unwrap_or(1);
+    (
+        StatusCode::OK,
+        Json(json!({
+            "status": "queued", "novel_id": nid, "from_chapter": from_c, "to_chapter": to_c,
+            "message": "Đã tiếp nhận trên Rust Backend",
+            "job_id": format!("rust_job_{}_{}_{}", nid, from_c, to_c)
+        })),
+    )
+}
+
+pub async fn get_job_status(Path(job_id): Path<String>) -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        Json(json!({
+            "id": job_id, "kind": "batch_translate", "status": "completed",
+            "progress": 1.0, "message": "Hoàn tất trên Rust Engine", "error": ""
+        })),
+    )
+}
+
+pub async fn get_overnight_status(State(state): State<AppState>) -> impl IntoResponse {
+    let enabled: Vec<Value> = state
+        .load_all_novels()
+        .into_iter()
+        .filter(|n| n.overnight_enabled)
+        .map(|n| json!({"id": n.id, "title": n.display_title(), "total_chapters": n.total_chapters, "translated_chapters": n.translated_chapters}))
+        .collect();
+    (
+        StatusCode::OK,
+        Json(json!({
+            "running": false, "current_novel_id": "", "current_batch": [],
+            "translated_total": enabled.len(), "models": ["rust-qwen-cpp"], "enabled_novels": enabled
+        })),
+    )
+}
+
 async fn ask_qwen_fast(state: &AppState, system_prompt: &str, user_prompt: &str) -> Option<String> {
     let req_body = json!({
         "messages": [

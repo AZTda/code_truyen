@@ -4,6 +4,7 @@ mod routes_auth;
 mod routes_extra;
 mod routes_novels;
 mod routes_sync;
+mod routes_translate;
 mod scraper;
 mod state;
 
@@ -82,18 +83,20 @@ pub fn build_router(state: AppState) -> Router {
         .route("/v1/app/version", get(routes_sync::check_app_update))
         .route("/v1/app/check-update", get(routes_sync::check_app_update))
         // AI Translation, VieNeu-TTS & Scraper routes
-        .route("/v1/translate", post(routes_ai_tts::translate_chapter))
-        .route("/v1/translate/batch", post(routes_ai_tts::batch_translate))
-        .route("/v1/jobs/:job_id", get(routes_ai_tts::get_job_status))
+        .route("/v1/translate", post(routes_translate::translate_chapter))
+        .route("/v1/translate/batch", post(routes_extra::batch_translate))
+        .route("/v1/jobs/:job_id", get(routes_extra::get_job_status))
         .route(
             "/v1/overnight/status",
-            get(routes_ai_tts::get_overnight_status),
+            get(routes_extra::get_overnight_status),
         )
         .route("/v1/tts/voices", get(routes_ai_tts::list_voices))
+        .route("/v1/tts/status", get(routes_ai_tts::tts_status))
         .route(
             "/v1/tts/stream",
             get(routes_ai_tts::stream_tts).post(routes_ai_tts::stream_tts),
         )
+        .route("/v1/tts/prefetch", post(routes_ai_tts::prefetch_tts))
         .route("/v1/tts/prerender", post(routes_ai_tts::prerender_tts))
         .route("/v1/scrape", post(scraper::scrape_url))
         // Settings, Lore, Companion & English Tutor routes

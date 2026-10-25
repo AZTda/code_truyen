@@ -231,10 +231,8 @@ impl AppState {
     }
 
     pub fn get_chapter_value(&self, novel_id: &str, chapter_number: i32) -> Option<Value> {
-        let ch_file = self
-            .data_dir
-            .join("novels")
-            .join(novel_id)
+        let novel_dir = self.data_dir.join("novels").join(novel_id);
+        let ch_file = novel_dir
             .join("chapters")
             .join(format!("chapter_{}.json", chapter_number));
         if let Ok(raw) = fs::read_to_string(&ch_file) {
@@ -242,12 +240,39 @@ impl AppState {
                 return Some(val);
             }
         }
-        let _guard = self.db_lock.lock().ok();
-        let conn = self.open_db().ok()?;
-        let pkey = format!("{}_{}", novel_id, chapter_number);
-        let mut stmt = conn.prepare("SELECT data FROM chapters WHERE pkey = ?1 LIMIT 1").ok()?;
-        let raw: String = stmt.query_row(params![pkey], |r| r.get(0)).ok()?;
-        serde_json::from_str(&raw).ok()
+        {
+            let _guard = self.db_lock.lock().ok();
+            if let Ok(conn) = self.open_db() {
+                let pkey = format!("{}_{}", novel_id, chapter_number);
+                if let Ok(mut stmt) = conn.prepare("SELECT data FROM chapters WHERE pkey = ?1 LIMIT 1") {
+                    if let Ok(raw) = stmt.query_row(params![pkey], |r| r.get::<_, String>(0)) {
+                        if let Ok(val) = serde_json::from_str::<Value>(&raw) {
+                            return Some(val);
+                        }
+                    }
+                }
+            }
+        }
+        // Fallback: lấy URL và tiêu đề chương từ `chapters_index.json` nếu tệp `chapter_<num>.json` chưa từng được cào
+        if let Ok(raw) = fs::read_to_string(novel_dir.join("chapters_index.json")) {
+            if let Ok(arr) = serde_json::from_str::<Vec<Value>>(&raw) {
+                let found = arr.iter().enumerate().find_map(|(idx, item)| {
+                    let cnum = item
+                        .get("chapter_number")
+                        .and_then(|v| v.as_i64())
+                        .unwrap_or((idx + 1) as i64) as i32;
+                    if cnum == chapter_number { Some(item.clone()) } else { None }
+                });
+                if let Some(mut item) = found {
+                    if let Some(obj) = item.as_object_mut() {
+                        obj.insert("novel_id".into(), Value::String(novel_id.to_string()));
+                        obj.insert("chapter_number".into(), json!(chapter_number));
+                    }
+                    return Some(item);
+                }
+            }
+        }
+        None
     }
 
     pub fn save_chapter_value(&self, novel_id: &str, chapter_number: i32, val: &Value) {
