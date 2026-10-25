@@ -13,8 +13,8 @@ android {
         applicationId = "com.truyencloud.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 21
-        versionName = "1.6.1-rust"
+        versionCode = 22
+        versionName = "1.6.2-rust"
     }
 
     buildFeatures {
