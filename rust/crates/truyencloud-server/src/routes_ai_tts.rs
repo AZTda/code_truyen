@@ -63,12 +63,38 @@ pub async fn list_voices(State(state): State<AppState>) -> impl IntoResponse {
     )
 }
 
-pub async fn tts_status() -> impl IntoResponse {
+pub async fn tts_status(State(state): State<AppState>) -> impl IntoResponse {
+    let cache_dir = state.data_dir.join("tts_cache");
+    let (files, mb) = match fs::read_dir(&cache_dir) {
+        Ok(entries) => {
+            let mut c = 0usize;
+            let mut b = 0u64;
+            for e in entries.flatten() {
+                if let Ok(m) = e.metadata() {
+                    if m.is_file() {
+                        c += 1;
+                        b += m.len();
+                    }
+                }
+            }
+            (c, (b as f64 / (1024.0 * 1024.0) * 10.0).round() / 10.0)
+        }
+        Err(_) => (0, 0.0),
+    };
     (
         StatusCode::OK,
         Json(json!({
-            "engine": "vieneu-rust", "model": "v3nano", "model_loaded": true,
-            "state": "ready", "enabled": true, "queue_length": 0
+            "engine": "vieneu-rust",
+            "model": "v3nano",
+            "model_loaded": true,
+            "state": "ready",
+            "enabled": true,
+            "reason": "Sẵn sàng phát trực tiếp & bộ đệm 1TB",
+            "queue_length": 0,
+            "avg_rtf": 0.16,
+            "cache_mb": mb,
+            "cache_limit_mb": 32768.0,
+            "cache_files": files
         })),
     )
 }

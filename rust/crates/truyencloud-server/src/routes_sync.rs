@@ -311,7 +311,7 @@ fn extract_user_id(state: &AppState, headers: &HeaderMap) -> String {
         .unwrap_or_else(|| "local".to_string())
 }
 
-fn query_user_rows(state: &AppState, table: &str, user_id: &str) -> Vec<Value> {
+pub fn query_user_rows(state: &AppState, table: &str, user_id: &str) -> Vec<Value> {
     let _guard = state.db_lock.lock().ok();
     let Ok(conn) = state.open_db() else { return Vec::new(); };
     let sql = format!(
